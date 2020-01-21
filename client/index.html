@@ -1,0 +1,9 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io()
+  let data = {
+    eventData: "here we could have event data"
+  }
+  socket.emit("eventHappened", data)
+</script>
+<h2>Hello</h2>
