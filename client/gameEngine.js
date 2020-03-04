@@ -11,9 +11,11 @@ gameEngine = function() {
         //it should have the div passed over for where the canvas will exist
         //it should also load the first gamestate
         console.log("load init");
+        creatCanvas();
+        toStates.push(new gameState())
     }
 
-    self.run = function() {console.log
+    self.run = function() {
         console.log("loop init");
         let t = setInterval(gameLoop,1000/60); //loop executed 60 times per second
         
@@ -29,20 +31,20 @@ gameEngine = function() {
             for(i = 0; i < popCount; i++) states.pop();
         }
 
-        if(toStates.length > 0){
+        if(toStates.length > 0) {
             for(i = 0; i < toStates.length; i++) states.push(toStates[i])
         }
 
-        if(states.length > 0){
+        if(states.length > 0) {
             states[states.length-1].update();
         }
     }
 
-    self.addState = function(){
-        states.push()
+    self.addState = function(newstate) {
+        toStates.push(newstate);
     }
 
-    self.popState = function(numOfStates){
+    self.popState = function(numOfStates) {
         popCount = numOfStates;
     }
 
