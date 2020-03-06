@@ -1,12 +1,13 @@
 gameEngine = function() {
     var self = {};
-
     let isRunning = true;
     let states = [];
     let newStates = [];
     let popCount = 0;
 
-    self.init = function() {
+    init();
+
+    function init() {
         //this should start the canvas space
         //it should have the div passed over for where the canvas will exist
         //it should also load the first gamestate

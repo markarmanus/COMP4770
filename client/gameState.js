@@ -2,12 +2,16 @@ gameState = function() {
     var self = {};
     let posx = 0
     let posy = 0
+    let eManager = new entityManager(); // each gamestate typically has a entity manager
+    // usage: x=eManager.addEntity("<insert description>") 
+    // This will return a reference to the entity which is useful for setting up components at entity creation 
 
     self.update = function() {
         // this should call all the relevant systems in the gamestate
+        eManager.update();
         movement();
         render();
-        console.log("test");
+        console.log("gstate update");
     }
 
     function movement() {
