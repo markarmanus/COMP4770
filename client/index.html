@@ -1,13 +1,13 @@
-<script src="/socket.io/socket.io.js"></script>
+<!--<script src="/socket.io/socket.io.js"></script>-->
 <script src="gameEngine.js"></script>
 <script src="gameState.js"></script>
-<script>
+<!--<script>
   var socket = io();
   let data = {
     eventData: "here we could have event data"
   };
   socket.emit("eventHappened", data);
-</script>
+</script>-->
 <script>
   init = function() {
     let engine = gameEngine();
@@ -16,5 +16,5 @@
   };
 </script>
 <body onload="init()">
-  <div id="canvas"></div>
+  <div id="canvasDiv"></div>
 </body>
