@@ -12,13 +12,14 @@ gameState = function() {
 
     function movement() {
         // This movement system should operate on entities with movement components
-        // example of simple movement for render, this is not component based:
+        // example: (simple movement for render example, this is not component based)
 
         posx++;
         posy++;
     }
 
     function render() {
+        // this should render all relavent items of a state
         let canvas = document.getElementById("canvas");
         let ctx = canvas.getContext("2d"); 
         ctx.clearRect(0,0,1280,720); //clears screen
