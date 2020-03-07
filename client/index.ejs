@@ -1,0 +1,45 @@
+<script src="/socket.io/socket.io.js"></script>
+<script src="GameEngine.js"></script>
+<script src="GameState.js"></script>
+<script src="EntityManager.js"></script>
+<script src="Entity.js"></script>
+<link rel="stylesheet" type="text/css" href="index.css" />
+<script>
+  init = function() {
+    var socket = io();
+    var canvas = document.getElementById("canvas");
+    window.socket = socket;
+    window.canvas = canvas;
+    let engine = new GameEngine();
+    engine.run();
+  };
+</script>
+<body>
+  <% if(!currentUser){ %>
+  <!-- BROOK MAKE PRETTY PLEASE -->
+  <div id="formsContainer">
+    <form method="POST" action="/login">
+      <input type="text" name="username" placeholder="username" />
+      <input type="password" name="password" placeholder="password" />
+      <button>Login</button>
+    </form>
+
+    <form method="POST" action="/register">
+      <input type="text" name="username" placeholder="username" />
+      <input type="password" name="password" placeholder="password" />
+      <button>Sign up</button>
+    </form>
+  </div>
+  <% } else { %>
+  <div id="logoutContainer">
+    <a href="/logout">Log out</a>
+  </div>
+
+  <div id="canvasDiv">
+    <canvas id="canvas"> </canvas>
+  </div>
+  <script>
+    init();
+  </script>
+  <% } %>
+</body>

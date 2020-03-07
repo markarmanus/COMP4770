@@ -1,24 +1,23 @@
-entity = function(i,d) {
-    var self = {};
-    let id = i;
-    let descriptor = d;
-    let active = true;
-    
-    self.remove = function(){
-        active = false;
-    }
+class Entity {
+  constructor(id, descriptor) {
+    this.id = id;
+    this.descriptor = descriptor;
+    this.active = true;
+  }
 
-    self.getStatus = function(){
-        return active;
-    }
+  get remove() {
+    this.active = false;
+  }
 
-    self.getId = function(){
-        return id;
-    }
+  get getStatus() {
+    return this.active;
+  }
 
-    self.getDescriptor = function(){
-        return descriptor;
-    }
+  get getId() {
+    return this.id;
+  }
 
-    return self;
+  get getDescriptor() {
+    return this.descriptor;
+  }
 }

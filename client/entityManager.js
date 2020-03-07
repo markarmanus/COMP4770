@@ -1,32 +1,29 @@
-entityManager = function() {
-    var self = {};
-    let entityCount = 0;
-    let newEntities = [];
-    let entityArray = [];
+class EntityManager {
+  constructor() {
+    this.entityCount = 0;
+    this.newEntities = [];
+    this.entityArray = [];
+  }
 
-    self.update = function() {
-        entityArray = entityArray.concat(newEntities);
-        newEntities = [];
-        removeEntities();
-    }
+  update() {
+    this.entityArray = this.entityArray.concat(this.newEntities);
+    this.newEntities = [];
+    this.removeEntities();
+  }
 
-    self.addEntity = function(desciptor) {
-        e = new entity(entityCount++,desciptor);
-        newEntities.push(e)
-        return e;
-    }
+  addEntity(descriptor) {
+    entity = new Entity(entityCount++, descriptor);
+    this.newEntities.push(entity);
+    return entity;
+  }
 
-    self.getEntities = function() {
-        return entityArray;
-    }
+  get getEntities() {
+    return this.entityArray;
+  }
 
-    function removeEntities() {
-        entityArray.forEach(element => {
-            if(!element.getStatus()){
-                entityArray.splice(entityArray.indexOf(element),1);
-            }
-        });
-    }
-
-    return self;
+  removeEntities() {
+    this.entityArray = this.entityArray.filter(entity => {
+      return entity.getStatus();
+    });
+  }
 }
