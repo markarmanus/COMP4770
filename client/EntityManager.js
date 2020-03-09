@@ -1,4 +1,6 @@
-class EntityManager {
+import Entity from "./Entity";
+
+export default class EntityManager {
   constructor() {
     this.entityCount = 0;
     this.newEntities = [];
@@ -6,18 +8,19 @@ class EntityManager {
   }
 
   update() {
-    this.entityArray = this.entityArray.concat(this.newEntities);
+    if (this.newEntities.length)
+      this.entityArray = this.entityArray.concat(this.newEntities);
     this.newEntities = [];
     this.removeEntities();
   }
 
   addEntity(descriptor) {
-    entity = new Entity(entityCount++, descriptor);
+    const entity = new Entity(this.entityCount++, descriptor);
     this.newEntities.push(entity);
     return entity;
   }
 
-  get getEntities() {
+  getEntities() {
     return this.entityArray;
   }
 

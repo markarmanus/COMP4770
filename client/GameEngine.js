@@ -1,4 +1,5 @@
-class GameEngine {
+import inGameState from "./States/InGame/InGameState";
+export default class GameEngine {
   constructor() {
     this.isRunning = true;
     this.states = [];
@@ -8,9 +9,7 @@ class GameEngine {
   }
 
   init() {
-    //example of sending a event to the server
-    socket.emit("eventHappened", { eventData: "Event Data can be here" });
-    this.newStates.push(new GameState());
+    this.newStates.push(new inGameState());
   }
 
   run() {
@@ -26,7 +25,6 @@ class GameEngine {
     //this should handle the loading and unloading of gamestates and should call the gamestate.update()
     for (let i = 0; i < popCount; i++) states.pop();
     for (let i = 0; i < newStates.length; i++) states.push(newStates[i]);
-
     if (states.length) {
       states[states.length - 1].update();
     }

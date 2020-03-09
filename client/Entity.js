@@ -1,23 +1,32 @@
-class Entity {
+import ComponentTypes from "./ComponentTypes";
+export default class Entity {
   constructor(id, descriptor) {
     this.id = id;
     this.descriptor = descriptor;
     this.active = true;
+    this.components = {};
   }
 
-  get remove() {
+  remove() {
     this.active = false;
   }
 
-  get getStatus() {
+  getStatus() {
     return this.active;
   }
 
-  get getId() {
+  getId() {
     return this.id;
   }
 
-  get getDescriptor() {
+  getComponents() {
+    return this.components;
+  }
+
+  getDescriptor() {
     return this.descriptor;
+  }
+  addComponent(component) {
+    this.components[component.type] = component;
   }
 }

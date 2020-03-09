@@ -1,8 +1,6 @@
 #canvas {
-  width: 1280px;
   margin: auto;
   display: block;
-  height: 720px;
 }
 #logoutContainer {
   text-align: center;

@@ -20,7 +20,12 @@ const store = new MongoDBStore({
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/client"));
 
-app.use(express.static("client"));
+app.use(
+  express.static(path.join(__dirname, "/client"), {
+    index: false,
+    extensions: ["js", "ejs"]
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -43,6 +48,10 @@ passport.deserializeUser(User.deserializeUser());
 
 app.get("/", (req, res) => {
   res.render("index", { currentUser: req.user });
+});
+
+app.get("/user", isLoggedIn, (req, res) => {
+  res.json(req.user);
 });
 
 app.post("/register", (req, res) => {
@@ -77,7 +86,12 @@ io.on("connection", socket => {
     console.log(data);
   });
 });
-
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.sendStatus(401);
+}
 server.listen(5000, () => {
   console.log("Connected To Port 5000");
   connectDb().then(() => console.log("Connected To Database Server"));
