@@ -6,5 +6,7 @@ export default class AnimtedC extends Component {
     this.animationSpeed = animationSpeed;
     this.imgSrc = imgSrc;
     this.spritesCount = spritesCount;
+    this.currentFrame = 0;
+    this.timer = new Date().getTime();
   }
 }
