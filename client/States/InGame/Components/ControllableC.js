@@ -6,11 +6,15 @@ export default class ControllableC extends Component {
     this.leftBttn = controlls.leftBttn;
     this.rightBttn = controlls.rightBttn;
     this.jumpBttn = controlls.jumpBttn;
+    this.upBttn = controlls.upBttn;
+    this.downBttn = controlls.downBttn;
     this.attack = controlls.attack;
     this.alternate = controlls.alternate;
     this.bttnsState = Object.values(controlls).reduce((acc, val) => {
       acc[val] = false;
       return acc;
     }, {});
+    this.bttnsHoldState = Object.assign({}, this.bttnsState);
+    this.bttnsDblClickState = Object.assign({}, this.bttnsState);
   }
 }

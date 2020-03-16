@@ -4,6 +4,8 @@ const ComponentTypes = {
   ANIMATED: 3,
   CONTROLABLE: 4,
   MOVABLE: 5,
-  MULTI_SPRITES: 6
+  MULTI_SPRITES: 6,
+  COLLIDABLE: 7,
+  PHYSICAL: 8
 };
 export default ComponentTypes;

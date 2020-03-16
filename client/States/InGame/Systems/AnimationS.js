@@ -14,7 +14,7 @@ export default class AnimationS {
           animationC.timer = currentTime;
           animationC.currentFrame =
             (animationC.currentFrame + 1) % animationC.spritesCount;
-          renderC.imageCropX = animationC.currentFrame * renderC.imageWidth;
+          renderC.imageCropX = animationC.currentFrame * renderC.width;
         }
       }
     }
