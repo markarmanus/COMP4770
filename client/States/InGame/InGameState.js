@@ -34,7 +34,12 @@ export default class inGameState extends GameState {
     background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
     const patern = canvasContext.createPattern(background, "repeat");
     canvasContext.fillStyle = patern;
-    canvasContext.fillRect(0, 0, canvas.width * 10, canvas.height * 10);
+    canvasContext.fillRect(
+      canvas.width * 2 * -1,
+      canvas.height * 2 * -1,
+      canvas.width * 10,
+      canvas.height * 10
+    );
     // canvasContext.drawImage(background, 0, 0);
 
     this.controllsS.update(this.entityManager);
