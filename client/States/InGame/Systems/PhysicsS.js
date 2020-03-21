@@ -21,7 +21,7 @@ export default class CollisionS {
           continue;
         }
         let newGrvityF =
-          physicsC.currentGravityForce + this.gravity * physicsC.aitFriction;
+          physicsC.currentGravityForce + this.gravity * physicsC.airFriction;
         newGrvityF = this.setGravityWithtinBounds(
           newGrvityF,
           physicsC.maxGravity

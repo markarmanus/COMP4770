@@ -1,7 +1,7 @@
 import ComponentTypes from "../../../ComponentTypes";
 import Component from "../../../Component";
 export default class MovableC extends Component {
-  constructor(
+  constructor({
     velocity,
     maxVelocity,
     friction,
@@ -13,7 +13,7 @@ export default class MovableC extends Component {
     doubleJumpForceScale,
     dashSpeed,
     dashCooldown
-  ) {
+  }) {
     super(ComponentTypes.MOVABLE);
     this.velocity = velocity;
     this.maxVelocity = maxVelocity;
@@ -29,8 +29,8 @@ export default class MovableC extends Component {
     this.jumpsCounter = 0;
     this.gravityForceScaler = gravityForceScaler;
     this.doubleJumpForceScale = 1 - doubleJumpForceScale;
-    this.dashCooldown = 500;
-    this.dashSpeed = 200;
+    this.dashCooldown = dashCooldown;
+    this.dashSpeed = dashSpeed;
     this.timeSinceDash = 0;
     // Split the dashing over multiple frames where each frame we will move 10 units.
     this.totalDashFrames = this.dashSpeed / 10;

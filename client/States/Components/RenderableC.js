@@ -1,11 +1,11 @@
 import ComponentTypes from "../../ComponentTypes";
 import Component from "../../Component";
 export default class RenderableC extends Component {
-  constructor(initPosX, initPosY, imgSrc, width = 32, height = 32, scale) {
+  constructor({ posX, posY, image, width = 32, height = 32, scale }) {
     super(ComponentTypes.RENDERABLE);
-    this.posX = initPosX;
-    this.posY = initPosY;
-    this.image = imgSrc;
+    this.posX = posX;
+    this.posY = posY;
+    this.image = image;
     this.imageCropX = 0;
     this.imageCropY = 0;
     this.width = width;
@@ -13,7 +13,7 @@ export default class RenderableC extends Component {
     this.scale = scale;
     this.scaledWidth = width * scale;
     this.scaledHeight = height * scale;
-    this.lastPosX = initPosX;
-    this.lastPosY = initPosY;
+    this.lastPosX = posX;
+    this.lastPosY = posY;
   }
 }

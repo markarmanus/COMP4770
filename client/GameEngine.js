@@ -9,7 +9,7 @@ export default class GameEngine {
   }
 
   init() {
-    this.newStates.push(new inGameState());
+    this.newStates.push(new inGameState(levels[0]));
   }
 
   run() {

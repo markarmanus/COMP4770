@@ -12,6 +12,9 @@
     await fetch("/user", { credentials: "include" }).then(user =>
       user.json().then(data => (window.user = data))
     );
+    await fetch("/levels", { credentials: "include" }).then(async levels => {
+      await levels.json().then(data => (window.levels = data));
+    });
     let engine = new GameEngine();
     engine.run();
   };

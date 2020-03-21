@@ -5,12 +5,12 @@ export default class RenderS {
     for (const entity of entities) {
       if (entity.components[ComponentTypes.RENDERABLE]) {
         const renderC = entity.components[ComponentTypes.RENDERABLE];
+        //temp camera system.
         if (entity.descriptor === "Player") {
           const diff = {
-            x: renderC.posX - renderC.lastPosX,
-            y: renderC.posX - renderC.lastPosX
+            x: renderC.lastPosX - renderC.posX
           };
-          canvasContext.translate(-1 * diff.x, 0);
+          canvasContext.translate(diff.x, 0);
         }
         if (renderC.image) {
           renderC.lastPosX = renderC.posX;

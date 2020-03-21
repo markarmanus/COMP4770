@@ -4,6 +4,8 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const connectDb = require("./server/db/connection");
 const User = require("./server/db/models/User");
+const Level = require("./server/db/models/Level");
+const levelSeeder = require("./server/db/seeders/level");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
@@ -26,6 +28,12 @@ app.use(
     extensions: ["js", "ejs"]
   })
 );
+app.use(
+  express.static(path.join(__dirname, "/client/Assets"), {
+    index: false,
+    extensions: ["png"]
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -45,6 +53,7 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+levelSeeder();
 
 app.get("/", (req, res) => {
   res.render("index", { currentUser: req.user });
@@ -54,6 +63,11 @@ app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
 
+app.get("/levels", isLoggedIn, async (req, res) => {
+  await Level.find({ isCustom: false })
+    .then(levels => res.send(levels))
+    .catch(err => console.error(err));
+});
 app.post("/register", (req, res) => {
   User.register(
     new User({
