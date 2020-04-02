@@ -53,7 +53,6 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-levelSeeder();
 
 app.get("/", (req, res) => {
   res.render("index", { currentUser: req.user });
@@ -106,7 +105,12 @@ function isLoggedIn(req, res, next) {
   }
   res.sendStatus(401);
 }
-server.listen(5000, () => {
-  console.log("Connected To Port 5000");
-  connectDb().then(() => console.log("Connected To Database Server"));
+connectDb().then(() => {
+  console.log("Connected To Database Server");
+  levelSeeder().then(() => {
+    console.log("Seeded Database");
+    server.listen(5000, () => {
+      console.log("Connected To Port 5000");
+    });
+  });
 });

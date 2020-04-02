@@ -75,6 +75,8 @@ export default class CollisionS {
         if (this.debug) this.createBorderForCBox(entityCBox);
         for (const innerEntity of entities) {
           if (
+            innerEntity.descriptor !== "Player" &&
+            innerEntity.descriptor !== entity.descriptor &&
             innerEntity.id !== entity.id &&
             innerEntity.components[ComponentTypes.RENDERABLE] &&
             innerEntity.components[ComponentTypes.COLLIDABLE]
@@ -95,24 +97,30 @@ export default class CollisionS {
                 lastEntityCBox,
                 lastInnerCBox
               );
-
-              if (direction === "above") {
-                entityRenderC.posY =
-                  innerCBox.top - entityCBox.height - offSet.height;
-                entityCollisionC.isGrounded = true;
-              } else if (direction === "below") {
-                entityRenderC.posY = innerCBox.bottom + offSet.height;
-                const movementC = entity.components[ComponentTypes.MOVABLE];
-                if (movementC?.currentjumpForce) movementC.currentjumpForce = 0;
-              } else if (direction === "right") {
-                entityRenderC.posX =
-                  innerCBox.left - entityCBox.width - offSet.width;
-              } else if (direction === "left") {
-                entityRenderC.posX = innerCBox.right - offSet.width;
-              }
-              if (direction === "right" || direction === "left") {
-                if (entityMovementC) entityMovementC.currentValocity = 0;
-                if (innerMovementC) innerMovementC.currentValocity = 0;
+              if (innerEntity.descriptor === "Currency") {
+                const currencyC = entity.components[ComponentTypes.CURRENCY];
+                if (currencyC) currencyC.currentCurrency++;
+                innerEntity.remove();
+              } else {
+                if (direction === "above") {
+                  entityRenderC.posY =
+                    innerCBox.top - entityCBox.height - offSet.height;
+                  entityCollisionC.isGrounded = true;
+                } else if (direction === "below") {
+                  entityRenderC.posY = innerCBox.bottom + offSet.height;
+                  const movementC = entity.components[ComponentTypes.MOVABLE];
+                  if (movementC?.currentjumpForce)
+                    movementC.currentjumpForce = 0;
+                } else if (direction === "right") {
+                  entityRenderC.posX =
+                    innerCBox.left - entityCBox.width - offSet.width;
+                } else if (direction === "left") {
+                  entityRenderC.posX = innerCBox.right - offSet.width;
+                }
+                if (direction === "right" || direction === "left") {
+                  if (entityMovementC) entityMovementC.currentValocity = 0;
+                  if (innerMovementC) innerMovementC.currentValocity = 0;
+                }
               }
             }
           }

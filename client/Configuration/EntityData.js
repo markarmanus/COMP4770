@@ -1,7 +1,6 @@
 import ComponentTypes from "../ComponentTypes";
 
 import Images from "../Assets/Images";
-
 const EntityData = {
   Player: {
     [ComponentTypes.RENDERABLE]: {
@@ -43,6 +42,34 @@ const EntityData = {
       animationSpeed: 300,
       imgSrc: Images.yoda,
       spritesCount: 6
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1
+    },
+    [ComponentTypes.HEALTH]: {
+      maxHealth: 100,
+      positionOnGUI: "left"
+    },
+    [ComponentTypes.FOCUS]: {
+      maxFocus: 100,
+      positionOnGUI: "left"
+    },
+    [ComponentTypes.CURRENCY]: {
+      currentCurrency: user.imperialCredits,
+      positionOnGUI: "right"
+    }
+  },
+  Currency: {
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 40,
+      imgSrc: Images.currencyAnimated,
+      spritesCount: 10
+    },
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.currencyAnimated,
+      width: 51,
+      height: 51,
+      scale: 1
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1

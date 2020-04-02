@@ -5,13 +5,7 @@ import AnimationS from "./Systems/AnimationS";
 import MovementS from "./Systems/MovementS";
 import PhysicsS from "./Systems/PhysicsS";
 import CollisionS from "./Systems/CollisionS";
-import RenderableC from "../Components/RenderableC";
-import AnimatedC from "../Components/AnimatedC";
-import MovableC from "./Components/MovableC";
-import MultiSpritesC from "./Components/MultiSpritesC";
-import ControllableC from "./Components/ControllableC";
-import CollidableC from "./Components/CollidableC";
-import PhysicalC from "./Components/PhysicalC";
+import GuiS from "./Systems/GuiS";
 import LevelManager from "./LevelManager";
 export default class inGameState extends GameState {
   constructor(level) {
@@ -23,6 +17,7 @@ export default class inGameState extends GameState {
     this.movementS = new MovementS();
     this.collisionS = new CollisionS();
     this.physicsS = new PhysicsS(0.4);
+    this.guiS = new GuiS(0.5);
     this.levelManager = new LevelManager(this.entityManager);
     this.level = level;
     this.init();
@@ -45,6 +40,7 @@ export default class inGameState extends GameState {
     this.controllsS.update(this.entityManager);
     if (!this.paused) {
       super.update();
+      this.guiS.update(this.entityManager);
       this.animationS.update(this.entityManager);
       this.physicsS.update(this.entityManager);
       this.movementS.update(this.entityManager);

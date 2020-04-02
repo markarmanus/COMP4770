@@ -1,21 +1,11 @@
 const Level = require("../models/Level");
-const levels = [
+
+let levels = [
   {
     data: {
       entities: [
         { posX: 100, posY: 500, type: "Player" },
-        { posX: 0, posY: 700, type: "Floor" },
-        { posX: 32, posY: 700, type: "Floor" },
-        { posX: 64, posY: 700, type: "Floor" },
-        { posX: 96, posY: 700, type: "Floor" },
-        { posX: 128, posY: 700, type: "Floor" },
-        { posX: 160, posY: 700, type: "Floor" },
-        { posX: 192, posY: 700, type: "Floor" },
-        { posX: 224, posY: 700, type: "Floor" },
-        { posX: 256, posY: 700, type: "Floor" },
-        { posX: 288, posY: 700, type: "Floor" },
-        { posX: 320, posY: 700, type: "Floor" },
-        { posX: 352, posY: 700, type: "Floor" }
+        { posX: 0, posY: 700, type: "Floor" }
       ]
     }
   },
@@ -25,12 +15,50 @@ const levels = [
     }
   }
 ];
-
-module.exports = levelSeeder = () => {
-  Level.deleteMany({ isCustom: false }, err => {
-    if (err) console.error(err);
+for (let i = 1; i < 100; i++) {
+  levels[0].data.entities.push({
+    posX: i * 32,
+    posY: 700,
+    type: "Floor"
   });
-  Level.insertMany(levels, err => {
-    if (err) console.error(err);
+  levels[0].data.entities.push({
+    posX: (i + 10) * 32,
+    posY: 550,
+    type: "Floor"
+  });
+  levels[0].data.entities.push({
+    posX: (i + 20) * 32,
+    posY: 400,
+    type: "Floor"
+  });
+  if (i % 2 == 0) {
+    levels[0].data.entities.push({
+      posX: i * 32,
+      posY: 630,
+      type: "Currency"
+    });
+    levels[0].data.entities.push({
+      posX: (i + 10) * 32,
+      posY: 480,
+      type: "Currency"
+    });
+    levels[0].data.entities.push({
+      posX: (i + 20) * 32,
+      posY: 330,
+      type: "Currency"
+    });
+  }
+}
+console.log(levels[0].data.entities);
+
+module.exports = levelSeeder = async () => {
+  return new Promise(resolve => {
+    Level.deleteMany({ isCustom: false }, err => {
+      if (err) console.error(err);
+      Level.insertMany(levels, err => {
+        if (err) console.error(err);
+        return resolve();
+      });
+    });
   });
 };

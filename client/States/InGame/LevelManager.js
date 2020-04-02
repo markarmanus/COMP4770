@@ -7,6 +7,9 @@ import ControllableC from "../InGame/Components/ControllableC";
 import MovableC from "../InGame/Components/MovableC";
 import MultiSpritesC from "../InGame/Components/MultiSpritesC";
 import PhysicalC from "../InGame/Components/PhysicalC";
+import HealthC from "../InGame/Components/HealthC";
+import FocusC from "../InGame/Components/FocusC";
+import CurrencyC from "../InGame/Components/CurrencyC";
 
 const ComponentClasses = {
   [ComponentTypes.RENDERABLE]: RenderableC,
@@ -15,7 +18,10 @@ const ComponentClasses = {
   [ComponentTypes.MOVABLE]: MovableC,
   [ComponentTypes.MULTI_SPRITES]: MultiSpritesC,
   [ComponentTypes.COLLIDABLE]: CollidableC,
-  [ComponentTypes.PHYSICAL]: PhysicalC
+  [ComponentTypes.PHYSICAL]: PhysicalC,
+  [ComponentTypes.HEALTH]: HealthC,
+  [ComponentTypes.FOCUS]: FocusC,
+  [ComponentTypes.CURRENCY]: CurrencyC
 };
 export default class LevelManager {
   constructor(entityManger) {

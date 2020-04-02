@@ -6,6 +6,9 @@ const ComponentTypes = {
   MOVABLE: 5,
   MULTI_SPRITES: 6,
   COLLIDABLE: 7,
-  PHYSICAL: 8
+  PHYSICAL: 8,
+  HEALTH: 9,
+  FOCUS: 10,
+  CURRENCY: 11
 };
 export default ComponentTypes;
