@@ -3,17 +3,20 @@
 
 <% if (currentUser) { %>
 <script type="module">
-  import GameEngine from "./GameEngine.js";
   window.onload = async () => {
     var canvas = document.getElementById("canvas");
     window.socket = io();
     window.canvas = canvas;
     window.canvasContext = canvas.getContext("2d");
-    await fetch("/user", { credentials: "include" }).then(user =>
-      user.json().then(data => (window.user = data))
-    );
-    let engine = new GameEngine();
-    engine.run();
+    await fetch("/user", { credentials: "include" }).then(async user => {
+      await fetch("/levels", { credentials: "include" }).then(async levels => {
+        await levels.json().then(data => (window.levels = data));
+        await user.json().then(data => (window.user = data));
+        const GameEngine = await import("./GameEngine.js");
+        let engine = new GameEngine.default();
+        engine.run();
+      });
+    });
   };
 </script>
 <% } %>

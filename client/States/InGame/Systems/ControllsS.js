@@ -3,51 +3,25 @@ import ComponentTypes from "./../../../ComponentTypes";
 export default class ControllsS {
   constructor() {
     this.clickedBttns = {};
-    // const move = key => {
-    //   if (this.clickedBttns[key] >= 1) {
-    //     this.clickedBttns[key] = 1;
-    //     clearInterval(move);
-    //     return;
-    //   }
-    //   this.clickedBttns[key] += 0.1;
-    // };
-    // const stop = (clickedBttns, key) => {
-    //   if (this.clickedBttns[e.key] <= 0) {
-    //     this.clickedBttns[e.key] = 0;
-    //     clearInterval(stop);
-    //     return;
-    //   }
-    //   this.clickedBttns[e.key] -= 0.1;
-    // };
-    var move;
-    var stop;
-    window.addEventListener("keydown", async e => {
-      console.log("keydown");
-      if (move != undefined) await clearInterval(move);
-      if (this.clickedBttns[e.key] === undefined) this.clickedBttns[e.key] = 0;
-      move = setInterval(() => {
-        if (this.clickedBttns[e.key] >= 1) {
-          this.clickedBttns[e.key] = 1;
-          clearInterval(move);
-          return;
-        }
-        console.log("move");
-        this.clickedBttns[e.key] = this.clickedBttns[e.key] + 0.1;
-      }, 100);
+    this.fistClickedAt = {};
+    this.lastClickedAt = {};
+    this.doubleClick = {};
+    window.addEventListener("keydown", e => {
+      const clickTime = new Date().getTime();
+      const doubleClick = clickTime - this.lastClickedAt[e.key] < 200;
+      if (doubleClick) {
+        this.doubleClick[e.key] = true;
+        setTimeout(() => (this.doubleClick[e.key] = false), 100);
+      }
+      if (!this.clickedBttns[e.key]) this.fistClickedAt[e.key] = clickTime;
+      if (!this.clickedBttns[e.key] && !doubleClick)
+        this.lastClickedAt[e.key] = clickTime;
+      this.clickedBttns[e.key] = true;
     });
     window.addEventListener("keyup", e => {
-      console.log("hi");
-      clearInterval(move);
-      stop = setInterval(() => {
-        if (this.clickedBttns[e.key] <= 0) {
-          this.clickedBttns[e.key] = 0;
-          clearInterval(stop);
-          return;
-        }
-        console.log("stop");
-
-        this.clickedBttns[e.key] = this.clickedBttns[e.key] - 0.1;
-      }, 25);
+      this.clickedBttns[e.key] = false;
+      this.fistClickedAt[e.key] = false;
+      this.doubleClick[e.key] = false;
     });
   }
   update(entityManager) {
@@ -57,22 +31,16 @@ export default class ControllsS {
         entity.components[ComponentTypes.CONTROLABLE] &&
         entity.components[ComponentTypes.RENDERABLE]
       ) {
-        const controllComponent = entity.components[ComponentTypes.CONTROLABLE];
-        const renderComponent = entity.components[ComponentTypes.RENDERABLE];
-        console.log(this.clickedBttns[controllComponent.leftBttn]);
-        console.log(this.clickedBttns[controllComponent.rightBttn]);
-        if (this.clickedBttns[controllComponent.leftBttn]) {
-          renderComponent.posX -=
-            controllComponent.speed *
-            this.clickedBttns[controllComponent.leftBttn];
-        }
-        if (this.clickedBttns[controllComponent.rightBttn]) {
-          renderComponent.posX +=
-            controllComponent.speed *
-            this.clickedBttns[controllComponent.rightBttn];
-        }
-        if (this.clickedBttns[controllComponent.jumpBttn]) {
-          //Jump Logic
+        const controllC = entity.components[ComponentTypes.CONTROLABLE];
+        for (let [key, value] of Object.entries(this.clickedBttns)) {
+          if (controllC.bttnsState[key] !== undefined) {
+            controllC.bttnsState[key] = value;
+            controllC.bttnsDblClickState[key] = this.doubleClick[key];
+            controllC.bttnsHoldState[key] =
+              new Date().getTime() - this.fistClickedAt[key] > 150 && value
+                ? true
+                : false;
+          }
         }
       }
     }

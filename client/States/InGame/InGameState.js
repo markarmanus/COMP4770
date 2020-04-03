@@ -2,44 +2,53 @@ import GameState from "./../../GameState";
 import RenderS from "./Systems/RenderS";
 import ControllsS from "./Systems/ControllsS";
 import AnimationS from "./Systems/AnimationS";
-import ComponentTypes from "../../ComponentTypes";
-import RenderableC from "../Components/RenderableC";
-import ControllableC from "./Components/ControllableC";
+import MovementS from "./Systems/MovementS";
+import PhysicsS from "./Systems/PhysicsS";
+import CollisionS from "./Systems/CollisionS";
+import GuiS from "./Systems/GuiS";
+import LevelManager from "./LevelManager";
 export default class inGameState extends GameState {
-  constructor() {
+  constructor(level) {
     super();
     this.paused = false;
     this.renderS = new RenderS();
-    this.controllerS = new ControllsS();
+    this.controllsS = new ControllsS();
     this.animationS = new AnimationS();
-    this.loadLevel();
+    this.movementS = new MovementS();
+    this.collisionS = new CollisionS();
+    this.physicsS = new PhysicsS(0.4);
+    this.guiS = new GuiS(0.5);
+    this.levelManager = new LevelManager(this.entityManager);
+    this.level = level;
+    this.init();
+    window.addEventListener("keydown", e => {
+      if (e.key === "p") this.paused = !this.paused;
+    });
   }
   update() {
     canvasContext.clearRect(0, 0, canvas.width, canvas.height);
     const background = new Image();
     background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
-    canvasContext.drawImage(background, 0, 0);
+    const patern = canvasContext.createPattern(background, "repeat");
+    canvasContext.fillStyle = patern;
+    canvasContext.fillRect(
+      canvas.width * 2 * -1,
+      canvas.height * 2 * -1,
+      canvas.width * 10,
+      canvas.height * 10
+    );
+    this.controllsS.update(this.entityManager);
     if (!this.paused) {
       super.update();
-      this.renderS.update(this.entityManager);
+      this.guiS.update(this.entityManager);
       this.animationS.update(this.entityManager);
+      this.physicsS.update(this.entityManager);
+      this.movementS.update(this.entityManager);
+      this.collisionS.update(this.entityManager);
     }
-    this.controllerS.update(this.entityManager);
+    this.renderS.update(this.entityManager);
   }
-  //Here we will load the level that the user clicked on.
-  loadLevel() {
-    const player = this.entityManager.addEntity("Player");
-    const renderC = new RenderableC(0, 600, 100, 100, null, 0, 0);
-
-    const controllC = new ControllableC(
-      {
-        leftBttn: "a",
-        rightBttn: "d",
-        jumpBttn: " "
-      },
-      10
-    );
-    player.addComponent(renderC);
-    player.addComponent(controllC);
+  init() {
+    this.levelManager.loadLevel(this.level);
   }
 }

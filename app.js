@@ -4,6 +4,8 @@ const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const connectDb = require("./server/db/connection");
 const User = require("./server/db/models/User");
+const Level = require("./server/db/models/Level");
+const levelSeeder = require("./server/db/seeders/level");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
@@ -24,6 +26,12 @@ app.use(
   express.static(path.join(__dirname, "/client"), {
     index: false,
     extensions: ["js", "ejs"]
+  })
+);
+app.use(
+  express.static(path.join(__dirname, "/client/Assets"), {
+    index: false,
+    extensions: ["png"]
   })
 );
 app.use(bodyParser.json());
@@ -54,6 +62,11 @@ app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
 
+app.get("/levels", isLoggedIn, async (req, res) => {
+  await Level.find({ isCustom: false })
+    .then(levels => res.send(levels))
+    .catch(err => console.error(err));
+});
 app.post("/register", (req, res) => {
   User.register(
     new User({
@@ -92,7 +105,12 @@ function isLoggedIn(req, res, next) {
   }
   res.sendStatus(401);
 }
-server.listen(5000, () => {
-  console.log("Connected To Port 5000");
-  connectDb().then(() => console.log("Connected To Database Server"));
+connectDb().then(() => {
+  console.log("Connected To Database Server");
+  levelSeeder().then(() => {
+    console.log("Seeded Database");
+    server.listen(5000, () => {
+      console.log("Connected To Port 5000");
+    });
+  });
 });
