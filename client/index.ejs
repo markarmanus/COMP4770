@@ -23,19 +23,20 @@
 
 <body>
   <% if(!currentUser){ %>
-  <!-- BROOK MAKE PRETTY PLEASE -->
+  <!-- BROOKE MAKE PRETTY PLEASE -->
+  <div id="title">baby yoda game</div>
+  <div id="subtitle">name coming soon</div>
+  <div id="bb-yoda-hero"></div>
   <div id="formsContainer">
-    <form method="POST" action="/login">
+    <form method="POST">
       <input type="text" name="username" placeholder="username" />
       <input type="password" name="password" placeholder="password" />
-      <button>Login</button>
+      <div class="buttons">
+      <button type="submit" formaction="/login">Login</button>
+      <button type="submit" formaction="/register">Sign up</button>
+      </div>
     </form>
 
-    <form method="POST" action="/register">
-      <input type="text" name="username" placeholder="username" />
-      <input type="password" name="password" placeholder="password" />
-      <button>Sign up</button>
-    </form>
   </div>
   <% } else { %>
   <div id="logoutContainer">
