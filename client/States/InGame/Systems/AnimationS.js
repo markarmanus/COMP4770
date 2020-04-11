@@ -4,7 +4,7 @@ export default class AnimationS {
     const entities = entityManager.getEntities();
     for (const entity of entities) {
       if (
-        entity.components[ComponentTypes.RENDERABLE] &&
+        entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
         entity.components[ComponentTypes.ANIMATED]
       ) {
         const renderC = entity.components[ComponentTypes.RENDERABLE];

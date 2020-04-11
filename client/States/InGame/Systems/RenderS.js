@@ -19,14 +19,16 @@ export default class RenderS {
             renderC.scaledWidth,
             renderC.scaledHeight
           );
+        }
+        if (
+          renderC.posX < -300 ||
+          renderC.posX > canvas.width + 300 ||
+          renderC.posY < -300 ||
+          renderC.posY > canvas.height + 300
+        ) {
+          renderC.isOnScreen = false;
         } else {
-          canvasContext.fillStyle = "#FF0000";
-          canvasContext.fillRect(
-            renderC.posX,
-            renderC.posY,
-            renderC.width,
-            renderC.height
-          );
+          renderC.isOnScreen = true;
         }
       }
     }

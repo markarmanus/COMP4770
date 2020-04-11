@@ -10,7 +10,7 @@ export default class CollisionS {
     const entities = entityManager.getEntities();
     for (const entity of entities) {
       if (
-        entity.components[ComponentTypes.RENDERABLE] &&
+        entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
         entity.components[ComponentTypes.PHYSICAL]
       ) {
         const physicsC = entity.components[ComponentTypes.PHYSICAL];

@@ -8,6 +8,7 @@ export default class RenderableC extends Component {
     this.image = image;
     this.imageCropX = 0;
     this.imageCropY = 0;
+    this.isOnScree = true;
     this.width = width;
     this.height = height;
     this.scale = scale;

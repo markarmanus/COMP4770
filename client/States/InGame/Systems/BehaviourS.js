@@ -50,7 +50,7 @@ export default class BehaviourS {
   update(entityManager) {
     const entities = entityManager.getEntities();
     for (const entity of entities) {
-      if (entity.components[ComponentTypes.RENDERABLE]) {
+      if (entity.components[ComponentTypes.RENDERABLE]?.isOnScreen) {
         if (entity.components[ComponentTypes.SEEK]) {
           this.handleSeek(entity);
         }
