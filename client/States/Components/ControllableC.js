@@ -1,5 +1,5 @@
-import ComponentTypes from "../../../ComponentTypes";
-import Component from "../../../Component";
+import ComponentTypes from "../../ComponentTypes";
+import Component from "../../Component";
 export default class ControllableC extends Component {
   constructor(controlls) {
     super(ComponentTypes.CONTROLABLE);
@@ -8,8 +8,6 @@ export default class ControllableC extends Component {
     this.jumpBttn = controlls.jumpBttn;
     this.upBttn = controlls.upBttn;
     this.downBttn = controlls.downBttn;
-    this.attack = controlls.attack;
-    this.alternate = controlls.alternate;
     this.bttnsState = Object.values(controlls).reduce((acc, val) => {
       acc[val] = false;
       return acc;

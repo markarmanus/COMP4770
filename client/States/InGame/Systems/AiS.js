@@ -1,5 +1,5 @@
 import ComponentTypes from "./../../../ComponentTypes";
-import Vec2 from "../Vec2";
+import Vec2 from "../../../Vec2";
 export default class AiS {
   constructor() {
     this.debug = false;

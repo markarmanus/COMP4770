@@ -1,7 +1,7 @@
 import GameState from "./../../GameState";
-import RenderS from "./Systems/RenderS";
-import ControllsS from "./Systems/ControllsS";
-import AnimationS from "./Systems/AnimationS";
+import RenderS from "../Systems/RenderS";
+import ControllsS from "../Systems/ControllsS";
+import AnimationS from "../Systems/AnimationS";
 import DeathS from "./Systems/DeathS";
 import MovementS from "./Systems/MovementS";
 import PhysicsS from "./Systems/PhysicsS";
@@ -36,17 +36,6 @@ export default class inGameState extends GameState {
     });
   }
   update() {
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-    const background = new Image();
-    background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
-    const patern = canvasContext.createPattern(background, "repeat");
-    canvasContext.fillStyle = patern;
-    canvasContext.fillRect(
-      canvas.width * 2 * -1,
-      canvas.height * 2 * -1,
-      canvas.width * 10,
-      canvas.height * 10
-    );
     this.controllsS.update(this.entityManager);
     if (!this.paused) {
       super.update();

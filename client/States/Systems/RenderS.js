@@ -1,6 +1,16 @@
-import ComponentTypes from "./../../../ComponentTypes";
+import ComponentTypes from "../../ComponentTypes";
 export default class RenderS {
+
+  updateCanvasOffset() {
+    const canvasTransform = canvasContext.getTransform();
+    this.canvasOffset = {
+      x: canvasTransform.e,
+      y: canvasTransform.f,
+    };
+  }
   update(entityManager) {
+    this.updateCanvasOffset();
+
     const entities = entityManager.getEntities();
     for (const entity of entities) {
       if (entity.components[ComponentTypes.RENDERABLE]) {
@@ -21,10 +31,10 @@ export default class RenderS {
           );
         }
         if (
-          renderC.posX < -300 ||
-          renderC.posX > canvas.width + 300 ||
-          renderC.posY < -300 ||
-          renderC.posY > canvas.height + 300
+          renderC.posX + this.canvasOffset.x < -300 ||
+          renderC.posX + this.canvasOffset.x > canvas.width + 300 ||
+          renderC.posY + this.canvasOffset.y < -300 ||
+          renderC.posY + this.canvasOffset.y > canvas.height + 300
         ) {
           renderC.isOnScreen = false;
         } else {
@@ -32,5 +42,7 @@ export default class RenderS {
         }
       }
     }
+
   }
+
 }

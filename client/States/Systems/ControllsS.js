@@ -1,4 +1,4 @@
-import ComponentTypes from "./../../../ComponentTypes";
+import ComponentTypes from "../../ComponentTypes";
 
 export default class ControllsS {
   constructor() {
@@ -40,9 +40,7 @@ export default class ControllsS {
     const entities = entityManager.getEntities();
     for (const entity of entities) {
       if (
-        entity.components[ComponentTypes.CONTROLABLE] &&
-        entity.components[ComponentTypes.RENDERABLE]
-      ) {
+        entity.components[ComponentTypes.CONTROLABLE]) {
         const controllC = entity.components[ComponentTypes.CONTROLABLE];
         for (let [key, value] of Object.entries(this.clickedBttns)) {
           if (controllC.bttnsState[key] !== undefined) {

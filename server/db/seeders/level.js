@@ -4,11 +4,9 @@ let levels = [
   {
     data: {
       entities: [
-        { posX: 100, posY: 500, type: "Player" },
+        { posX: 128, posY: 480, type: "Player" },
 
-        { posX: 0, posY: 700, type: "Floor" },
-        { posX: 300, posY: 500, type: "StormTropper" },
-        { posX: 300, posY: 500, type: "StormTropper" },
+        { posX: 192, posY: 480, type: "StormTropper" },
       ],
     },
   },
@@ -21,35 +19,27 @@ let levels = [
 for (let i = 1; i < 100; i++) {
   levels[0].data.entities.push({
     posX: i * 32,
-    posY: 700,
+    posY: 672,
     type: "Floor",
   });
   levels[0].data.entities.push({
     posX: (i + 10) * 32,
-    posY: 550,
+    posY: 512,
     type: "Floor",
   });
-  levels[0].data.entities.push({
-    posX: (i + 20) * 32,
-    posY: 400,
-    type: "Floor",
-  });
+
   if (i % 2 == 0) {
     levels[0].data.entities.push({
       posX: i * 32,
-      posY: 630,
+      posY: 608,
       type: "Currency",
     });
     levels[0].data.entities.push({
       posX: (i + 10) * 32,
-      posY: 480,
+      posY: 448,
       type: "Currency",
     });
-    levels[0].data.entities.push({
-      posX: (i + 20) * 32,
-      posY: 330,
-      type: "Currency",
-    });
+
   }
 }
 console.log(levels[0].data.entities);

@@ -1,4 +1,4 @@
-import ComponentTypes from "./../../../ComponentTypes";
+import ComponentTypes from "../../ComponentTypes";
 export default class AnimationS {
   update(entityManager) {
     const entities = entityManager.getEntities();

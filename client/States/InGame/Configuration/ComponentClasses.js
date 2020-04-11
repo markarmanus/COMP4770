@@ -2,7 +2,7 @@ import ComponentTypes from "../../../ComponentTypes";
 import RenderableC from "../../Components/RenderableC";
 import AnimatedC from "../../Components/AnimatedC";
 import CollidableC from "../Components/CollidableC";
-import ControllableC from "../Components/ControllableC";
+import ControllableC from "../../Components/ControllableC";
 import MovableC from "../Components/MovableC";
 import MultiSpritesC from "../Components/MultiSpritesC";
 import PhysicalC from "../Components/PhysicalC";
