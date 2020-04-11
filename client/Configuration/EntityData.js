@@ -8,6 +8,10 @@ const EntityData = {
       width: 32,
       height: 64,
       scale: 2.5,
+      visionOffset: {
+        x: 30,
+        y: 40,
+      },
     },
     [ComponentTypes.PHYSICAL]: {
       airFriction: 0.7,
@@ -59,7 +63,38 @@ const EntityData = {
       positionOnGUI: "right",
     },
     [ComponentTypes.WEAPONS]: {
-      shootingSpeed: 10,
+      shootingSpeed: 1,
+    },
+  },
+  StormTropper: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.yoda,
+      width: 32,
+      height: 64,
+      visionOffset: {
+        x: 30,
+        y: 40,
+      },
+      scale: 2.5,
+    },
+    [ComponentTypes.PHYSICAL]: {
+      airFriction: 0.7,
+      maxGravity: 16,
+    },
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 300,
+      imgSrc: Images.yoda,
+      spritesCount: 6,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.AI]: {
+      AItype: "StormTropper",
+      offset: {
+        x: 20,
+        y: 20,
+      },
     },
   },
   Currency: {
@@ -83,6 +118,7 @@ const EntityData = {
       image: Images.floor,
       width: 400,
       height: 400,
+      blocksView: true,
       scale: 0.08,
     },
     [ComponentTypes.COLLIDABLE]: {

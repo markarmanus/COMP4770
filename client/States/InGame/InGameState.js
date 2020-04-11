@@ -10,6 +10,7 @@ import GuiS from "./Systems/GuiS";
 import BehaviourS from "./Systems/BehaviourS";
 import CameraS from "./Systems/CameraS";
 import WeaponsS from "./Systems/WeaponsS";
+import AiS from "./Systems/AiS";
 import LevelManager from "./LevelManager";
 export default class inGameState extends GameState {
   constructor(level) {
@@ -27,6 +28,7 @@ export default class inGameState extends GameState {
     this.weaponsS = new WeaponsS();
     this.guiS = new GuiS(0.55);
     this.levelManager = new LevelManager(this.entityManager, this.cameraS);
+    this.aiS = new AiS();
     this.level = level;
     this.init();
     window.addEventListener("keydown", (e) => {
@@ -51,6 +53,7 @@ export default class inGameState extends GameState {
       this.guiS.update(this.entityManager);
       this.animationS.update(this.entityManager);
       this.behaviourS.update(this.entityManager);
+      this.aiS.update(this.entityManager);
       this.DeathS.update(this.entityManager);
       this.physicsS.update(this.entityManager);
       this.movementS.update(this.entityManager);

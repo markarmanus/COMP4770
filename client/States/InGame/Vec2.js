@@ -6,4 +6,11 @@ export default class Vec2 {
     this.normalX = this.length === 0 ? 0 : x / this.length;
     this.normalY = this.length === 0 ? 0 : y / this.length;
   }
+
+  subtract(vector) {
+    return new Vec2(this.x - vector.x, this.y - vector.y);
+  }
+  cross(vector) {
+    return this.x * vector.y - this.y * vector.x;
+  }
 }
