@@ -1,36 +1,17 @@
+import ComponentClasses from "./Configuration/ComponentClasses";
 import EntityData from "../../Configuration/EntityData";
 import ComponentTypes from "../../ComponentTypes";
-import RenderableC from "../Components/RenderableC";
-import AnimatedC from "../Components/AnimatedC";
-import CollidableC from "../InGame/Components/CollidableC";
-import ControllableC from "../InGame/Components/ControllableC";
-import MovableC from "../InGame/Components/MovableC";
-import MultiSpritesC from "../InGame/Components/MultiSpritesC";
-import PhysicalC from "../InGame/Components/PhysicalC";
-import HealthC from "../InGame/Components/HealthC";
-import FocusC from "../InGame/Components/FocusC";
-import CurrencyC from "../InGame/Components/CurrencyC";
 
-const ComponentClasses = {
-  [ComponentTypes.RENDERABLE]: RenderableC,
-  [ComponentTypes.ANIMATED]: AnimatedC,
-  [ComponentTypes.CONTROLABLE]: ControllableC,
-  [ComponentTypes.MOVABLE]: MovableC,
-  [ComponentTypes.MULTI_SPRITES]: MultiSpritesC,
-  [ComponentTypes.COLLIDABLE]: CollidableC,
-  [ComponentTypes.PHYSICAL]: PhysicalC,
-  [ComponentTypes.HEALTH]: HealthC,
-  [ComponentTypes.FOCUS]: FocusC,
-  [ComponentTypes.CURRENCY]: CurrencyC
-};
 export default class LevelManager {
-  constructor(entityManger) {
+  constructor(entityManger, cameraS) {
     this.entityManger = entityManger;
+    this.cameraS = cameraS;
   }
   loadLevel(level) {
     const entities = level.data.entities;
     for (let entity of entities) {
       const entityInstance = this.entityManger.addEntity(entity.type);
+      if (entity.type === "Player") this.cameraS.follow(entityInstance);
       const components = Object.entries(EntityData[entity.type]);
       for (let [component, properties] of components) {
         if (component == ComponentTypes.RENDERABLE) {

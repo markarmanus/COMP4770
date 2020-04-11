@@ -1,31 +1,32 @@
 @font-face {
-  font-family:"DistantGalaxy";
+  font-family: "DistantGalaxy";
   src: url("Fonts/Distant-Galaxy/DISTGRG_.ttf") format("truetype");
 }
 
 @font-face {
-  font-family:"StarJediHollow";
+  font-family: "StarJediHollow";
   src: url("Fonts/star_jedi/starjedi/Starjhol.ttf") format("truetype");
 }
 
 body {
   font-family: DistantGalaxy;
-  background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  background: #000
+    url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top
+    center;
   overflow-x: hidden;
-
 }
 
 #title {
   font-family: StarJediHollow;
-  color: #EEDB00;
+  color: #eedb00;
   font-size: 70px;
   text-align: center;
   margin-top: 50px;
   letter-spacing: 2px;
 }
 
-#subtitle{
-  color: #EEDB00;
+#subtitle {
+  color: #eedb00;
   font-size: 30px;
   text-align: center;
   letter-spacing: 2px;
@@ -40,13 +41,13 @@ body {
 }
 
 #bb-yoda-hero {
-  background-image: url(Images/BYF-big.gif);
+  background-image: url(Assets/Images/BYF-big.gif);
   height: 300px;
   width: 300px;
   background-size: cover;
   animation: flying 15s;
   position: absolute;
-  left: calc(50% - 150px);;
+  left: calc(50% - 150px);
 }
 
 #formsContainer {
@@ -77,20 +78,20 @@ body {
 #formsContainer button {
   font-family: DistantGalaxy;
   background-color: black;
-  color: #EEDB00;
+  color: #eedb00;
   letter-spacing: 1px;
   border: none;
   font-size: 16px;
   margin-top: 15px;
   width: 140px;
   padding: 10px 0;
-  box-shadow: 0 0 5px #EDDB00;
+  box-shadow: 0 0 5px #eddb00;
   border-radius: 5px;
   cursor: pointer;
 }
 
 #formsContainer button:hover {
-  background-color: #EDDB00;
+  background-color: #eddb00;
   color: black;
 }
 

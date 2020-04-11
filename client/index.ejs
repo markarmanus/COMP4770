@@ -8,14 +8,18 @@
     window.socket = io();
     window.canvas = canvas;
     window.canvasContext = canvas.getContext("2d");
-    await fetch("/user", { credentials: "include" }).then(async user => {
-      await fetch("/levels", { credentials: "include" }).then(async levels => {
-        await levels.json().then(data => (window.levels = data));
-        await user.json().then(data => (window.user = data));
-        const GameEngine = await import("./GameEngine.js");
-        let engine = new GameEngine.default();
-        engine.run();
-      });
+    await fetch("/user", { credentials: "include" }).then(async (user) => {
+      await fetch("/levels", { credentials: "include" }).then(
+        async (levels) => {
+          await levels.json().then((data) => (window.levels = data));
+          await user.json().then((data) => (window.user = data));
+          const GameEngine = await import("./GameEngine.js");
+          const MouseTracker = await import("./MouseTracker.js");
+          window.mouseTracker = new MouseTracker.default(10, 30);
+          let engine = new GameEngine.default();
+          engine.run();
+        }
+      );
     });
   };
 </script>
@@ -32,11 +36,10 @@
       <input type="text" name="username" placeholder="username" />
       <input type="password" name="password" placeholder="password" />
       <div class="buttons">
-      <button type="submit" formaction="/login">Login</button>
-      <button type="submit" formaction="/register">Sign up</button>
+        <button type="submit" formaction="/login">Login</button>
+        <button type="submit" formaction="/register">Sign up</button>
       </div>
     </form>
-
   </div>
   <% } else { %>
   <div id="logoutContainer">

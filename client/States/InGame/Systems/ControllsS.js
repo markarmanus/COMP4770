@@ -6,7 +6,19 @@ export default class ControllsS {
     this.fistClickedAt = {};
     this.lastClickedAt = {};
     this.doubleClick = {};
-    window.addEventListener("keydown", e => {
+    this.mouseState = {};
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
+    canvas.addEventListener("mousedown", (e) => {
+      if (e.button === 0) this.mouseState.leftClick = true;
+      if (e.button === 2) {
+        this.mouseState.rightClick = true;
+      }
+    });
+    canvas.addEventListener("mouseup", (e) => {
+      if (e.button === 0) this.mouseState.leftClick = false;
+      if (e.button === 2) this.mouseState.rightClick = false;
+    });
+    window.addEventListener("keydown", (e) => {
       const clickTime = new Date().getTime();
       const doubleClick = clickTime - this.lastClickedAt[e.key] < 200;
       if (doubleClick) {
@@ -18,7 +30,7 @@ export default class ControllsS {
         this.lastClickedAt[e.key] = clickTime;
       this.clickedBttns[e.key] = true;
     });
-    window.addEventListener("keyup", e => {
+    window.addEventListener("keyup", (e) => {
       this.clickedBttns[e.key] = false;
       this.fistClickedAt[e.key] = false;
       this.doubleClick[e.key] = false;
@@ -42,6 +54,7 @@ export default class ControllsS {
                 : false;
           }
         }
+        controllC.mouseState = this.mouseState;
       }
     }
   }

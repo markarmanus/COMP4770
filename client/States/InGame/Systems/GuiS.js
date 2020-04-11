@@ -1,12 +1,12 @@
 import ComponentTypes from "../../../ComponentTypes";
-import Images from "../../../Assets/Images";
+import Images from "../../../Assets/ImageGenerator";
 
 export default class GuiS {
   constructor(scale) {
     this.scale = scale;
     this.defaultPadding = {
       x: 30,
-      y: 10
+      y: 10,
     };
     this.canvasOffset = {};
   }
@@ -14,7 +14,7 @@ export default class GuiS {
     const canvasTransform = canvasContext.getTransform();
     this.canvasOffset = {
       x: canvasTransform.e,
-      y: canvasTransform.f
+      y: canvasTransform.f,
     };
   }
   drawBar(fullBar, emptyBar, padding, offset, percent, place) {
@@ -109,7 +109,7 @@ export default class GuiS {
             x: this.defaultPadding.x,
             y:
               Images.fullHealthBar.naturalHeight * this.scale +
-              this.defaultPadding.y
+              this.defaultPadding.y,
           };
           const focusPercent = focusC.currentFocus / focusC.maxFocus;
           const offset = 80;

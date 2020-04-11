@@ -16,5 +16,9 @@ export default class ControllableC extends Component {
     }, {});
     this.bttnsHoldState = Object.assign({}, this.bttnsState);
     this.bttnsDblClickState = Object.assign({}, this.bttnsState);
+    this.mouseState = {
+      leftClick: false,
+      rightClick: false,
+    };
   }
 }

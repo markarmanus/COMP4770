@@ -16,7 +16,7 @@ const MongoDBStore = require("connect-mongodb-session")(expressSession);
 
 const store = new MongoDBStore({
   uri: "mongodb://mongo:27017/database",
-  collection: "sessions"
+  collection: "sessions",
 });
 
 app.set("view engine", "ejs");
@@ -25,13 +25,13 @@ app.set("views", path.join(__dirname, "/client"));
 app.use(
   express.static(path.join(__dirname, "/client"), {
     index: false,
-    extensions: ["js", "ejs"]
+    extensions: ["js", "ejs"],
   })
 );
 app.use(
   express.static(path.join(__dirname, "/client/Assets"), {
     index: false,
-    extensions: ["png"]
+    extensions: ["png"],
   })
 );
 app.use(bodyParser.json());
@@ -43,7 +43,7 @@ app.use(
     secret: "2Lu75u4Sb&H&wA6Y",
     resave: true,
     store: store,
-    saveUninitialized: true
+    saveUninitialized: true,
   })
 );
 app.use(passport.initialize());
@@ -64,14 +64,14 @@ app.get("/user", isLoggedIn, (req, res) => {
 
 app.get("/levels", isLoggedIn, async (req, res) => {
   await Level.find({ isCustom: false })
-    .then(levels => res.send(levels))
-    .catch(err => console.error(err));
+    .then((levels) => res.send(levels))
+    .catch((err) => console.error(err));
 });
 app.post("/register", (req, res) => {
   User.register(
     new User({
       username: req.body.username,
-      email: req.body.email
+      email: req.body.email,
     }),
     req.body.password,
     (err, user) => {
@@ -94,8 +94,8 @@ app.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-io.on("connection", socket => {
-  socket.on("eventHappened", data => {
+io.on("connection", (socket) => {
+  socket.on("eventHappened", (data) => {
     console.log(data);
   });
 });

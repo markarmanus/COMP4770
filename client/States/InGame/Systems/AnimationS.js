@@ -10,11 +10,19 @@ export default class AnimationS {
         const renderC = entity.components[ComponentTypes.RENDERABLE];
         const animationC = entity.components[ComponentTypes.ANIMATED];
         const currentTime = new Date().getTime();
-        if (currentTime - animationC.timer > animationC.animationSpeed) {
+        if (
+          animationC.isAnimating &&
+          currentTime - animationC.timer > animationC.animationSpeed
+        ) {
           animationC.timer = currentTime;
           animationC.currentFrame =
             (animationC.currentFrame + 1) % animationC.spritesCount;
           renderC.imageCropX = animationC.currentFrame * renderC.width;
+          if (
+            !animationC.repeat &&
+            animationC.currentFrame === animationC.spritesCount - 1
+          )
+            animationC.isAnimating = false;
         }
       }
     }

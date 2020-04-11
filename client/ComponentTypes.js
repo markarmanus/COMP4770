@@ -9,6 +9,11 @@ const ComponentTypes = {
   PHYSICAL: 8,
   HEALTH: 9,
   FOCUS: 10,
-  CURRENCY: 11
+  CURRENCY: 11,
+  FOLLOW: 12,
+  LIFE_TIME: 13,
+  SEEK: 14,
+  CHARGE: 15,
+  WEAPONS: 16,
 };
 export default ComponentTypes;

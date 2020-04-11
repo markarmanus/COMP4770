@@ -23,9 +23,12 @@ export default class EntityManager {
   getEntities() {
     return this.entityArray;
   }
-
+  getEntitiesOfType(type) {
+    console.log(this.entityArray);
+    return this.entityArray.filter((entity) => entity.descriptor === type);
+  }
   removeEntities() {
-    this.entityArray = this.entityArray.filter(entity => {
+    this.entityArray = this.entityArray.filter((entity) => {
       return entity.getStatus();
     });
   }

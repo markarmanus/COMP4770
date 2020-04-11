@@ -1,8 +1,10 @@
 import ComponentTypes from "./../../../ComponentTypes";
+import Sounds from "../../../Assets/SoundGenerator";
+import { EffectsGenerator, Effects } from "../EffectsGenerator";
 export default class CollisionS {
   constructor() {
     this.debug = false;
-    window.addEventListener("keydown", e => {
+    window.addEventListener("keydown", (e) => {
       if (e.key === "C") {
         this.debug = !this.debug;
       }
@@ -18,7 +20,7 @@ export default class CollisionS {
 
       y: posY + renderC.scaledHeight * 0.5 * (1 - collisionC.subSquareRatio),
       width: renderC.scaledWidth * collisionC.subSquareRatio,
-      height: renderC.scaledHeight * collisionC.subSquareRatio
+      height: renderC.scaledHeight * collisionC.subSquareRatio,
     };
     entityCBox.top = entityCBox.y;
     entityCBox.bottom = entityCBox.y + entityCBox.height;
@@ -47,7 +49,7 @@ export default class CollisionS {
     const remainingRatio = 1 - collisionC.subSquareRatio;
     return {
       width: (renderC.scaledWidth * remainingRatio) / 2,
-      height: (renderC.scaledHeight * remainingRatio) / 2
+      height: (renderC.scaledHeight * remainingRatio) / 2,
     };
   }
   getCollisionDirection(cBox1, cBox2, lastCBox1, lastCBox2) {
@@ -59,6 +61,24 @@ export default class CollisionS {
       return "right";
     if (cBox1.left <= cBox2.right && lastCBox1.left >= lastCBox2.right)
       return "left";
+  }
+  canEntitiesCollid(entity1, entity2) {
+    // if same describtor but not floor cause floor can colid with it self.
+    if (entity1.descriptor === entity2.descriptor) {
+      return false;
+    }
+    if (entity1.id === entity2.id) {
+      return false;
+    }
+    if (
+      entity1.descriptor === "Currency" ||
+      entity2.descriptor === "Currency"
+    ) {
+      if (entity1.descriptor === "Floor" || entity2.descriptor === "Floor") {
+        return false;
+      }
+    }
+    return true;
   }
   update(entityManager) {
     const entities = entityManager.getEntities();
@@ -76,8 +96,7 @@ export default class CollisionS {
         for (const innerEntity of entities) {
           if (
             innerEntity.descriptor !== "Player" &&
-            innerEntity.descriptor !== entity.descriptor &&
-            innerEntity.id !== entity.id &&
+            this.canEntitiesCollid(entity, innerEntity) &&
             innerEntity.components[ComponentTypes.RENDERABLE] &&
             innerEntity.components[ComponentTypes.COLLIDABLE]
           ) {
@@ -97,10 +116,21 @@ export default class CollisionS {
                 lastEntityCBox,
                 lastInnerCBox
               );
-              if (innerEntity.descriptor === "Currency") {
+              if (
+                innerEntity.descriptor === "Currency" &&
+                entity.descriptor === "Player"
+              ) {
                 const currencyC = entity.components[ComponentTypes.CURRENCY];
                 if (currencyC) currencyC.currentCurrency++;
                 innerEntity.remove();
+                Sounds.explosion().play();
+                EffectsGenerator.createEffect(
+                  Effects.explosion,
+                  entityManager,
+                  { x: 0, y: 0 },
+                  innerEntity,
+                  false
+                );
               } else {
                 if (direction === "above") {
                   entityRenderC.posY =
