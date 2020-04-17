@@ -2,13 +2,14 @@ import ComponentTypes from "../../../ComponentTypes";
 import Images from "../../../Assets/ImageGenerator";
 
 export default class GuiS {
-  constructor(scale) {
-    this.scale = scale;
+  constructor(scale, entityManager) {
+    this.guiScale = scale;
     this.defaultPadding = {
       x: 30,
       y: 10,
     };
     this.canvasOffset = {};
+    this.entityManager = entityManager;
   }
   updateCanvasOffset() {
     const canvasTransform = canvasContext.getTransform();
@@ -17,14 +18,47 @@ export default class GuiS {
       y: canvasTransform.f,
     };
   }
-  drawBar(fullBar, emptyBar, padding, offset, percent, place) {
-    fullBar.width = fullBar.naturalWidth * this.scale;
-    fullBar.height = fullBar.naturalHeight * this.scale;
-    emptyBar.width = emptyBar.naturalWidth * this.scale;
-    emptyBar.height = emptyBar.naturalHeight * this.scale;
-    const posX =
+  drawSmallBar(fullBar, emptyBar, barScale, percent, entity) {
+    let scale = this.guiScale * barScale;
+    fullBar.width = fullBar.naturalWidth * scale;
+    fullBar.height = fullBar.naturalHeight * scale;
+    emptyBar.width = emptyBar.naturalWidth * scale;
+    emptyBar.height = emptyBar.naturalHeight * scale;
+    const renderC = entity.components[ComponentTypes.RENDERABLE];
+    let entityCenterPoint = {
+      x: renderC.posX + renderC.scaledWidth / 2,
+      y: renderC.posY,
+    };
+    const posX = entityCenterPoint.x - fullBar.width / 2;
+    const posY = entityCenterPoint.y - fullBar.height / 2;
+    canvasContext.drawImage(
+      emptyBar,
+      posX,
+      posY,
+      emptyBar.width,
+      emptyBar.height
+    );
+
+    canvasContext.drawImage(
+      fullBar,
+      0,
+      0,
+      percent * fullBar.naturalWidth,
+      fullBar.naturalHeight,
+      posX,
+      posY,
+      fullBar.width * percent,
+      fullBar.height
+    );
+  }
+  drawBar(fullBar, emptyBar, padding, offset, percent, place, entity) {
+    fullBar.width = fullBar.naturalWidth * this.guiScale;
+    fullBar.height = fullBar.naturalHeight * this.guiScale;
+    emptyBar.width = emptyBar.naturalWidth * this.guiScale;
+    emptyBar.height = emptyBar.naturalHeight * this.guiScale;
+    let posX =
       place === "right" ? canvas.width - fullBar.width - padding.x : padding.x;
-    const posY = padding.y;
+    let posY = padding.y;
     canvasContext.drawImage(
       emptyBar,
       posX - this.canvasOffset.x,
@@ -38,15 +72,15 @@ export default class GuiS {
       0,
       percent * (fullBar.naturalWidth - offset),
       fullBar.naturalHeight,
-      posX + offset * this.scale - this.canvasOffset.x,
+      posX + offset * this.guiScale - this.canvasOffset.x,
       posY - this.canvasOffset.y,
-      (fullBar.width - offset * this.scale) * percent,
+      (fullBar.width - offset * this.guiScale) * percent,
       fullBar.height
     );
   }
   drawCurrency(currentCurrency, place, image, padding, currencyScale) {
-    image.width = image.naturalWidth * this.scale * currencyScale;
-    image.height = image.naturalHeight * this.scale * currencyScale;
+    image.width = image.naturalWidth * this.guiScale * currencyScale;
+    image.height = image.naturalHeight * this.guiScale * currencyScale;
     const imagePosX =
       place === "right"
         ? canvas.width - image.width - padding.x - 80
@@ -61,7 +95,7 @@ export default class GuiS {
       image.width,
       image.height
     );
-    canvasContext.font = `${this.scale * currencyScale * 360}px serif`;
+    canvasContext.font = `${this.guiScale * currencyScale * 360}px serif`;
     canvasContext.fillStyle = "black";
     canvasContext.textBaseline = "top";
     canvasContext.fillText(
@@ -70,18 +104,14 @@ export default class GuiS {
       textPosY + image.height / 6 - this.canvasOffset.y
     );
   }
-  update(entityManager) {
+  update() {
     this.updateCanvasOffset();
-    const entities = entityManager.getEntities();
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.HEALTH] ||
-        entity.components[ComponentTypes.FOCUS] ||
-        entity.components[ComponentTypes.CURRENCY]
-      ) {
-        const healthC = entity.components[ComponentTypes.HEALTH];
-        const focusC = entity.components[ComponentTypes.FOCUS];
-        const currencyC = entity.components[ComponentTypes.CURRENCY];
+      const healthC = entity.components[ComponentTypes.HEALTH];
+      const focusC = entity.components[ComponentTypes.FOCUS];
+      const currencyC = entity.components[ComponentTypes.CURRENCY];
+      if (healthC || focusC || currencyC) {
         if (currencyC) {
           this.drawCurrency(
             currencyC.currentCurrency,
@@ -92,23 +122,34 @@ export default class GuiS {
           );
         }
         if (healthC) {
-          const healthPrcnt = healthC.currentHealth / healthC.maxHealth;
-          const offset = 80;
-          this.drawBar(
-            Images.fullHealthBar,
-            Images.emptyHealthBar,
-            this.defaultPadding,
-            offset,
-            healthPrcnt,
-            healthC.positionOnGUI
-          );
+          const healthPrcnt =
+            Math.max(healthC.currentHealth, 0) / healthC.maxHealth;
+          if (healthC.folllowEntity) {
+            this.drawSmallBar(
+              Images.fullSmallHealthBar,
+              Images.emptySmallHealthBar,
+              0.5,
+              healthPrcnt,
+              entity
+            );
+          } else {
+            const offset = 80;
+            this.drawBar(
+              Images.fullHealthBar,
+              Images.emptyHealthBar,
+              this.defaultPadding,
+              offset,
+              healthPrcnt,
+              healthC.positionOnGUI
+            );
+          }
         }
 
         if (focusC) {
           const padding = {
             x: this.defaultPadding.x,
             y:
-              Images.fullHealthBar.naturalHeight * this.scale +
+              Images.fullHealthBar.naturalHeight * this.guiScale +
               this.defaultPadding.y,
           };
           const focusPercent = focusC.currentFocus / focusC.maxFocus;

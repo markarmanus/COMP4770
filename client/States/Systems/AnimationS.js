@@ -1,7 +1,10 @@
 import ComponentTypes from "../../ComponentTypes";
 export default class AnimationS {
-  update(entityManager) {
-    const entities = entityManager.getEntities();
+  constructor(entityManager) {
+    this.entityManager = entityManager;
+  }
+  update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
       if (
         entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&

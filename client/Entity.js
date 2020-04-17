@@ -29,4 +29,7 @@ export default class Entity {
   addComponent(component) {
     this.components[component.type] = component;
   }
+  removeComponent(component) {
+    this.components[component] = undefined;
+  }
 }

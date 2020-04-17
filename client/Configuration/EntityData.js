@@ -9,12 +9,12 @@ const EntityData = {
       height: 64,
       scale: 2.5,
       visionOffset: {
-        x: 30,
-        y: 40,
+        x: 0.1,
+        y: 0.2,
       },
     },
     [ComponentTypes.PHYSICAL]: {
-      airFriction: 0.7,
+      airFriction: 0.2,
       maxGravity: 16,
     },
     [ComponentTypes.CONTROLABLE]: {
@@ -63,7 +63,6 @@ const EntityData = {
       positionOnGUI: "right",
     },
     [ComponentTypes.WEAPONS]: {
-      shootingSpeed: 1,
     },
   },
   StormTropper: {
@@ -72,10 +71,19 @@ const EntityData = {
       width: 32,
       height: 64,
       visionOffset: {
-        x: 30,
-        y: 40,
+        x: 0.1,
+        y: 0.2,
       },
       scale: 2.5,
+    },
+    [ComponentTypes.MULTI_SPRITES]: {
+      left: 128,
+      right: 192,
+      idle: 0,
+    },
+    [ComponentTypes.HEALTH]: {
+      maxHealth: 100,
+      folllowEntity: true,
     },
     [ComponentTypes.PHYSICAL]: {
       airFriction: 0.7,
@@ -90,12 +98,96 @@ const EntityData = {
       subSquareRatio: 1,
     },
     [ComponentTypes.AI]: {
-      AItype: "StormTropper",
-      offset: {
-        x: 20,
-        y: 20,
-      },
+      recognitionSpeed: 500,
+      AIType: "StormTropper",
+      properties: {
+        shooter: {
+          fireRate: 200,
+          shootingOffset: { x: 20, y: 30 },
+        },
+        patrol: {
+          speed: 1.5,
+        }
+      }
     },
+
+  },
+  Drone: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.currency,
+      width: 500,
+      height: 500,
+      visionOffset: {
+        x: 0.1,
+        y: 0.2,
+      },
+      scale: 0.15,
+    },
+    [ComponentTypes.HEALTH]: {
+      maxHealth: 100,
+      folllowEntity: true,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.AI]: {
+      recognitionSpeed: 500,
+      AIType: "Drone",
+      properties: {
+        drone: {
+          maxSpeed: 8,
+          speed: 1,
+          offset: { x: 0, y: 0 },
+          accerlation: 0.1
+        }
+      }
+    },
+    [ComponentTypes.DAMAGE]: {
+      damage: 20,
+    }
+  },
+  Orb: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.currency,
+      width: 500,
+      height: 500,
+      scale: 0.09,
+    },
+    [ComponentTypes.LIFE_TIME]: {
+      lifeTime: 500,
+    },
+    [ComponentTypes.CHARGE]: {
+      behaveLikeBullet: true,
+      speed: 10,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.DAMAGE]: {
+      damage: 3,
+    }
+  },
+  LaserBullet: {
+
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.currency,
+      width: 500,
+      height: 500,
+      scale: 0.09,
+    },
+    [ComponentTypes.LIFE_TIME]: {
+      lifeTime: 500,
+    },
+    [ComponentTypes.CHARGE]: {
+      behaveLikeBullet: true,
+      speed: 10,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.DAMAGE]: {
+      damage: 3,
+    }
   },
   Currency: {
     [ComponentTypes.ANIMATED]: {

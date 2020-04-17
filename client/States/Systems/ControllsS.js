@@ -1,7 +1,8 @@
 import ComponentTypes from "../../ComponentTypes";
 
 export default class ControllsS {
-  constructor() {
+  constructor(entityManager) {
+    this.entityManager = entityManager;
     this.clickedBttns = {};
     this.fistClickedAt = {};
     this.lastClickedAt = {};
@@ -36,11 +37,10 @@ export default class ControllsS {
       this.doubleClick[e.key] = false;
     });
   }
-  update(entityManager) {
-    const entities = entityManager.getEntities();
+  update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.CONTROLABLE]) {
+      if (entity.components[ComponentTypes.CONTROLABLE]) {
         const controllC = entity.components[ComponentTypes.CONTROLABLE];
         for (let [key, value] of Object.entries(this.clickedBttns)) {
           if (controllC.bttnsState[key] !== undefined) {

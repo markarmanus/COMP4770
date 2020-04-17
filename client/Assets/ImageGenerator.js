@@ -9,6 +9,8 @@ const Images = {
   floor: createImage("./Images/floor.png"),
   fullHealthBar: createImage("./Images/fullHealthBar.png"),
   emptyHealthBar: createImage("./Images/EmptyHealthBar.png"),
+  emptySmallHealthBar: createImage("./Images/EmptySmallHealthBar.png"),
+  fullSmallHealthBar: createImage("./Images/FullSmallHealthBar.png"),
   fullFocusBar: createImage("./Images/FullFocusBar.png"),
   emptyFocusBar: createImage("./Images/EmptyFocusBar.png"),
   currency: createImage("./Images/currency.png"),

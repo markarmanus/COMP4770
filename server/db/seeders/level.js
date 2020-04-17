@@ -6,7 +6,9 @@ let levels = [
       entities: [
         { posX: 128, posY: 480, type: "Player" },
 
-        { posX: 192, posY: 480, type: "StormTropper" },
+        { posX: 800, posY: 300, type: "Drone" },
+        { posX: 2000, posY: 200, type: "StormTropper" },
+
       ],
     },
   },
@@ -24,7 +26,7 @@ for (let i = 1; i < 100; i++) {
   });
   levels[0].data.entities.push({
     posX: (i + 10) * 32,
-    posY: 512,
+    posY: 448,
     type: "Floor",
   });
 
@@ -36,7 +38,7 @@ for (let i = 1; i < 100; i++) {
     });
     levels[0].data.entities.push({
       posX: (i + 10) * 32,
-      posY: 448,
+      posY: 384,
       type: "Currency",
     });
 

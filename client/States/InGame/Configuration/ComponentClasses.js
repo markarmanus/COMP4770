@@ -15,6 +15,7 @@ import SeekC from "../Components/SeekC";
 import ChargeC from "../Components/ChargeC";
 import WeaponsC from "../Components/WeaponsC.js";
 import AiC from "../Components/AiC.js";
+import DamageC from "../Components/DamageC.js";
 
 const ComponentClasses = {
   [ComponentTypes.RENDERABLE]: RenderableC,
@@ -33,5 +34,7 @@ const ComponentClasses = {
   [ComponentTypes.CHARGE]: ChargeC,
   [ComponentTypes.WEAPONS]: WeaponsC,
   [ComponentTypes.AI]: AiC,
+  [ComponentTypes.DAMAGE]: DamageC,
+
 };
 export default ComponentClasses;

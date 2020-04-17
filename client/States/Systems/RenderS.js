@@ -1,20 +1,33 @@
 import ComponentTypes from "../../ComponentTypes";
+import Helper from "../InGame/Helper";
 export default class RenderS {
-
-  updateCanvasOffset() {
-    const canvasTransform = canvasContext.getTransform();
-    this.canvasOffset = {
-      x: canvasTransform.e,
-      y: canvasTransform.f,
-    };
+  constructor(entityManager) {
+    this.entityManager = entityManager;
   }
-  update(entityManager) {
-    this.updateCanvasOffset();
+  updateCanvasOffset() {
 
-    const entities = entityManager.getEntities();
+  }
+  async update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (entity.components[ComponentTypes.RENDERABLE]) {
-        const renderC = entity.components[ComponentTypes.RENDERABLE];
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      if (renderC) {
+        const spriteC = entity.components[ComponentTypes.MULTI_SPRITES];
+        const movementC = entity.components[ComponentTypes.MOVABLE];
+        if (spriteC) {
+          let movingRight = movementC && movementC.currentVelocity > 2;
+          let movingLeft = movementC && movementC.currentVelocity < -2;
+          switch (true) {
+            case renderC.lastPosX < renderC.posX || movingRight:
+              renderC.imageCropY = spriteC.sprites.right;
+              break;
+            case renderC.lastPosX > renderC.posX || movingLeft:
+              renderC.imageCropY = spriteC.sprites.left;
+              break;
+            default:
+              renderC.imageCropY = spriteC.sprites.idle;
+          }
+        }
         if (renderC.image) {
           renderC.lastPosX = renderC.posX;
           renderC.lastPosY = renderC.posY;
@@ -30,19 +43,20 @@ export default class RenderS {
             renderC.scaledHeight
           );
         }
+        let canvasOffset = Helper.getCanvasOffset();
+        // if going to add buffer to loading zone, remember Helper AI wont work.
         if (
-          renderC.posX + this.canvasOffset.x < -300 ||
-          renderC.posX + this.canvasOffset.x > canvas.width + 300 ||
-          renderC.posY + this.canvasOffset.y < -300 ||
-          renderC.posY + this.canvasOffset.y > canvas.height + 300
+          renderC.posX + canvasOffset.x < -300 ||
+          renderC.posX + canvasOffset.x > canvas.width + 300 ||
+          renderC.posY + canvasOffset.y < -300 ||
+          renderC.posY + canvasOffset.y > canvas.height + 300
         ) {
           renderC.isOnScreen = false;
         } else {
           renderC.isOnScreen = true;
         }
+
       }
     }
-
   }
-
 }

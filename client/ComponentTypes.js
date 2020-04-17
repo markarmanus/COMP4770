@@ -15,5 +15,9 @@ const ComponentTypes = {
   SEEK: 14,
   CHARGE: 15,
   WEAPONS: 16,
+  DRONE: 17,
+  SHOOTER: 18,
+  DAMAGE: 19,
+  PATROL: 20
 };
 export default ComponentTypes;

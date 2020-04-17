@@ -1,27 +1,19 @@
 import ComponentTypes from "./../../../ComponentTypes";
 export default class MovementS {
+  constructor(entityManager) {
+    this.entityManager = entityManager;
+  }
   setVelocityWithinBounds(velocity, maxVelocity) {
     const negativeMax = -1 * maxVelocity;
     velocity =
       velocity > maxVelocity
         ? maxVelocity
         : velocity < negativeMax
-        ? negativeMax
-        : velocity;
+          ? negativeMax
+          : velocity;
     return velocity;
   }
-  setProperSprite(renderC, currentVelocity, sprites) {
-    switch (true) {
-      case currentVelocity > 2:
-        renderC.imageCropY = sprites.right;
-        break;
-      case currentVelocity < -2:
-        renderC.imageCropY = sprites.left;
-        break;
-      default:
-        renderC.imageCropY = sprites.idle;
-    }
-  }
+
   addFriction(direction, currentVelocity, friction, velocity) {
     let frictionForce = velocity * friction;
     frictionForce = direction === "left" ? -1 * frictionForce : frictionForce;
@@ -30,17 +22,13 @@ export default class MovementS {
     if (direction === "right" && newVelocity > 0) newVelocity = 0;
     return newVelocity;
   }
-  update(entityManager) {
-    const entities = entityManager.getEntities();
+  update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.RENDERABLE] &&
-        entity.components[ComponentTypes.MOVABLE] &&
-        entity.components[ComponentTypes.CONTROLABLE]
-      ) {
-        const renderC = entity.components[ComponentTypes.RENDERABLE];
-        const movementC = entity.components[ComponentTypes.MOVABLE];
-        const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      const movementC = entity.components[ComponentTypes.MOVABLE];
+      const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      if (renderC && movementC && controllsC) {
         const spritesC = entity.components[ComponentTypes.MULTI_SPRITES];
         const collisionC = entity.components[ComponentTypes.COLLIDABLE];
         const physicsC = entity.components[ComponentTypes.PHYSICAL];
@@ -136,13 +124,6 @@ export default class MovementS {
           movementC.currentVelocity,
           movementC.maxVelocity
         );
-        if (spritesC) {
-          this.setProperSprite(
-            renderC,
-            movementC.currentVelocity,
-            spritesC.sprites
-          );
-        }
         renderC.posX += movementC.currentVelocity;
         renderC.posY -= movementC.currentjumpForce;
       }

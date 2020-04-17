@@ -1,4 +1,4 @@
-// import inGameState from "./States/InGame/InGameState";
+import inGameState from "./States/InGame/InGameState";
 import LevelEditorState from "./States/LevelEditor/LevelEditorState";
 export default class GameEngine {
   constructor() {
@@ -10,7 +10,7 @@ export default class GameEngine {
   }
 
   init() {
-    this.newStates.push(new LevelEditorState(levels[0]));
+    this.newStates.push(new inGameState(levels[0]));
   }
 
   run() {

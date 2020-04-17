@@ -1,20 +1,18 @@
 import ComponentTypes from "./../../../ComponentTypes";
 export default class CollisionS {
-  constructor(gravity) {
+  constructor(gravity, entityManager) {
     this.gravity = gravity;
+    this.entityManager = entityManager;
   }
   setGravityWithtinBounds(gravity, maxGravity) {
     return gravity > maxGravity ? maxGravity : gravity;
   }
-  update(entityManager) {
-    const entities = entityManager.getEntities();
+  update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
-        entity.components[ComponentTypes.PHYSICAL]
-      ) {
-        const physicsC = entity.components[ComponentTypes.PHYSICAL];
-        const renderC = entity.components[ComponentTypes.RENDERABLE];
+      const physicsC = entity.components[ComponentTypes.PHYSICAL];
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      if (renderC && renderC.isOnScreen && physicsC) {
         const collisionC = entity.components[ComponentTypes.COLLIDABLE];
         if (collisionC && collisionC.isGrounded) {
           physicsC.currentGravityForce = 0;

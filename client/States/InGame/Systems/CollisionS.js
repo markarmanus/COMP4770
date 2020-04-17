@@ -2,7 +2,9 @@ import ComponentTypes from "./../../../ComponentTypes";
 import Sounds from "../../../Assets/SoundGenerator";
 import { EffectsGenerator, Effects } from "../EffectsGenerator";
 export default class CollisionS {
-  constructor() {
+  constructor(entityManager) {
+    this.entityManager = entityManager;
+
     this.debug = false;
     window.addEventListener("keydown", (e) => {
       if (e.key === "C") {
@@ -62,96 +64,156 @@ export default class CollisionS {
     if (cBox1.left <= cBox2.right && lastCBox1.left >= lastCBox2.right)
       return "left";
   }
-  canEntitiesCollid(entity1, entity2) {
-    // if same describtor but not floor cause floor can colid with it self.
+  canEntitiesCollide(entity1, entity2) {
     if (entity1.descriptor === entity2.descriptor) {
       return false;
     }
-    if (entity1.id === entity2.id) {
+    const cantColide = {
+      LaserBullet: ["Floor", "Currency"],
+      Floor: ["Currency", "LaserBullet"],
+      Player: ["StormTropper"],
+      Currency: ["Floor", "LaserBullet"],
+    };
+    const condition1 =
+      cantColide[entity1.descriptor] &&
+      cantColide[entity1.descriptor].includes(entity2.descriptor);
+    const condition2 =
+      cantColide[entity2.descriptor] &&
+      cantColide[entity2.descriptor].includes(entity1.descriptor);
+    if (condition1 || condition2) {
       return false;
     }
-    if (
-      entity1.descriptor === "Currency" ||
-      entity2.descriptor === "Currency"
-    ) {
-      if (entity1.descriptor === "Floor" || entity2.descriptor === "Floor") {
-        return false;
-      }
-    }
+
     return true;
   }
-  update(entityManager) {
-    const entities = entityManager.getEntities();
+  handleCollision(entity1, entity2, direction) {
+    const type = entity1.descriptor + "To" + entity2.descriptor;
+    switch (type) {
+      case "PlayerToCurrency":
+        this.handlePickUpCurrency(entity1, entity2);
+        this.destroyWithEffect(entity2, Effects.explosion);
+        break;
+      case "PlayerToLaserBullet":
+        this.doDamage(entity1, entity2);
+        this.destroyWithEffect(entity2, Effects.explosion);
+        break;
+      case "PlayerToDrone":
+        this.doDamage(entity1, entity2);
+        this.destroyWithEffect(entity2, Effects.explosion);
+        break;
+      case "DroneToOrb":
+      case "StormTropperToOrb":
+        this.doDamage(entity1, entity2);
+        break;
+      case "OrbToFloor":
+      case "LaserBulletToFloor":
+        this.destroyWithEffect(entity1, Effects.explosion);
+        break;
+
+      //Drone To
+      case "DroneToStormTropper":
+      case "DroneToCurrency":
+      //LaserBullet To
+      case "LaserBulletToOrb":
+      //Player To
+      case "PlayerToOrb":
+      //Orb To
+      case "OrbToLaserBullet":
+      case "OrbToCurrency":
+      case "OrbToStormTropper":
+      case "OrbToDrone":
+      case "OrbToPlayer":
+      //StromTropper To
+      case "StormTropperToDrone":
+      case "StormTropperToCurrency":
+      //Currency To
+      case "CurrencyToStormTropper":
+      case "CurrencyToDrone":
+      case "CurrencyToOrb":
+      //Floor To
+      case "FloorToDrone":
+      case "FloorToOrb":
+      case "FloorToLaserBullet":
+        break;
+
+      default:
+        this.handleDefaultCollision(entity1, entity2, direction);
+    }
+  }
+  doDamage(toDamage, causesDamage) {
+    const damageC = causesDamage.components[ComponentTypes.DAMAGE];
+    const healthC = toDamage.components[ComponentTypes.HEALTH];
+    if (damageC && healthC) {
+      healthC.currentHealth -= damageC.damage;
+    }
+  }
+  destroyWithEffect(toDestroy, effecType, offset = { x: 0, y: 0 }) {
+    toDestroy.remove();
+    EffectsGenerator.createEffect(
+      effecType,
+      this.entityManager,
+      offset,
+      toDestroy,
+      false
+    );
+  }
+  handlePickUpCurrency(player, currency) {
+    const currencyC = player.components[ComponentTypes.CURRENCY];
+    if (currencyC) currencyC.currentCurrency++;
+  }
+  handleDefaultCollision(entity1, entity2, direction) {
+    const e1RenderC = entity1.components[ComponentTypes.RENDERABLE];
+    const e1CollisionC = entity1.components[ComponentTypes.COLLIDABLE];
+    const e1CBox = this.getCollisionBox(entity1);
+    const e2CBox = this.getCollisionBox(entity2);
+    const e1MovementC = entity1.components[ComponentTypes.MOVABLE];
+    const e2MovementC = entity2.components[ComponentTypes.MOVABLE];
+    const offSet = this.getRenderCollisionBoxDiff(e1RenderC, e1CollisionC);
+    if (direction === "above") {
+      e1RenderC.posY = e2CBox.top - e1CBox.height - offSet.height;
+      e1CollisionC.isGrounded = true;
+    } else if (direction === "below") {
+      e1RenderC.posY = e2CBox.bottom + offSet.height;
+      const movementC = entity1.components[ComponentTypes.MOVABLE];
+      if (movementC?.currentjumpForce) movementC.currentjumpForce = 0;
+    } else if (direction === "right") {
+      e1RenderC.posX = e2CBox.left - e1CBox.width - offSet.width;
+    } else if (direction === "left") {
+      e1RenderC.posX = e2CBox.right - offSet.width;
+    }
+    if (direction === "right" || direction === "left") {
+      if (e1MovementC) e1MovementC.currentValocity = 0;
+      if (e2MovementC) e2MovementC.currentValocity = 0;
+    }
+  }
+
+  update() {
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
-        entity.components[ComponentTypes.COLLIDABLE]
-      ) {
-        const entityRenderC = entity.components[ComponentTypes.RENDERABLE];
-        const entityCollisionC = entity.components[ComponentTypes.COLLIDABLE];
-        const entityMovementC = entity.components[ComponentTypes.MOVABLE];
+      const entityRenderC = entity.components[ComponentTypes.RENDERABLE];
+      const entityCollisionC = entity.components[ComponentTypes.COLLIDABLE];
+      if (entityRenderC && entityRenderC.isOnScreen && entityCollisionC) {
         entityCollisionC.isGrounded = false;
         const entityCBox = this.getCollisionBox(entity);
         if (this.debug) this.createBorderForCBox(entityCBox);
         for (const innerEntity of entities) {
           if (
             innerEntity.descriptor !== "Player" &&
-            this.canEntitiesCollid(entity, innerEntity) &&
+            this.canEntitiesCollide(entity, innerEntity) &&
             innerEntity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
             innerEntity.components[ComponentTypes.COLLIDABLE]
           ) {
             const innerCBox = this.getCollisionBox(innerEntity);
-            const innerMovementC =
-              innerEntity.components[ComponentTypes.MOVABLE];
             if (this.isColiding(entityCBox, innerCBox)) {
               const lastEntityCBox = this.getCollisionBox(entity, true);
               const lastInnerCBox = this.getCollisionBox(innerEntity, true);
-              const offSet = this.getRenderCollisionBoxDiff(
-                entityRenderC,
-                entityCollisionC
-              );
               const direction = this.getCollisionDirection(
                 entityCBox,
                 innerCBox,
                 lastEntityCBox,
                 lastInnerCBox
               );
-              if (
-                innerEntity.descriptor === "Currency" &&
-                entity.descriptor === "Player"
-              ) {
-                const currencyC = entity.components[ComponentTypes.CURRENCY];
-                if (currencyC) currencyC.currentCurrency++;
-                innerEntity.remove();
-                Sounds.explosion().play();
-                EffectsGenerator.createEffect(
-                  Effects.explosion,
-                  entityManager,
-                  { x: 0, y: 0 },
-                  innerEntity,
-                  false
-                );
-              } else {
-                if (direction === "above") {
-                  entityRenderC.posY =
-                    innerCBox.top - entityCBox.height - offSet.height;
-                  entityCollisionC.isGrounded = true;
-                } else if (direction === "below") {
-                  entityRenderC.posY = innerCBox.bottom + offSet.height;
-                  const movementC = entity.components[ComponentTypes.MOVABLE];
-                  if (movementC?.currentjumpForce)
-                    movementC.currentjumpForce = 0;
-                } else if (direction === "right") {
-                  entityRenderC.posX =
-                    innerCBox.left - entityCBox.width - offSet.width;
-                } else if (direction === "left") {
-                  entityRenderC.posX = innerCBox.right - offSet.width;
-                }
-                if (direction === "right" || direction === "left") {
-                  if (entityMovementC) entityMovementC.currentValocity = 0;
-                  if (innerMovementC) innerMovementC.currentValocity = 0;
-                }
-              }
+              this.handleCollision(entity, innerEntity, direction);
             }
           }
         }

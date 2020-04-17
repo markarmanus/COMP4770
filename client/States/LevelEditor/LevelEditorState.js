@@ -12,9 +12,9 @@ export default class LevelEditorState extends GameState {
   constructor(level) {
     super();
     this.paused = false;
-    this.renderS = new RenderS();
-    this.controllsS = new ControllsS();
-    this.animationS = new AnimationS();
+    this.renderS = new RenderS(this.entityManager);
+    this.controllsS = new ControllsS(this.entityManager);
+    this.animationS = new AnimationS(this.entityManager);
     this.cameraS = new CameraS(10);
     this.guiS = new GuiS(this.entityManager);
     this.levelManager = new LevelManager(this.entityManager, this.cameraS);
@@ -25,13 +25,13 @@ export default class LevelEditorState extends GameState {
     });
   }
   update() {
-    this.controllsS.update(this.entityManager);
+    this.controllsS.update();
     if (!this.paused) {
       super.update();
-      this.animationS.update(this.entityManager);
+      this.animationS.update();
       this.cameraS.update(this.entityManager);
     }
-    this.renderS.update(this.entityManager);
+    this.renderS.update();
     this.guiS.update(this.entityManager);
   }
   init() {
