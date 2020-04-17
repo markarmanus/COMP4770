@@ -46,21 +46,20 @@ export default class BehaviourS {
     renderC.posX += chargeC.speedVector.normalX * chargeC.speed;
   }
   handlePatrol(entity) {
-    let grid = Helper.getEntityGrid(this.entityManager);
+    let grid = Helper.getInitialLevelGrid(this.entityManager);
     const renderC = entity.components[ComponentTypes.RENDERABLE];
     const partrolC = entity.components[ComponentTypes.PATROL];
-    let gridPosition = Helper.toGridPosition(
-      Helper.toCameraPos({
-        x: renderC.posX,
-        y: renderC.posY + renderC.scaledHeight,
-      })
-    );
+    let gridPosition = Helper.toGridPosition({
+      x: renderC.posX,
+      y: renderC.posY + renderC.scaledHeight,
+    });
     let direction = partrolC.direction;
     let nextLocation = {
       x: gridPosition.x + direction.x,
       y: gridPosition.y + direction.y,
     };
     if (
+      grid[nextLocation.y] &&
       grid[nextLocation.y][nextLocation.x] &&
       grid[nextLocation.y][nextLocation.x].includes("Floor")
     ) {
@@ -167,7 +166,7 @@ export default class BehaviourS {
   update() {
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (entity.components[ComponentTypes.RENDERABLE]?.isOnScreen) {
+      if (entity.components[ComponentTypes.RENDERABLE]) {
         if (entity.components[ComponentTypes.SEEK]) {
           this.handleSeek(entity);
         }

@@ -1,7 +1,7 @@
 import ComponentTypes from "./../../../ComponentTypes";
 import ShooterC from "../Components/ShooterC";
 import DroneC from "../Components/DroneC";
-import PatrolC from "../Components/PatrolC"
+import PatrolC from "../Components/PatrolC";
 import Vec2 from "../../../Vec2";
 export default class AiS {
   constructor(entityManager) {
@@ -84,26 +84,39 @@ export default class AiS {
     canvasContext.lineTo(p2.x, p2.y);
     canvasContext.stroke();
   }
+  getPlayerDirection(player, entity) {
+    const playerRenderC = player.components[ComponentTypes.RENDERABLE];
+    const entityRenderC = entity.components[ComponentTypes.RENDERABLE];
+    return entityRenderC.posX > playerRenderC.posX
+      ? { x: -1, y: 0 }
+      : { x: 1, y: 0 };
+  }
   update() {
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      if (
-        entity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
-        entity.components[ComponentTypes.AI]
-      ) {
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      if (renderC && entity.components[ComponentTypes.AI]) {
         const player = this.entityManager.getEntitiesOfType("Player")[0];
         const aiC = entity.components[ComponentTypes.AI];
-        if (this.canSeeEachOther(player, entity, entities)) {
-          if (aiC.lastAction === "cantSee") aiC.lastSawTime = new Date().getTime();
+        if (
+          this.canSeeEachOther(player, entity, entities) &&
+          renderC.isOnScreen
+        ) {
+          if (aiC.lastAction === "cantSee")
+            aiC.lastSawTime = new Date().getTime();
           aiC.lastAction = "see";
           if (new Date().getTime() - aiC.lastSawTime > aiC.recognitionSpeed) {
             aiC.lastSawTime = new Date().getTime();
             if (aiC.AIType === "StormTropper") {
+              aiC.properties.patrol.direction = this.getPlayerDirection(
+                player,
+                entity
+              );
               if (!entity.components[ComponentTypes.SHOOTER]) {
                 entity.addComponent(
                   new ShooterC({
                     toShootAt: player,
-                    ...aiC.properties.shooter
+                    ...aiC.properties.shooter,
                   })
                 );
               }
@@ -114,13 +127,12 @@ export default class AiS {
                 entity.addComponent(
                   new DroneC({
                     toAttack: player,
-                    ...aiC.properties.drone
+                    ...aiC.properties.drone,
                   })
                 );
               }
             }
           }
-
         } else {
           aiC.lastAction = "cantSee";
           if (new Date().getTime() - aiC.lastSawTime > aiC.recognitionSpeed) {
@@ -128,13 +140,12 @@ export default class AiS {
               if (!entity.components[ComponentTypes.PATROL]) {
                 entity.addComponent(
                   new PatrolC({
-                    ...aiC.properties.patrol
+                    ...aiC.properties.patrol,
                   })
                 );
               }
               if (entity.components[ComponentTypes.SHOOTER])
                 entity.removeComponent(ComponentTypes.SHOOTER);
-
             } else if (aiC.AIType === "Drone") {
               if (entity.components[ComponentTypes.DRONE])
                 entity.removeComponent(ComponentTypes.DRONE);
@@ -142,9 +153,7 @@ export default class AiS {
                 entity.removeComponent(ComponentTypes.SEEK);
             }
           }
-
         }
-
       }
     }
   }

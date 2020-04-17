@@ -23,6 +23,9 @@ export default class EntityManager {
   getEntities() {
     return this.entityArray;
   }
+  getNewEntities() {
+    return this.newEntities;
+  }
   getEntitiesOfType(type) {
     return this.entityArray.filter((entity) => entity.descriptor === type);
   }

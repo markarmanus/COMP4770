@@ -15,8 +15,6 @@ import LevelManager from "./LevelManager";
 import Helper from "./Helper";
 export default class inGameState extends GameState {
   constructor(level) {
-
-
     super();
     this.paused = false;
     this.renderS = new RenderS(this.entityManager);
@@ -27,7 +25,10 @@ export default class inGameState extends GameState {
     this.collisionS = new CollisionS(this.entityManager);
     this.physicsS = new PhysicsS(0.4, this.entityManager);
     this.behaviourS = new BehaviourS(this.entityManager);
-    this.cameraS = new CameraS({ min: { x: -5000, y: 0 }, max: { x: 5000, y: 5000 } }, this.entityManager);
+    this.cameraS = new CameraS(
+      { min: { x: -5000, y: -300 }, max: { x: 5000, y: 5000 } },
+      this.entityManager
+    );
     this.weaponsS = new WeaponsS(this.entityManager);
     this.guiS = new GuiS(0.55, this.entityManager);
     this.levelManager = new LevelManager(this.entityManager, this.cameraS);
@@ -49,53 +50,30 @@ export default class inGameState extends GameState {
     let bla = "hi";
     if (!this.paused) {
       super.update();
-      if (this.debug) bla = Helper.profilerStart()
       this.guiS.update();
-      // if (this.debug) Helper.profilerStop("Gui System")
 
-      // if (this.debug) Helper.profilerStart()
       this.animationS.update();
-      // if (this.debug) Helper.profilerStop("Animation System")
 
-      // if (this.debug) Helper.profilerStart()
       this.behaviourS.update();
-      // if (this.debug) Helper.profilerStop("Behaviour System")
 
-      // if (this.debug) Helper.profilerStart()
       this.aiS.update();
-      // if (this.debug) Helper.profilerStop("Ai System")
 
-      // if (this.debug) Helper.profilerStart()
       this.DeathS.update();
-      // if (this.debug) Helper.profilerStop("Death System")
 
-      // if (this.debug) Helper.profilerStart()
       this.physicsS.update();
-      // if (this.debug) Helper.profilerStop("Physics System")
 
-      // if (this.debug) Helper.profilerStart()
       this.movementS.update();
-      // if (this.debug) Helper.profilerStop("Movement System")
 
-      // if (this.debug) Helper.profilerStart()
       this.weaponsS.update();
-      // if (this.debug) Helper.profilerStop("Weapons System")
 
-      // if (this.debug) Helper.profilerStart()
       this.collisionS.update();
-      // if (this.debug) Helper.profilerStop("Collision System")
 
-      // if (this.debug) Helper.profilerStart()
       this.cameraS.update();
-      // if (this.debug) Helper.profilerStop("Camera System")
-
     }
-    // if (this.debug) Helper.profilerStart()
     this.renderS.update();
-    if (this.debug) Helper.profilerStop("Render System", bla)
-
   }
   init() {
     this.levelManager.loadLevel(this.level);
+    Helper.setInitialLevelGrid(this.entityManager);
   }
 }

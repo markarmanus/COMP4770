@@ -1,5 +1,6 @@
 import inGameState from "./States/InGame/InGameState";
 import LevelEditorState from "./States/LevelEditor/LevelEditorState";
+import Helper from "./States/InGame/Helper";
 export default class GameEngine {
   constructor() {
     this.isRunning = true;
@@ -10,7 +11,8 @@ export default class GameEngine {
   }
 
   init() {
-    this.newStates.push(new inGameState(levels[0]));
+    window.currentLevel = levels[0];
+    this.newStates.push(new inGameState(currentLevel));
   }
 
   run() {

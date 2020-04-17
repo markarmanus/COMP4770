@@ -4,9 +4,7 @@ export default class RenderS {
   constructor(entityManager) {
     this.entityManager = entityManager;
   }
-  updateCanvasOffset() {
-
-  }
+  updateCanvasOffset() {}
   async update() {
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
@@ -28,7 +26,7 @@ export default class RenderS {
               renderC.imageCropY = spriteC.sprites.idle;
           }
         }
-        if (renderC.image) {
+        if (renderC.image && renderC.isOnScreen) {
           renderC.lastPosX = renderC.posX;
           renderC.lastPosY = renderC.posY;
           canvasContext.drawImage(
@@ -46,16 +44,15 @@ export default class RenderS {
         let canvasOffset = Helper.getCanvasOffset();
         // if going to add buffer to loading zone, remember Helper AI wont work.
         if (
-          renderC.posX + canvasOffset.x < -300 ||
-          renderC.posX + canvasOffset.x > canvas.width + 300 ||
-          renderC.posY + canvasOffset.y < -300 ||
-          renderC.posY + canvasOffset.y > canvas.height + 300
+          renderC.posX + canvasOffset.x < -32 ||
+          renderC.posX + canvasOffset.x > canvas.width ||
+          renderC.posY + canvasOffset.y < -32 ||
+          renderC.posY + canvasOffset.y > canvas.height
         ) {
           renderC.isOnScreen = false;
         } else {
           renderC.isOnScreen = true;
         }
-
       }
     }
   }

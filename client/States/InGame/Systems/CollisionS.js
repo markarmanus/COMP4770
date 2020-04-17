@@ -86,8 +86,7 @@ export default class CollisionS {
 
     return true;
   }
-  handleCollision(entity1, entity2, direction) {
-    const type = entity1.descriptor + "To" + entity2.descriptor;
+  handleCollision(entity1, entity2, type, direction) {
     switch (type) {
       case "PlayerToCurrency":
         this.handlePickUpCurrency(entity1, entity2);
@@ -109,35 +108,23 @@ export default class CollisionS {
       case "LaserBulletToFloor":
         this.destroyWithEffect(entity1, Effects.explosion);
         break;
-
-      //Drone To
-      case "DroneToStormTropper":
-      case "DroneToCurrency":
-      //LaserBullet To
-      case "LaserBulletToOrb":
-      //Player To
-      case "PlayerToOrb":
-      //Orb To
-      case "OrbToLaserBullet":
-      case "OrbToCurrency":
-      case "OrbToStormTropper":
-      case "OrbToDrone":
-      case "OrbToPlayer":
-      //StromTropper To
-      case "StormTropperToDrone":
-      case "StormTropperToCurrency":
-      //Currency To
-      case "CurrencyToStormTropper":
-      case "CurrencyToDrone":
-      case "CurrencyToOrb":
-      //Floor To
-      case "FloorToDrone":
-      case "FloorToOrb":
-      case "FloorToLaserBullet":
-        break;
-
       default:
         this.handleDefaultCollision(entity1, entity2, direction);
+    }
+  }
+  canCollision(type) {
+    switch (type) {
+      case "OrbToFloor":
+      case "LaserBulletToFloor":
+      case "DroneToOrb":
+      case "StormTropperToOrb":
+      case "StormTropperToFloor":
+      case "PlayerToDrone":
+      case "PlayerToCurrency":
+      case "PlayerToFloor":
+        return true;
+      default:
+        return false;
     }
   }
   doDamage(toDamage, causesDamage) {
@@ -197,9 +184,9 @@ export default class CollisionS {
         const entityCBox = this.getCollisionBox(entity);
         if (this.debug) this.createBorderForCBox(entityCBox);
         for (const innerEntity of entities) {
+          const type = entity.descriptor + "To" + innerEntity.descriptor;
           if (
-            innerEntity.descriptor !== "Player" &&
-            this.canEntitiesCollide(entity, innerEntity) &&
+            this.canCollision(type) &&
             innerEntity.components[ComponentTypes.RENDERABLE]?.isOnScreen &&
             innerEntity.components[ComponentTypes.COLLIDABLE]
           ) {
@@ -213,7 +200,7 @@ export default class CollisionS {
                 lastEntityCBox,
                 lastInnerCBox
               );
-              this.handleCollision(entity, innerEntity, direction);
+              this.handleCollision(entity, innerEntity, type, direction);
             }
           }
         }

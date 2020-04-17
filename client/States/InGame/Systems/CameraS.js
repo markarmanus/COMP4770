@@ -18,7 +18,7 @@ export default class CameraS {
         y: canvas.height / 2 - renderC.posY,
       };
       if (translate.y < this.limit.min.y) translate.y = this.limit.min.y;
-      // if (translate.x < this.limit.min.x) translate.x = this.limit.min.x;
+      if (translate.x < this.limit.min.x) translate.x = this.limit.min.x;
       if (translate.y > this.limit.max.y) translate.y = this.limit.y;
       if (translate.x > this.limit.max.x) translate.x = this.limit.x;
 

@@ -1,6 +1,8 @@
 import ComponentClasses from "./Configuration/ComponentClasses";
 import EntityData from "../../Configuration/EntityData";
 import ComponentTypes from "../../ComponentTypes";
+import EntityManager from "../../EntityManager";
+import LevelManager from "./LevelManager";
 const isDiagonalMove = (action) => {
   return (
     (action.x === 1 && action.y === 1) ||
@@ -52,11 +54,10 @@ const isValidPosition = (position, width, height) => {
 };
 export default class Helper {
   static profilerStart() {
-    return new Date().getMilliseconds() * 1000;
+    this.timer = new Date().getTime();
   }
-  static profilerStop(name, time) {
-    let timePassed = new Date().getMilliseconds() * 1000 - time;
-    console.log(timePassed)
+  static profilerStop(name) {
+    let timePassed = new Date().getTime() - this.timer;
     console.log(name + " Took " + timePassed.toString());
   }
   static generateEntity(type, entityManger) {
@@ -102,17 +103,39 @@ export default class Helper {
     };
     return canvasOffset;
   }
-  static getEntityGrid(entityManager) {
+  static getInitialLevelGrid() {
+    return this.initialLevelEntityGrid;
+  }
+  static setInitialLevelGrid(entityManager) {
+    let gridWidth = 0;
+    let gridHeight = 0;
+    const entities = entityManager.getNewEntities();
+
+    for (const entity of entities) {
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      if (renderC) {
+        let gridPosition = this.toGridPosition({
+          x: renderC.posX,
+          y: renderC.posY,
+        });
+        gridHeight = gridPosition.y > gridHeight ? gridPosition.y : gridHeight;
+        gridWidth = gridPosition.x > gridWidth ? gridPosition.x : gridWidth;
+      }
+    }
+    this.initialLevelEntityGrid = this.entitiesToGrid(
+      entities,
+      gridWidth,
+      gridHeight
+    );
+  }
+  static entitiesToGrid(entities, gridWidth, gridHeight) {
     let canvasOffset = this.getCanvasOffset();
-    let gridWidth = Math.floor((canvas.width + 0) / 32);
-    let gridHeight = Math.floor((canvas.height + 0) / 32);
-    const entities = entityManager.getEntities();
     const grid = [...new Array(gridHeight)].map(() =>
       [...new Array(gridWidth)].map(() => [])
     );
     for (const entity of entities) {
       const renderC = entity.components[ComponentTypes.RENDERABLE];
-      if (renderC && renderC.isOnScreen) {
+      if (renderC) {
         let x = Math.floor((renderC.posX + canvasOffset.x) / 32);
         let y = Math.floor((renderC.posY + canvasOffset.y) / 32);
         x = x < 0 ? 0 : x >= gridWidth ? gridWidth - 1 : x;
@@ -122,14 +145,20 @@ export default class Helper {
     }
     return grid;
   }
+  static getCurrentEntityGrid(entityManager) {
+    let gridWidth = Math.floor(canvas.width / 32);
+    let gridHeight = Math.floor(canvas.height / 32);
+    const entities = entityManager.getEntities();
+    return this.entitiesToGrid(entities, gridWidth, gridHeight);
+  }
 
   static AStar(start, goal, entityManager, buffer) {
     start.h = this.getDistance(start, goal);
     start.g = 0;
     start.path = [];
-    let actualGrid = this.getEntityGrid(entityManager);
-    let gridWidth = actualGrid[0].length;
-    let gridHeight = actualGrid.length;
+    let grid = this.getCurrentEntityGrid(entityManager);
+    let gridWidth = grid[0].length;
+    let gridHeight = grid.length;
     let open = [];
     let closed = new Array(gridWidth * gridHeight).fill(false);
     open.push(start);
@@ -183,7 +212,7 @@ export default class Helper {
         };
         let isValid =
           isValidPosition(newNode, gridWidth, gridHeight) &&
-          !actualGrid[newNode.y][newNode.x].includes("Floor");
+          !grid[newNode.y][newNode.x].includes("Floor");
         if (buffer) {
           inner: for (let i = 0; i < actions.length; i++) {
             let action = actions[i];
@@ -193,7 +222,7 @@ export default class Helper {
             };
             if (
               isValidPosition(position, gridWidth, gridHeight) &&
-              actualGrid[position.y][position.x].includes("Floor")
+              grid[position.y][position.x].includes("Floor")
             ) {
               isValid = false;
               break inner;

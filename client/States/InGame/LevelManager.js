@@ -1,6 +1,5 @@
-
 import ComponentTypes from "../../ComponentTypes";
-import Helper from "./Helper"
+import Helper from "./Helper";
 export default class LevelManager {
   constructor(entityManger, cameraS) {
     this.entityManger = entityManger;
@@ -9,7 +8,10 @@ export default class LevelManager {
   loadLevel(level) {
     const entities = level.data.entities;
     for (let entity of entities) {
-      const entityInstance = Helper.generateEntity(entity.type, this.entityManger);
+      const entityInstance = Helper.generateEntity(
+        entity.type,
+        this.entityManger
+      );
       const renderC = entityInstance.components[ComponentTypes.RENDERABLE];
       if (renderC) {
         renderC.posX = entity.posX;
@@ -17,6 +19,5 @@ export default class LevelManager {
       }
       if (entity.type === "Player") this.cameraS.follow(entityInstance);
     }
-    console.log(this.entityManger)
   }
 }
