@@ -99,6 +99,7 @@ export default class AiS {
         const player = this.entityManager.getEntitiesOfType("Player")[0];
         const aiC = entity.components[ComponentTypes.AI];
         if (
+          player &&
           this.canSeeEachOther(player, entity, entities) &&
           renderC.isOnScreen
         ) {

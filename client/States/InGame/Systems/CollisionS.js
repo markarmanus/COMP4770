@@ -1,6 +1,7 @@
 import ComponentTypes from "./../../../ComponentTypes";
 import Sounds from "../../../Assets/SoundGenerator";
 import { EffectsGenerator, Effects } from "../EffectsGenerator";
+import Images from "../../../Assets/ImageGenerator";
 export default class CollisionS {
   constructor(entityManager) {
     this.entityManager = entityManager;
@@ -104,6 +105,13 @@ export default class CollisionS {
       case "StormTropperToOrb":
         this.doDamage(entity1, entity2);
         break;
+      case "PlayerToCheckPoint":
+        this.handlePlayerHitsCheckPoint(entity1, entity2);
+        break;
+      case "ForceFieldToDrone":
+      case "ForceFieldToStormTropper":
+        this.doDamage(entity2, entity1);
+        break;
       case "OrbToFloor":
       case "LaserBulletToFloor":
         this.destroyWithEffect(entity1, Effects.explosion);
@@ -119,12 +127,33 @@ export default class CollisionS {
       case "DroneToOrb":
       case "StormTropperToOrb":
       case "StormTropperToFloor":
+      case "ForceFieldToDrone":
+      case "ForceFieldToStormTropper":
+
       case "PlayerToDrone":
+      case "PlayerToCheckPoint":
+      case "PlayerToLaserBullet":
+      case "CheckPointToFloor":
       case "PlayerToCurrency":
       case "PlayerToFloor":
         return true;
       default:
         return false;
+    }
+  }
+  handlePlayerHitsCheckPoint(player, checkPoint) {
+    const checkPointC = player.components[ComponentTypes.CHECKPOINT];
+    const playerRenderC = player.components[ComponentTypes.RENDERABLE];
+    const checkPointRenderC = checkPoint.components[ComponentTypes.RENDERABLE];
+    const currencyC = player.components[ComponentTypes.CURRENCY];
+    if (checkPointC && checkPointRenderC.image !== Images.campFireOn) {
+      checkPointC.lastCheckPoint = {
+        x: playerRenderC.posX,
+        y: playerRenderC.posY,
+        currency: currencyC.currentCurrency,
+      };
+      checkPointRenderC.image = Images.campFireOn;
+      checkPointRenderC.height = Images.campFireOn.naturalHeight;
     }
   }
   doDamage(toDamage, causesDamage) {

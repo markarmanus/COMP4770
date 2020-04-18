@@ -7,13 +7,13 @@ const User = require("./server/db/models/User");
 const Level = require("./server/db/models/Level");
 const levelSeeder = require("./server/db/seeders/level");
 const passport = require("passport");
+const _ = require("lodash");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const expressSession = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(expressSession);
-
 const store = new MongoDBStore({
   uri: "mongodb://mongo:27017/database",
   collection: "sessions",
@@ -95,9 +95,7 @@ app.get("/logout", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("eventHappened", (data) => {
-    console.log(data);
-  });
+  socket.on("EventHappend", (data, callBack) => {});
 });
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {

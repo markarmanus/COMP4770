@@ -29,8 +29,8 @@ export default class BehaviourS {
       followC.locationStack.push(locationTofollow);
       if (followC.locationStack.length > followC.delay) {
         let newLocation = followC.locationStack.shift();
-        renderC.posX = newLocation.x + followC.offset.x;
-        renderC.posY = newLocation.y + followC.offset.y;
+        renderC.posX = newLocation.x - followC.offset.x * renderC.scaledWidth;
+        renderC.posY = newLocation.y - followC.offset.y * renderC.scaledHeight;
       }
     }
   }
@@ -85,12 +85,20 @@ export default class BehaviourS {
     const seekC = entity.components[ComponentTypes.SEEK];
     let directVector;
     if (seekC.entityToSeek) {
-      const entityToSeekRenderC =
-        seekC.entityToSeek.components[ComponentTypes.RENDERABLE];
-      directVector = new Vec2(
-        entityToSeekRenderC.posX + seekC.offset.x - renderC.posX,
-        entityToSeekRenderC.posY + seekC.offset.y - renderC.posY
-      );
+      if (seekC.entityToSeek === "mouse") {
+        let mousePosition = window.mouseTracker.getLocation(0);
+        directVector = new Vec2(
+          mousePosition.x - seekC.offset.x * renderC.scaledWidth - renderC.posX,
+          mousePosition.y - seekC.offset.y * renderC.scaledHeight - renderC.posY
+        );
+      } else {
+        const entityToSeekRenderC =
+          seekC.entityToSeek.components[ComponentTypes.RENDERABLE];
+        directVector = new Vec2(
+          entityToSeekRenderC.posX + seekC.offset.x - renderC.posX,
+          entityToSeekRenderC.posY + seekC.offset.y - renderC.posY
+        );
+      }
     } else {
       directVector = new Vec2(
         seekC.locationToSeek.x + seekC.offset.x - renderC.posX,
@@ -111,18 +119,36 @@ export default class BehaviourS {
     const shooterRenderC = entity.components[ComponentTypes.RENDERABLE];
     const toShootAt = shooterC.toShootAt;
     const shootAtRenderC = toShootAt.components[ComponentTypes.RENDERABLE];
+
     if (
       shootAtRenderC &&
       new Date().getTime() - shooterC.lastShotTime > shooterC.fireRate
     ) {
+      const distance = Helper.getDistance(
+        {
+          x: shooterRenderC.posX,
+          y: shooterRenderC.posY,
+        },
+        {
+          x: shootAtRenderC.posX,
+          y: shootAtRenderC.posY,
+        }
+      );
       const bullet = Helper.generateEntity("LaserBullet", this.entityManager);
       const renderC = bullet.components[ComponentTypes.RENDERABLE];
       renderC.posX = shooterRenderC.posX + shooterC.shootingOffset.x;
       renderC.posY = shooterRenderC.posY + shooterC.shootingOffset.y;
-
+      const vector = {
+        x: shootAtRenderC.posX - shooterRenderC.posX,
+        y: shootAtRenderC.posY - shooterRenderC.posY,
+      };
+      let acurateAngle = Math.atan2(vector.y, vector.x) * (180 / Math.PI);
+      const plusOrMinus = Math.random() > 0.5 ? -1 : 1;
+      const randomAngle = Math.random() * 0.5 * plusOrMinus * shooterC.accuracy;
+      let angle = (acurateAngle + randomAngle) * (Math.PI / 180);
       bullet.components[ComponentTypes.CHARGE].location = {
-        x: shootAtRenderC.posX + shootAtRenderC.scaledWidth / 2,
-        y: shootAtRenderC.posY + shootAtRenderC.scaledHeight / 2,
+        x: renderC.posX + Math.cos(angle) * distance,
+        y: renderC.posY + Math.sin(angle) * distance,
       };
       shooterC.lastShotTime = new Date().getTime();
     }

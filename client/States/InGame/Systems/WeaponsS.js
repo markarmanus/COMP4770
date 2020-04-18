@@ -28,6 +28,23 @@ export default class WeaponsS {
           const orbChargeC = orb.components[ComponentTypes.CHARGE];
           orbChargeC.location = window.mouseTracker.getLocation(0);
         }
+        if (controllC.mouseState.rightClick) {
+          if (!weaponsC.forceFieldEntity) {
+            const field = Helper.generateEntity(
+              "ForceField",
+              this.entityManager
+            );
+            const fieldRenderC = field.components[ComponentTypes.RENDERABLE];
+            fieldRenderC.posX = renderC.posX - renderC.scaledWidth / 2;
+            fieldRenderC.posY = renderC.posY - renderC.scaledHeight / 2;
+            weaponsC.forceFieldEntity = field;
+          }
+        } else {
+          if (weaponsC.forceFieldEntity) {
+            weaponsC.forceFieldEntity.remove();
+            weaponsC.forceFieldEntity = null;
+          }
+        }
       }
     }
   }

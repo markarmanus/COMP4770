@@ -2,6 +2,7 @@ import ComponentTypes from "../../../ComponentTypes";
 import RenderableC from "../../Components/RenderableC";
 import AnimatedC from "../../Components/AnimatedC";
 import CollidableC from "../Components/CollidableC";
+import CheckPointC from "../Components/CheckPointC";
 import ControllableC from "../../Components/ControllableC";
 import MovableC from "../Components/MovableC";
 import MultiSpritesC from "../Components/MultiSpritesC";
@@ -35,6 +36,6 @@ const ComponentClasses = {
   [ComponentTypes.WEAPONS]: WeaponsC,
   [ComponentTypes.AI]: AiC,
   [ComponentTypes.DAMAGE]: DamageC,
-
+  [ComponentTypes.CHECKPOINT]: CheckPointC,
 };
 export default ComponentClasses;

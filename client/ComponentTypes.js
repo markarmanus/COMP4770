@@ -18,6 +18,7 @@ const ComponentTypes = {
   DRONE: 17,
   SHOOTER: 18,
   DAMAGE: 19,
-  PATROL: 20
+  PATROL: 20,
+  CHECKPOINT: 21,
 };
 export default ComponentTypes;

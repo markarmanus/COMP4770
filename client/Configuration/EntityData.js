@@ -1,6 +1,7 @@
 import ComponentTypes from "../ComponentTypes";
 
 import Images from "../Assets/ImageGenerator";
+import Helper from "../States/InGame/Helper";
 const EntityData = {
   Player: {
     [ComponentTypes.RENDERABLE]: {
@@ -13,6 +14,7 @@ const EntityData = {
         y: 0.2,
       },
     },
+    [ComponentTypes.CHECKPOINT]: {},
     [ComponentTypes.PHYSICAL]: {
       airFriction: 0.2,
       maxGravity: 16,
@@ -44,7 +46,6 @@ const EntityData = {
     },
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
-      imgSrc: Images.yoda,
       spritesCount: 6,
     },
     [ComponentTypes.COLLIDABLE]: {
@@ -62,7 +63,56 @@ const EntityData = {
       currentCurrency: user.imperialCredits,
       positionOnGUI: "right",
     },
-    [ComponentTypes.WEAPONS]: {
+    [ComponentTypes.WEAPONS]: {},
+  },
+  PauseMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.mainMenu,
+      width: 860,
+      height: 961,
+      scale: 0.6,
+    },
+  },
+  ContinueMenuItem: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.continue,
+      width: 150,
+      height: 29,
+      scale: 1.2,
+    },
+  },
+  ExitMenuItem: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.exit,
+      width: 105,
+      height: 33,
+      scale: 1.25,
+    },
+  },
+  ForceField: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.forceField,
+      width: 64,
+      height: 64,
+      scale: 5,
+    },
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 35,
+      spritesCount: 8,
+    },
+    [ComponentTypes.SEEK]: {
+      speed: 2,
+      entityToSeek: "mouse",
+      delay: 3,
+      offset: { x: 0.5, y: 0.5 },
+      accerlation: 1.1,
+      maxSpeed: 10,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 0.2,
+    },
+    [ComponentTypes.DAMAGE]: {
+      damage: 0.3,
     },
   },
   StormTropper: {
@@ -91,7 +141,6 @@ const EntityData = {
     },
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
-      imgSrc: Images.yoda,
       spritesCount: 6,
     },
     [ComponentTypes.COLLIDABLE]: {
@@ -104,13 +153,13 @@ const EntityData = {
         shooter: {
           fireRate: 200,
           shootingOffset: { x: 20, y: 30 },
+          accuracy: 60,
         },
         patrol: {
           speed: 1.5,
-        }
-      }
+        },
+      },
     },
-
   },
   Drone: {
     [ComponentTypes.RENDERABLE]: {
@@ -138,13 +187,13 @@ const EntityData = {
           maxSpeed: 8,
           speed: 1,
           offset: { x: 0, y: 0 },
-          accerlation: 0.1
-        }
-      }
+          accerlation: 0.1,
+        },
+      },
     },
     [ComponentTypes.DAMAGE]: {
       damage: 20,
-    }
+    },
   },
   Orb: {
     [ComponentTypes.RENDERABLE]: {
@@ -165,10 +214,9 @@ const EntityData = {
     },
     [ComponentTypes.DAMAGE]: {
       damage: 3,
-    }
+    },
   },
   LaserBullet: {
-
     [ComponentTypes.RENDERABLE]: {
       image: Images.currency,
       width: 500,
@@ -186,13 +234,12 @@ const EntityData = {
       subSquareRatio: 1,
     },
     [ComponentTypes.DAMAGE]: {
-      damage: 3,
-    }
+      damage: 0,
+    },
   },
   Currency: {
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 40,
-      imgSrc: Images.currencyAnimated,
       spritesCount: 10,
     },
     [ComponentTypes.RENDERABLE]: {
@@ -216,20 +263,10 @@ const EntityData = {
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1,
     },
-    [ComponentTypes.FOLLOW]: {
-      entityToFollow: "mouse",
-      delay: 5,
-      speed: 1,
-      offset: {
-        x: 0.5,
-        y: 0.5,
-      },
-    },
   },
   Explosion: {
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 40,
-      imgSrc: Images.currencyAnimated,
       spritesCount: 10,
       repeat: false,
     },
@@ -241,6 +278,25 @@ const EntityData = {
     },
     [ComponentTypes.LIFE_TIME]: {
       lifeTime: "animationCycle",
+    },
+  },
+  CheckPoint: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.campFireOff,
+      width: 32,
+      height: 11,
+      scale: 4,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.PHYSICAL]: {
+      airFriction: 0.7,
+      maxGravity: 16,
+    },
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 300,
+      spritesCount: 3,
     },
   },
 };

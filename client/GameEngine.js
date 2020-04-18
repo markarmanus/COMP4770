@@ -12,7 +12,7 @@ export default class GameEngine {
 
   init() {
     window.currentLevel = levels[0];
-    this.newStates.push(new inGameState(currentLevel));
+    this.newStates.push(new inGameState(currentLevel, this));
   }
 
   run() {
@@ -26,8 +26,12 @@ export default class GameEngine {
   update() {
     const { popCount, newStates, states } = this;
     //this should handle the loading and unloading of gamestates and should call the gamestate.update()
-    for (let i = 0; i < popCount; i++) states.pop();
+    for (let i = 0; i < popCount; i++) {
+      states.pop();
+    }
     for (let i = 0; i < newStates.length; i++) states.push(newStates[i]);
+    this.newStates = [];
+    this.popCount = 0;
     if (states.length) {
       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
       const background = new Image();
@@ -45,6 +49,7 @@ export default class GameEngine {
   }
 
   addState(state) {
+    console.log(state);
     this.newStates.push(state);
   }
 

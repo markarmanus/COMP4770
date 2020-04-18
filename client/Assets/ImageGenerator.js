@@ -15,6 +15,12 @@ const Images = {
   emptyFocusBar: createImage("./Images/EmptyFocusBar.png"),
   currency: createImage("./Images/currency.png"),
   currencyAnimated: createImage("./Images/currencyAnimated.png"),
+  campFireOff: createImage("./Images/CampFireOff.png"),
+  campFireOn: createImage("./Images/CampFireOn.png"),
+  forceField: createImage("./Images/blueFireball.png"),
+  mainMenu: createImage("./Images/pauseMenu.png"),
+  continue: createImage("./Images/continue.png"),
+  exit: createImage("./Images/exit.png"),
 };
 
 export default Images;

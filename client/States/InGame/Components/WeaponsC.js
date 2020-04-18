@@ -8,5 +8,6 @@ export default class SeekC extends Component {
     this.lastShot = new Date().getTime();
     this.fireRate = 100;
     this.bulletLifeTime = 500;
+    this.forceFieldEntity;
   }
 }

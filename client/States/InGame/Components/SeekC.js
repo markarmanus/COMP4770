@@ -4,7 +4,7 @@ export default class SeekC extends Component {
   constructor({
     maxSpeed,
     speed,
-    entitiyToSeek,
+    entityToSeek,
     accerlation,
     offset = { x: 0, y: 0 },
     locationToSeek,
@@ -12,7 +12,7 @@ export default class SeekC extends Component {
     super(ComponentTypes.SEEK);
     this.speed = speed;
     this.currentSpeed = 0;
-    this.entitiyToSeek = entitiyToSeek;
+    this.entityToSeek = entityToSeek;
     this.locationToSeek = locationToSeek;
     this.accerlation = accerlation;
     this.maxSpeed = maxSpeed;

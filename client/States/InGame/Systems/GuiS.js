@@ -1,8 +1,9 @@
 import ComponentTypes from "../../../ComponentTypes";
 import Images from "../../../Assets/ImageGenerator";
+import Helper from "../Helper";
 
 export default class GuiS {
-  constructor(scale, entityManager) {
+  constructor(scale, entityManager, onEndLevel, unpause) {
     this.guiScale = scale;
     this.defaultPadding = {
       x: 30,
@@ -10,13 +11,12 @@ export default class GuiS {
     };
     this.canvasOffset = {};
     this.entityManager = entityManager;
+    this.pauseMenu = [];
+    this.onEndLevel = onEndLevel;
+    this.unpause = unpause;
   }
   updateCanvasOffset() {
-    const canvasTransform = canvasContext.getTransform();
-    this.canvasOffset = {
-      x: canvasTransform.e,
-      y: canvasTransform.f,
-    };
+    this.canvasOffset = Helper.getCanvasOffset();
   }
   drawSmallBar(fullBar, emptyBar, barScale, percent, entity) {
     let scale = this.guiScale * barScale;
@@ -104,65 +104,125 @@ export default class GuiS {
       textPosY + image.height / 6 - this.canvasOffset.y
     );
   }
-  update() {
+  drawPauseScreen() {
+    if (!this.pauseMenu.length > 0) {
+      const pauseMenu = Helper.generateEntity("PauseMenu", this.entityManager);
+      const pauseRenderC = pauseMenu.components[ComponentTypes.RENDERABLE];
+      pauseRenderC.posX =
+        canvas.width / 2 -
+        Helper.getCanvasOffset().x -
+        pauseRenderC.scaledWidth / 2;
+      pauseRenderC.posY =
+        canvas.height / 2 -
+        Helper.getCanvasOffset().y -
+        pauseRenderC.scaledHeight / 2;
+      const continueItem = Helper.generateEntity(
+        "ContinueMenuItem",
+        this.entityManager
+      );
+      const exit = Helper.generateEntity("ExitMenuItem", this.entityManager);
+      const continueRenderC =
+        continueItem.components[ComponentTypes.RENDERABLE];
+      const exitRenderC = exit.components[ComponentTypes.RENDERABLE];
+      continueRenderC.posX =
+        pauseRenderC.posX +
+        pauseRenderC.scaledWidth / 2 -
+        continueRenderC.scaledWidth / 2;
+      continueRenderC.posY = pauseRenderC.posY + 220;
+      exitRenderC.posX =
+        pauseRenderC.posX +
+        pauseRenderC.scaledWidth / 2 -
+        exitRenderC.scaledWidth / 2;
+      exitRenderC.posY = continueRenderC.posY + 80;
+      this.pauseMenu.push(
+        { entity: pauseMenu },
+        { entity: exit, handler: this.onEndLevel },
+        { entity: continueItem, handler: this.unpause }
+      );
+    }
+  }
+  checkForClicks(controllsC) {
+    if (controllsC.mouseState.leftClick) {
+      const lastMousePosition = window.mouseTracker.getLocation(0);
+      for (const menuItem of this.pauseMenu) {
+        const renderC = menuItem.entity.components[ComponentTypes.RENDERABLE];
+        const isClicked =
+          renderC.posX < lastMousePosition.x &&
+          renderC.posX + renderC.scaledWidth > lastMousePosition.x &&
+          renderC.posY < lastMousePosition.y &&
+          renderC.posY + renderC.scaledHeight > lastMousePosition.y;
+        if (isClicked) console.log(menuItem.handler);
+        if (isClicked && menuItem.handler !== undefined) menuItem.handler();
+      }
+    }
+  }
+  update(isPaused) {
     this.updateCanvasOffset();
+    console.log(isPaused);
+    if (isPaused) {
+      this.drawPauseScreen();
+    } else {
+      while (this.pauseMenu.length > 0) {
+        const menuItem = this.pauseMenu.pop();
+        menuItem.entity.remove();
+      }
+    }
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
       const healthC = entity.components[ComponentTypes.HEALTH];
       const focusC = entity.components[ComponentTypes.FOCUS];
       const currencyC = entity.components[ComponentTypes.CURRENCY];
-      if (healthC || focusC || currencyC) {
-        if (currencyC) {
-          this.drawCurrency(
-            currencyC.currentCurrency,
-            currencyC.positionOnGUI,
-            Images.currency,
-            this.defaultPadding,
-            0.3
+      const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      if (controllsC) this.checkForClicks(controllsC);
+      if (currencyC) {
+        this.drawCurrency(
+          currencyC.currentCurrency,
+          currencyC.positionOnGUI,
+          Images.currency,
+          this.defaultPadding,
+          0.3
+        );
+      }
+      if (healthC) {
+        const healthPrcnt =
+          Math.max(healthC.currentHealth, 0) / healthC.maxHealth;
+        if (healthC.folllowEntity) {
+          this.drawSmallBar(
+            Images.fullSmallHealthBar,
+            Images.emptySmallHealthBar,
+            0.5,
+            healthPrcnt,
+            entity
           );
-        }
-        if (healthC) {
-          const healthPrcnt =
-            Math.max(healthC.currentHealth, 0) / healthC.maxHealth;
-          if (healthC.folllowEntity) {
-            this.drawSmallBar(
-              Images.fullSmallHealthBar,
-              Images.emptySmallHealthBar,
-              0.5,
-              healthPrcnt,
-              entity
-            );
-          } else {
-            const offset = 80;
-            this.drawBar(
-              Images.fullHealthBar,
-              Images.emptyHealthBar,
-              this.defaultPadding,
-              offset,
-              healthPrcnt,
-              healthC.positionOnGUI
-            );
-          }
-        }
-
-        if (focusC) {
-          const padding = {
-            x: this.defaultPadding.x,
-            y:
-              Images.fullHealthBar.naturalHeight * this.guiScale +
-              this.defaultPadding.y,
-          };
-          const focusPercent = focusC.currentFocus / focusC.maxFocus;
+        } else {
           const offset = 80;
           this.drawBar(
-            Images.fullFocusBar,
-            Images.emptyFocusBar,
-            padding,
+            Images.fullHealthBar,
+            Images.emptyHealthBar,
+            this.defaultPadding,
             offset,
-            focusPercent,
-            focusC.positionOnGUI
+            healthPrcnt,
+            healthC.positionOnGUI
           );
         }
+      }
+      if (focusC) {
+        const padding = {
+          x: this.defaultPadding.x,
+          y:
+            Images.fullHealthBar.naturalHeight * this.guiScale +
+            this.defaultPadding.y,
+        };
+        const focusPercent = focusC.currentFocus / focusC.maxFocus;
+        const offset = 80;
+        this.drawBar(
+          Images.fullFocusBar,
+          Images.emptyFocusBar,
+          padding,
+          offset,
+          focusPercent,
+          focusC.positionOnGUI
+        );
       }
     }
   }

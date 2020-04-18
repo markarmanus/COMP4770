@@ -8,7 +8,7 @@ let levels = [
 
         { posX: 800, posY: 300, type: "Drone" },
         { posX: 2000, posY: 200, type: "StormTropper" },
-
+        { posX: 800, posY: 400, type: "CheckPoint" },
       ],
     },
   },
@@ -36,13 +36,13 @@ for (let i = 1; i < 100; i++) {
       posY: 608,
       type: "Currency",
     });
-    levels[0].data.entities.push({
-      posX: (i + 10) * 32,
-      posY: 384,
-      type: "Currency",
-    });
-
   }
+  //   levels[0].data.entities.push({
+  //     posX: (i + 10) * 32,
+  //     posY: 384,
+  //     type: "Currency",
+  //   });
+  // }
 }
 console.log(levels[0].data.entities);
 

@@ -45,9 +45,9 @@ export default class RenderS {
         // if going to add buffer to loading zone, remember Helper AI wont work.
         if (
           renderC.posX + canvasOffset.x < -32 ||
-          renderC.posX + canvasOffset.x > canvas.width ||
+          renderC.posX + canvasOffset.x > canvas.width + 32 ||
           renderC.posY + canvasOffset.y < -32 ||
-          renderC.posY + canvasOffset.y > canvas.height
+          renderC.posY + canvasOffset.y > canvas.height + 32
         ) {
           renderC.isOnScreen = false;
         } else {
