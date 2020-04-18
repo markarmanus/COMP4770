@@ -25,7 +25,8 @@ const Images = {
   drone: createImage("./Images/drone.png"),
   laserBullet: createImage("./Images/laserBullet.png"),
   stormtrooper: createImage("./Images/stormtrooperNEW"),
-  orb: createImage("./Images/blueShootingOrb.png")
+  orb: createImage("./Images/blueShootingOrb.png"),
+  explosion: createImage("./Images/explode.png")
 };
 
 export default Images;
