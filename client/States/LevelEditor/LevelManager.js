@@ -14,6 +14,7 @@ export default class LevelManager {
       let renderProperties = EntityData[entity.type][ComponentTypes.RENDERABLE];
       renderProperties.posX = entity.posX;
       renderProperties.posY = entity.posY;
+      console.log(renderProperties);
       const rendeC = new RenderC(renderProperties);
       entityInstance.addComponent(rendeC);
       if (EntityData[entity.type][ComponentTypes.ANIMATED]) {

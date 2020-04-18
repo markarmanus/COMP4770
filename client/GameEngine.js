@@ -1,5 +1,9 @@
 import inGameState from "./States/InGame/InGameState";
-import LevelEditorState from "./States/LevelEditor/LevelEditorState";
+import mainMenuState from "./States/MainMenu/MainMenuState";
+import levelSelectState from "./States/LevelSelect/LevelSelectState";
+import levelEditorState from "./States/LevelEditor/LevelEditorState";
+
+
 import Helper from "./States/InGame/Helper";
 export default class GameEngine {
   constructor() {
@@ -11,8 +15,8 @@ export default class GameEngine {
   }
 
   init() {
-    window.currentLevel = levels[0];
-    this.newStates.push(new inGameState(currentLevel, this));
+    //window.currentLevel = levels[0];
+    this.newStates.push(new mainMenuState(this));
   }
 
   run() {
@@ -33,8 +37,8 @@ export default class GameEngine {
     this.newStates = [];
     this.popCount = 0;
     if (states.length) {
-      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-      const background = new Image();
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height); //this shouldnt be here, it should be apart of the rendering systems
+      /*const background = new Image();
       background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
       const patern = canvasContext.createPattern(background, "repeat");
       canvasContext.fillStyle = patern;
@@ -43,7 +47,7 @@ export default class GameEngine {
         canvas.height * 2 * -1,
         canvas.width * 10,
         canvas.height * 10
-      );
+      );*/
       states[states.length - 1].update();
     }
   }

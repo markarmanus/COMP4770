@@ -299,5 +299,13 @@ const EntityData = {
       spritesCount: 3,
     },
   },
+  BluePlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.bluePlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
 };
 export default EntityData;

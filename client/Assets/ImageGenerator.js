@@ -21,6 +21,7 @@ const Images = {
   mainMenu: createImage("./Images/pauseMenu.png"),
   continue: createImage("./Images/continue.png"),
   exit: createImage("./Images/exit.png"),
+  bluePlanet: createImage("./Images/Planets/bluePlanet128.png"),
 };
 
 export default Images;

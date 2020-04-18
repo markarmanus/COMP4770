@@ -16,6 +16,13 @@ let levels = [
     data: {
       entities: [{ posX: 0, posY: 500, type: "Floor" }],
     },
+    
+  },
+    {
+    data: {
+      entities: [{ posX: 100, posY: 480, type: "BluePlanet" }],
+    },
+    
   },
 ];
 for (let i = 1; i < 100; i++) {
