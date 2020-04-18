@@ -20,5 +20,6 @@ const ComponentTypes = {
   DAMAGE: 19,
   PATROL: 20,
   CHECKPOINT: 21,
+  PICK_UP: 22,
 };
 export default ComponentTypes;

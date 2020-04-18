@@ -151,14 +151,12 @@ export default class GuiS {
           renderC.posX + renderC.scaledWidth > lastMousePosition.x &&
           renderC.posY < lastMousePosition.y &&
           renderC.posY + renderC.scaledHeight > lastMousePosition.y;
-        if (isClicked) console.log(menuItem.handler);
         if (isClicked && menuItem.handler !== undefined) menuItem.handler();
       }
     }
   }
   update(isPaused) {
     this.updateCanvasOffset();
-    console.log(isPaused);
     if (isPaused) {
       this.drawPauseScreen();
     } else {

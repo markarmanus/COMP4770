@@ -17,6 +17,7 @@ import ChargeC from "../Components/ChargeC";
 import WeaponsC from "../Components/WeaponsC.js";
 import AiC from "../Components/AiC.js";
 import DamageC from "../Components/DamageC.js";
+import PickUpC from "../Components/PickUpC.js";
 
 const ComponentClasses = {
   [ComponentTypes.RENDERABLE]: RenderableC,
@@ -37,5 +38,6 @@ const ComponentClasses = {
   [ComponentTypes.AI]: AiC,
   [ComponentTypes.DAMAGE]: DamageC,
   [ComponentTypes.CHECKPOINT]: CheckPointC,
+  [ComponentTypes.PICK_UP]: PickUpC,
 };
 export default ComponentClasses;

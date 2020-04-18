@@ -112,6 +112,9 @@ export default class CollisionS {
       case "ForceFieldToStormTropper":
         this.doDamage(entity2, entity1);
         break;
+      case "PlayerToEmptyCrib":
+        this.handlePlayerCollidePickUp(entity1, entity2);
+        break;
       case "OrbToFloor":
       case "LaserBulletToFloor":
         this.destroyWithEffect(entity1, Effects.explosion);
@@ -129,7 +132,7 @@ export default class CollisionS {
       case "StormTropperToFloor":
       case "ForceFieldToDrone":
       case "ForceFieldToStormTropper":
-
+      case "PlayerToEmptyCrib":
       case "PlayerToDrone":
       case "PlayerToCheckPoint":
       case "PlayerToLaserBullet":
@@ -139,6 +142,13 @@ export default class CollisionS {
         return true;
       default:
         return false;
+    }
+  }
+  handlePlayerCollidePickUp(player, pickUp) {
+    const pickUpC = pickUp.components[ComponentTypes.PICK_UP];
+    if (pickUpC) {
+      pickUpC.wasPickedUp = true;
+      pickUpC.pickedUpBy = player;
     }
   }
   handlePlayerHitsCheckPoint(player, checkPoint) {
