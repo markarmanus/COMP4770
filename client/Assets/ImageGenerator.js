@@ -4,7 +4,7 @@ const createImage = (src) => {
   return image;
 };
 const Images = {
-  yoda: createImage("./Images/character.png"),
+  yoda: createImage("./Images/babyYodaNew.png"),
   selectorBackground: createImage("./Images/selectorBackground.png"),
   floor: createImage("./Images/floor.png"),
   fullHealthBar: createImage("./Images/fullHealthBar.png"),

@@ -6,9 +6,9 @@ const EntityData = {
   Player: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.yoda,
-      width: 32,
-      height: 64,
-      scale: 2.5,
+      width: 64,
+      height: 43,
+      scale: 1,
       visionOffset: {
         x: 0.1,
         y: 0.2,
@@ -40,13 +40,13 @@ const EntityData = {
       dashCooldown: 500,
     },
     [ComponentTypes.MULTI_SPRITES]: {
-      left: 128,
-      right: 192,
-      idle: 0,
+      left: 386,
+      right: 430,
+      idle: 1,
     },
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
-      spritesCount: 6,
+      spritesCount: 4,
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1,
