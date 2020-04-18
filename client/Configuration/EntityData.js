@@ -144,19 +144,21 @@ const EntityData = {
   },
   StormTropper: {
     [ComponentTypes.RENDERABLE]: {
-      image: Images.yoda,
-      width: 32,
+      image: Images.stormtrooper,
+      width: 64,
       height: 64,
       visionOffset: {
         x: 0.1,
         y: 0.2,
       },
-      scale: 2.5,
+      scale: 2,
     },
     [ComponentTypes.MULTI_SPRITES]: {
-      left: 128,
-      right: 192,
+      left: 133,
+      right: 199,
       idle: 0,
+      shootLeft: 265,
+      shootRight: 331
     },
     [ComponentTypes.HEALTH]: {
       maxHealth: 100,
@@ -168,7 +170,7 @@ const EntityData = {
     },
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
-      spritesCount: 6,
+      spritesCount: 3,
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1,
@@ -248,7 +250,7 @@ const EntityData = {
       image: Images.laserBullet,
       width: 25,
       height: 9,
-      scale: 2,
+      scale: 1,
     },
     [ComponentTypes.LIFE_TIME]: {
       lifeTime: 500,

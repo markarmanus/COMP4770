@@ -23,7 +23,8 @@ const Images = {
   exit: createImage("./Images/exit.png"),
   emptyCrib: createImage("./Images/emptyCrib.png"),
   drone: createImage("./Images/drone.png"),
-  laserBullet: createImage("./Images/laserBullet.png")
+  laserBullet: createImage("./Images/laserBullet.png"),
+  stormtrooper: createImage("./Images/stormtrooperNEW")
 };
 
 export default Images;
