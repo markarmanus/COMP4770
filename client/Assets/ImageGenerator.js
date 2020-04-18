@@ -14,7 +14,7 @@ const Images = {
   fullFocusBar: createImage("./Images/FullFocusBar.png"),
   emptyFocusBar: createImage("./Images/EmptyFocusBar.png"),
   currency: createImage("./Images/currency.png"),
-  currencyAnimated: createImage("./Images/currencyAnimated.png"),
+  currencyAnimated: createImage("./Images/coinSpinning.png"),
   campFireOff: createImage("./Images/CampFireOff.png"),
   campFireOn: createImage("./Images/CampFireOn.png"),
   forceField: createImage("./Images/blueFireball.png"),

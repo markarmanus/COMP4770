@@ -266,14 +266,14 @@ const EntityData = {
   },
   Currency: {
     [ComponentTypes.ANIMATED]: {
-      animationSpeed: 40,
-      spritesCount: 10,
+      animationSpeed: 60,
+      spritesCount: 7,
     },
     [ComponentTypes.RENDERABLE]: {
       image: Images.currencyAnimated,
-      width: 51,
-      height: 51,
-      scale: 1,
+      width: 64,
+      height: 64,
+      scale: 1.25,
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1,
