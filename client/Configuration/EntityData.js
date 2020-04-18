@@ -107,7 +107,7 @@ const EntityData = {
       },
     },
   },
-  
+
   ExitMenuItem: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.exit,
@@ -190,14 +190,14 @@ const EntityData = {
   },
   Drone: {
     [ComponentTypes.RENDERABLE]: {
-      image: Images.currency,
-      width: 500,
-      height: 500,
+      image: Images.drone,
+      width: 64,
+      height: 64,
       visionOffset: {
         x: 0.1,
         y: 0.2,
       },
-      scale: 0.15,
+      scale: 1,
     },
     [ComponentTypes.HEALTH]: {
       maxHealth: 100,

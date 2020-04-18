@@ -22,6 +22,7 @@ const Images = {
   continue: createImage("./Images/continue.png"),
   exit: createImage("./Images/exit.png"),
   emptyCrib: createImage("./Images/emptyCrib.png"),
+  drone: createImage("./Images/drone.png")
 };
 
 export default Images;
