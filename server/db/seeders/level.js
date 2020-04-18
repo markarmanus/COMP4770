@@ -8,7 +8,7 @@ let levels = [
 
         { posX: 800, posY: 300, type: "Drone" },
         { posX: 2000, posY: 200, type: "StormTropper" },
-        { posX: 800, posY: 400, type: "CheckPoint" },
+        { posX: 800, posY: 400, type: "EmptyCrib" },
       ],
     },
   },

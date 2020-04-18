@@ -7,6 +7,7 @@ import MovementS from "./Systems/MovementS";
 import CheckPointS from "./Systems/CheckPointS";
 import ComponentTypes from "../../ComponentTypes";
 import PhysicsS from "./Systems/PhysicsS";
+import PickUpS from "./Systems/PickUpS";
 import CollisionS from "./Systems/CollisionS";
 import GuiS from "./Systems/GuiS";
 import BehaviourS from "./Systems/BehaviourS";
@@ -39,6 +40,7 @@ export default class inGameState extends GameState {
     this.checkPointS = new CheckPointS(this.entityManager, this.levelManager);
     this.collisionS = new CollisionS(this.entityManager);
     this.physicsS = new PhysicsS(0.4, this.entityManager);
+    this.pickUpS = new PickUpS(this.entityManager);
     this.behaviourS = new BehaviourS(this.entityManager);
 
     this.weaponsS = new WeaponsS(this.entityManager);
@@ -53,7 +55,7 @@ export default class inGameState extends GameState {
     this.level = level;
     this.init();
     window.addEventListener("keydown", (e) => {
-      if (e.key === "p") this.paused = !this.paused;
+      if (e.key === "Escape") this.paused = !this.paused;
     });
     this.debug = false;
     window.addEventListener("keydown", (e) => {
@@ -66,9 +68,7 @@ export default class inGameState extends GameState {
     this.levelEnded = true;
   }
   unpause() {
-    console.log("hi");
     this.paused = false;
-    console.log(this.paused);
   }
   update() {
     super.update();
@@ -89,6 +89,8 @@ export default class inGameState extends GameState {
       this.physicsS.update();
 
       this.movementS.update();
+
+      this.pickUpS.update();
 
       this.weaponsS.update();
 

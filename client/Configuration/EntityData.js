@@ -81,6 +81,33 @@ const EntityData = {
       scale: 1.2,
     },
   },
+  EmptyCrib: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.emptyCrib,
+      width: 32,
+      height: 32,
+      scale: 2,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: 1,
+    },
+    [ComponentTypes.PICK_UP]: {
+      componentsToChange: {
+        [ComponentTypes.PHYSICAL]: {
+          maxGravity: 0,
+        },
+        [ComponentTypes.RENDERABLE]: {
+          image: Images.currency,
+          posY: "-50",
+        },
+        [ComponentTypes.MOVABLE]: {
+          gravityForceScaler: 0,
+          jumpForce: 0,
+        },
+      },
+    },
+  },
+  
   ExitMenuItem: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.exit,

@@ -21,6 +21,7 @@ const Images = {
   mainMenu: createImage("./Images/pauseMenu.png"),
   continue: createImage("./Images/continue.png"),
   exit: createImage("./Images/exit.png"),
+  emptyCrib: createImage("./Images/emptyCrib.png"),
 };
 
 export default Images;
