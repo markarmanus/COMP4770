@@ -245,10 +245,10 @@ const EntityData = {
   },
   LaserBullet: {
     [ComponentTypes.RENDERABLE]: {
-      image: Images.currency,
-      width: 500,
-      height: 500,
-      scale: 0.09,
+      image: Images.laserBullet,
+      width: 25,
+      height: 9,
+      scale: 2,
     },
     [ComponentTypes.LIFE_TIME]: {
       lifeTime: 500,
@@ -273,7 +273,7 @@ const EntityData = {
       image: Images.currencyAnimated,
       width: 64,
       height: 64,
-      scale: 1.25,
+      scale: 1.5,
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: 1,
