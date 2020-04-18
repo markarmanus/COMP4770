@@ -7,7 +7,6 @@ const User = require("./server/db/models/User");
 const Level = require("./server/db/models/Level");
 const levelSeeder = require("./server/db/seeders/level");
 const passport = require("passport");
-const _ = require("lodash");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const cookieParser = require("cookie-parser");
