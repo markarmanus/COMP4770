@@ -342,6 +342,14 @@ const EntityData = {
       scale: .5,
     },
   },
+  RedPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.redPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
   GreenPlanet: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.greenPlanet,
@@ -356,6 +364,14 @@ const EntityData = {
       width: 550,
       height: 86,
       scale: .35,
+    },
+  },
+  GreenPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.greenPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
     },
   },
   BluePlanet: {
@@ -374,6 +390,14 @@ const EntityData = {
       scale: .3,
     },
   },
+  BluePlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.bluePlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
   PinkPlanet: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.pinkPlanet,
@@ -388,6 +412,14 @@ const EntityData = {
       width: 600,
       height: 58,
       scale: .5,
+    },
+  },
+  PinkPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.pinkPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
     },
   },
   OverworldYoda: {
