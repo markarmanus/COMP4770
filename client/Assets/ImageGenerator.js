@@ -26,7 +26,12 @@ const Images = {
   laserBullet: createImage("./Images/laserBullet.png"),
   stormtrooper: createImage("./Images/stormtrooperNEW"),
   orb: createImage("./Images/blueShootingOrb.png"),
-  explosion: createImage("./Images/explode.png")
+  explosion: createImage("./Images/explode.png"),
+  redPlanet: createImage("./Images/Planets/redPlanet128.png"),
+  bluePlanet: createImage("./Images/Planets/bluePlanet128.png"),
+  greenPlanet: createImage("./Images/Planets/greenPlanet128.png"),
+  pinkPlanet: createImage("./Images/Planets/pinkPlanet128.png"),
+  overworldYoda: createImage("./Images/yodaCrib.png")
 };
 
 export default Images;
