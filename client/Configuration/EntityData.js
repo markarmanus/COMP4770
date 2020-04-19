@@ -334,12 +334,28 @@ const EntityData = {
       scale: 1,
     },
   },
+  CoruscantText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.coruscantText,
+      width: 500,
+      height: 62,
+      scale: .5,
+    },
+  },
   GreenPlanet: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.greenPlanet,
       width: 128,
       height: 128,
       scale: 1,
+    },
+  },
+  OrondiaText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.orondia,
+      width: 550,
+      height: 86,
+      scale: .35,
     },
   },
   BluePlanet: {
@@ -350,12 +366,28 @@ const EntityData = {
       scale: 1,
     },
   },
+  NabooText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.nabooText,
+      width: 552,
+      height: 110,
+      scale: .3,
+    },
+  },
   PinkPlanet: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.pinkPlanet,
       width: 128,
       height: 128,
       scale: 1,
+    },
+  },
+  LevelEditorText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.levelEditor,
+      width: 600,
+      height: 58,
+      scale: .5,
     },
   },
   OverworldYoda: {

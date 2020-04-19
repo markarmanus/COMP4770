@@ -31,7 +31,11 @@ const Images = {
   bluePlanet: createImage("./Images/Planets/bluePlanet128.png"),
   greenPlanet: createImage("./Images/Planets/greenPlanet128.png"),
   pinkPlanet: createImage("./Images/Planets/pinkPlanet128.png"),
-  overworldYoda: createImage("./Images/yodaCrib.png")
+  overworldYoda: createImage("./Images/yodaCrib.png"),
+  coruscantText: createImage("./Images/coruscant.png"),
+  nabooText: createImage("./Images/NabooText.png"),
+  levelEditor: createImage("./Images/levelEditor.png"),
+  orondia: createImage("./Images/orondia.png")
 };
 
 export default Images;
