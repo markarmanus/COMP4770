@@ -24,13 +24,13 @@ export default class MoementS {
     return newVelocity;
   }
 
-  //update(planets) {
-  update() {
+  update(planets) {
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
-      const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
       const movementC = entity.components[ComponentTypes.MOVABLE];
-      if (controllsC){
+      const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      if (renderC && movementC && controllsC){
       //to access the last mouse location
       console.log(window.mouseTracker.getLocation(0));
       // to access the keys that are currently pressed.
@@ -40,10 +40,23 @@ export default class MoementS {
 
       // here you would detect that the user has pressed either (a) to move left
       // or (d) to move right and move him to the correct planet
-      // redPlanet = planets[3];
-      // const redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
-      // redPlanetRenderC.posY
+      
 
+      let redPlanet = planets[0];
+      let redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
+      let redPlanetPosition = [redPlanetRenderC.posX, redPlanetRenderC.posY];
+
+      let bluePlanet = planets[1];
+      let bluePlanetRenderC = bluePlanet.components[ComponentTypes.RENDERABLE];
+      let bluePlanetPosition = [bluePlanetRenderC.posX, bluePlanetRenderC.posY];
+
+      let greenPlanet = planets[2];
+      let greenPlanetRenderC = greenPlanet.components[ComponentTypes.RENDERABLE];
+      let greenPlanetPosition = [greenPlanetRenderC.posX, greenPlanetRenderC.posY];
+
+      let pinkPlanet = planets[3];
+      let pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
+      let pinkPlanetPosition = [pinkPlanetRenderC.posX, pinkPlanetRenderC.posY];
 
         const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
         const leftBttn = controllsC.bttnsState[controllsC.leftBttn];
