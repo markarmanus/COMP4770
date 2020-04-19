@@ -27,7 +27,8 @@ export default class OverWorldState extends GameState {
     super.update();
     this.controllsS.update();
     this.animationS.update();
-    this.movementS.update(this.planets);
+    this.movementS.update();
+    this.guiS.update(this.planets);
     this.renderS.update();
   }
   init() {
