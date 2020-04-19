@@ -224,10 +224,10 @@ const EntityData = {
   },
   Orb: {
     [ComponentTypes.RENDERABLE]: {
-      image: Images.currency,
-      width: 500,
-      height: 500,
-      scale: 0.09,
+      image: Images.orb,
+      width: 21,
+      height: 15,
+      scale: 1,
     },
     [ComponentTypes.LIFE_TIME]: {
       lifeTime: 500,
