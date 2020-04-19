@@ -57,25 +57,26 @@ export default class MoementS {
       let pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
       let pinkPlanetPosition = [pinkPlanetRenderC.posX, pinkPlanetRenderC.posY];
 
-      const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
-      const leftBttn = controllsC.bttnsState[controllsC.leftBttn];
-      const upBttn = controllsC.bttnsState[controllsC.upBttn];
-      const downBttn = controllsC.bttnsState[controllsC.downBttn];
-
-      if (rightBttn) {
-        movementC.currentVelocity +=
-          movementC.velocity * movementC.accerlationSpeed;
-      }
-      if (leftBttn) {
-        movementC.currentVelocity -=
-          movementC.velocity * movementC.accerlationSpeed;
-      }
-
-      movementC.currentVelocity = this.setVelocityWithinBounds(
-        movementC.currentVelocity,
-        movementC.maxVelocity
-    );
-
+      //Moving yoda, remove for now
+    //   const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
+    //   const leftBttn = controllsC.bttnsState[controllsC.leftBttn];
+    //   const upBttn = controllsC.bttnsState[controllsC.upBttn];
+    //   const downBttn = controllsC.bttnsState[controllsC.downBttn];
+    //
+    //   if (rightBttn) {
+    //     movementC.currentVelocity +=
+    //       movementC.velocity * movementC.accerlationSpeed;
+    //   }
+    //   if (leftBttn) {
+    //     movementC.currentVelocity -=
+    //       movementC.velocity * movementC.accerlationSpeed;
+    //   }
+    //
+    //   movementC.currentVelocity = this.setVelocityWithinBounds(
+    //     movementC.currentVelocity,
+    //     movementC.maxVelocity
+    // );
+    //     renderC.posX += movementC.currentVelocity;
       }
 
     }

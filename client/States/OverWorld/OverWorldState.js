@@ -36,28 +36,42 @@ export default class OverWorldState extends GameState {
     const redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
     redPlanetRenderC.posX = window.innerWidth * .8;
     redPlanetRenderC.posY = window.innerHeight/2;
+    const c = Helper.generateEntity("CoruscantText", this.entityManager);
+    const cPlanetRenderC = c.components[ComponentTypes.RENDERABLE];
+    cPlanetRenderC.posX = window.innerWidth * .8 -60;
+    cPlanetRenderC.posY = window.innerHeight/2 + 100;
 
     const bluePlanet = Helper.generateEntity("BluePlanet", this.entityManager);
     const bluePlanetRenderC = bluePlanet.components[ComponentTypes.RENDERABLE];
     bluePlanetRenderC.posX = window.innerWidth * .56;
     bluePlanetRenderC.posY = window.innerHeight/2;
+    const n = Helper.generateEntity("NabooText", this.entityManager);
+    const nPlanetRenderC = n.components[ComponentTypes.RENDERABLE];
+    nPlanetRenderC.posX = window.innerWidth * .56 -20;
+    nPlanetRenderC.posY = window.innerHeight/2 + 100;
 
     const greenPlanet = Helper.generateEntity("GreenPlanet", this.entityManager);
     const greenPlanetRenderC = greenPlanet.components[ComponentTypes.RENDERABLE];
     greenPlanetRenderC.posX = window.innerWidth * .33;
     greenPlanetRenderC.posY = window.innerHeight/2;
+    const o = Helper.generateEntity("OrondiaText", this.entityManager);
+    const oPlanetRenderC = o.components[ComponentTypes.RENDERABLE];
+    oPlanetRenderC.posX = window.innerWidth * .33 -30;
+    oPlanetRenderC.posY = window.innerHeight/2 + 100;
 
     const pinkPlanet = Helper.generateEntity("PinkPlanet", this.entityManager);
     const pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
     pinkPlanetRenderC.posX = window.innerWidth * .1;
     pinkPlanetRenderC.posY = window.innerHeight/2;
+    const l = Helper.generateEntity("LevelEditorText", this.entityManager);
+    const lPlanetRenderC = l.components[ComponentTypes.RENDERABLE];
+    lPlanetRenderC.posX = window.innerWidth * .1 -100;
+    lPlanetRenderC.posY = window.innerHeight/2 + 100;
 
     this.planets.push(redPlanet);
     this.planets.push(bluePlanet);
     this.planets.push(greenPlanet);
     this.planets.push(pinkPlanet);
-
-
 
     // and position them in the correct places.
     // make sure you add the planets to the entityData file with proper

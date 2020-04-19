@@ -56,6 +56,12 @@ const Images = {
   MudFloor: createImage("./Images/MudFloor.png"),
   MessageScroll: createImage("./Images/MessageScroll2.png"),
   YodaCrib: createImage("./Images/YodaCrib.png"),
+  pinkPlanet: createImage("./Images/Planets/pinkPlanet128.png"),
+  overworldYoda: createImage("./Images/yodaCrib.png"),
+  coruscantText: createImage("./Images/coruscant.png"),
+  nabooText: createImage("./Images/NabooText.png"),
+  levelEditor: createImage("./Images/levelEditor.png"),
+  orondia: createImage("./Images/orondia.png")
 };
 
 export default Images;
