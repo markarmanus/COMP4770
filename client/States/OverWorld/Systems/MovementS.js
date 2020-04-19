@@ -40,7 +40,6 @@ export default class MoementS {
 
       // here you would detect that the user has pressed either (a) to move left
       // or (d) to move right and move him to the correct planet
-      
 
       let redPlanet = planets[0];
       let redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
@@ -58,22 +57,24 @@ export default class MoementS {
       let pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
       let pinkPlanetPosition = [pinkPlanetRenderC.posX, pinkPlanetRenderC.posY];
 
-        const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
-        const leftBttn = controllsC.bttnsState[controllsC.leftBttn];
+      const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
+      const leftBttn = controllsC.bttnsState[controllsC.leftBttn];
+      const upBttn = controllsC.bttnsState[controllsC.upBttn];
+      const downBttn = controllsC.bttnsState[controllsC.downBttn];
 
-        if (rightBttn) {
-          movementC.currentVelocity +=
-            movementC.velocity * movementC.accerlationSpeed;
-        }
-        if (leftBttn) {
-          movementC.currentVelocity -=
-            movementC.velocity * movementC.accerlationSpeed;
-        }
+      if (rightBttn) {
+        movementC.currentVelocity +=
+          movementC.velocity * movementC.accerlationSpeed;
+      }
+      if (leftBttn) {
+        movementC.currentVelocity -=
+          movementC.velocity * movementC.accerlationSpeed;
+      }
 
-        movementC.currentVelocity = this.setVelocityWithinBounds(
-          movementC.currentVelocity,
-          movementC.maxVelocity
-        );
+      movementC.currentVelocity = this.setVelocityWithinBounds(
+        movementC.currentVelocity,
+        movementC.maxVelocity
+    );
 
       }
 
