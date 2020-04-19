@@ -7,7 +7,7 @@ import MovementS from "./Systems/MovementS";
 import GuiS from "./Systems/GuiS";
 import Helper from "../../Helper";
 import inGameState from "../InGame/InGameState";
-export default class OverWolrdState extends GameState {
+export default class OverWorldState extends GameState {
   constructor( gameEngine) {
     super();
     this.gameEngine = gameEngine;
@@ -32,11 +32,41 @@ export default class OverWolrdState extends GameState {
   }
   init() {
     // create planets entities here using the Helper.generateEntity
+    const redPlanet = Helper.generateEntity("RedPlanet", this.entityManager);
+    const redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
+    redPlanetRenderC.posX = window.innerWidth * .8;
+    redPlanetRenderC.posY = window.innerHeight/2;
+
+    const bluePlanet = Helper.generateEntity("BluePlanet", this.entityManager);
+    const bluePlanetRenderC = bluePlanet.components[ComponentTypes.RENDERABLE];
+    bluePlanetRenderC.posX = window.innerWidth * .56;
+    bluePlanetRenderC.posY = window.innerHeight/2;
+
+    const greenPlanet = Helper.generateEntity("GreenPlanet", this.entityManager);
+    const greenPlanetRenderC = greenPlanet.components[ComponentTypes.RENDERABLE];
+    greenPlanetRenderC.posX = window.innerWidth * .33;
+    greenPlanetRenderC.posY = window.innerHeight/2;
+
+    const pinkPlanet = Helper.generateEntity("PinkPlanet", this.entityManager);
+    const pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
+    pinkPlanetRenderC.posX = window.innerWidth * .1;
+    pinkPlanetRenderC.posY = window.innerHeight/2;
+
+    this.planets.push(redPlanet);
+    this.planets.push(bluePlanet);
+    this.planets.push(greenPlanet);
+    this.planets.push(pinkPlanet);
+
+
     // and position them in the correct places.
     // make sure you add the planets to the entityData file with proper
     //compoents (Renderable).
     // make sure you add the planets to the this.planets list.
     //create an entity to represent baby yoda in his crib
+    const yoda = Helper.generateEntity("OverworldYoda", this.entityManager);
+    const yodaRenderC = yoda.components[ComponentTypes.RENDERABLE];
+    yodaRenderC.posX = window.innerWidth * .47;
+    yodaRenderC.posY = window.innerHeight * .1;
     // make sure you add the entity first in the EndityData
     // with thr proper components he will need(renderable, movable, controllable)
   }

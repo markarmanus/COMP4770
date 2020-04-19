@@ -669,5 +669,45 @@ const EntityData = {
       scale: 1.75,
     },
   },
+  RedPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.redPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  GreenPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.greenPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  BluePlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.bluePlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  PinkPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.pinkPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  OverworldYoda: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.overworldYoda,
+      width: 64,
+      height: 54,
+      scale: 1,
+    },
+  },
 };
 export default EntityData;
