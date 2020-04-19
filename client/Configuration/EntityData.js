@@ -365,6 +365,22 @@ const EntityData = {
       height: 54,
       scale: 1,
     },
+    [ComponentTypes.CONTROLABLE]: {
+      leftBttn: "a",
+      rightBttn: "d",
+      upBttn: "w",
+      downBttn: "s",
+    },
+    [ComponentTypes.MOVABLE]: {
+      velocity: 1,
+      maxVelocity: 5,
+      friction: 0.3,
+      accerlationSpeed: 0.9,
+    },
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 300,
+      spritesCount: 4,
+    },
   },
 };
 export default EntityData;
