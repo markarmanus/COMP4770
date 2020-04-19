@@ -15,7 +15,7 @@ import CameraS from "./Systems/CameraS";
 import WeaponsS from "./Systems/WeaponsS";
 import AiS from "./Systems/AiS";
 import LevelManager from "./LevelManager";
-import Helper from "./Helper";
+import Helper from "../../Helper";
 export default class inGameState extends GameState {
   constructor(level, gameEngine) {
     super();
@@ -70,8 +70,21 @@ export default class inGameState extends GameState {
   unpause() {
     this.paused = false;
   }
+  setBackground() {
+    const background = new Image();
+    background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
+    const patern = canvasContext.createPattern(background, "repeat");
+    canvasContext.fillStyle = patern;
+    canvasContext.fillRect(
+      canvas.width * 2 * -1,
+      canvas.height * 2 * -1,
+      canvas.width * 10,
+      canvas.height * 10
+    );
+  }
   update() {
     super.update();
+    this.setBackground();
     this.controllsS.update();
     this.guiS.update(this.paused);
 

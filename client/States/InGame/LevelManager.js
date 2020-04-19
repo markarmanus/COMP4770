@@ -1,5 +1,5 @@
 import ComponentTypes from "../../ComponentTypes";
-import Helper from "./Helper";
+import Helper from "../../Helper";
 import EntityManager from "../../EntityManager";
 import Images from "../../Assets/ImageGenerator";
 export default class LevelManager {

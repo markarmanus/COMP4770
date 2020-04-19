@@ -3,7 +3,7 @@ import RenderableC from "../../Components/RenderableC";
 import Images from "../../../Assets/ImageGenerator";
 import ChargeC from "../Components/ChargeC";
 import CollidableC from "../Components/CollidableC";
-import Helper from "../Helper";
+import Helper from "../../../Helper";
 export default class WeaponsS {
   constructor(entityManager) {
     this.entityManager = entityManager;

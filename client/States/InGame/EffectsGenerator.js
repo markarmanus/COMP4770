@@ -1,5 +1,5 @@
 import ComponentTypes from "../../ComponentTypes";
-import Helper from "./Helper";
+import Helper from "../../Helper";
 const Effects = {
   explosion: "Explosion",
 };

@@ -1,6 +1,6 @@
 import ComponentTypes from "../../../ComponentTypes";
 import Images from "../../../Assets/ImageGenerator";
-import Helper from "../Helper";
+import Helper from "../../../Helper";
 
 export default class GuiS {
   constructor(scale, entityManager, onEndLevel, unpause) {

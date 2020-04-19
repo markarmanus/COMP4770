@@ -5,7 +5,7 @@ import ChargeC from "../Components/ChargeC";
 
 import Images from "../../../Assets/ImageGenerator";
 import CollidableC from "../Components/CollidableC";
-import Helper from "../Helper";
+import Helper from "../../../Helper";
 import SeekC from "../Components/SeekC";
 export default class BehaviourS {
   constructor(entityManager) {

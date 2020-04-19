@@ -1,5 +1,5 @@
 import ComponentTypes from "../../ComponentTypes";
-import Helper from "../InGame/Helper";
+import Helper from "../../Helper";
 export default class RenderS {
   constructor(entityManager) {
     this.entityManager = entityManager;

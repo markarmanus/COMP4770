@@ -1,7 +1,5 @@
 import ComponentTypes from "../ComponentTypes";
-
 import Images from "../Assets/ImageGenerator";
-import Helper from "../States/InGame/Helper";
 const EntityData = {
   Player: {
     [ComponentTypes.RENDERABLE]: {
@@ -158,7 +156,7 @@ const EntityData = {
       right: 199,
       idle: 0,
       shootLeft: 265,
-      shootRight: 331
+      shootRight: 331,
     },
     [ComponentTypes.HEALTH]: {
       maxHealth: 100,

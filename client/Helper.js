@@ -1,8 +1,8 @@
-import ComponentClasses from "./Configuration/ComponentClasses";
-import EntityData from "../../Configuration/EntityData";
-import ComponentTypes from "../../ComponentTypes";
-import EntityManager from "../../EntityManager";
-import LevelManager from "./LevelManager";
+import ComponentClasses from "./States/InGame/Configuration/ComponentClasses";
+import EntityData from "./Configuration/EntityData";
+import ComponentTypes from "./ComponentTypes";
+import EntityManager from "./EntityManager";
+import LevelManager from "./States/InGame/LevelManager";
 const isDiagonalMove = (action) => {
   return (
     (action.x === 1 && action.y === 1) ||

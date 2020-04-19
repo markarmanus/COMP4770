@@ -1,6 +1,6 @@
 import inGameState from "./States/InGame/InGameState";
 import LevelEditorState from "./States/LevelEditor/LevelEditorState";
-import Helper from "./States/InGame/Helper";
+import Helper from "./Helper";
 export default class GameEngine {
   constructor() {
     this.isRunning = true;
@@ -34,16 +34,6 @@ export default class GameEngine {
     this.popCount = 0;
     if (states.length) {
       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-      const background = new Image();
-      background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
-      const patern = canvasContext.createPattern(background, "repeat");
-      canvasContext.fillStyle = patern;
-      canvasContext.fillRect(
-        canvas.width * 2 * -1,
-        canvas.height * 2 * -1,
-        canvas.width * 10,
-        canvas.height * 10
-      );
       states[states.length - 1].update();
     }
   }

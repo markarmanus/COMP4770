@@ -1,10 +1,9 @@
 import ComponentTypes from "../../ComponentTypes";
 import Component from "../../Component";
 export default class AnimtedC extends Component {
-  constructor({ animationSpeed, imgSrc, spritesCount, repeat }) {
+  constructor({ animationSpeed, spritesCount, repeat }) {
     super(ComponentTypes.ANIMATED);
     this.animationSpeed = animationSpeed;
-    this.imgSrc = imgSrc;
     this.spritesCount = spritesCount;
     this.currentFrame = -1;
     this.timer = new Date().getTime();
