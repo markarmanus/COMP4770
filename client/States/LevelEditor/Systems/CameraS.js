@@ -1,11 +1,12 @@
 import ComponentTypes from "../../../ComponentTypes";
 
 export default class CameraS {
-  constructor(speed) {
+  constructor(speed, entityManager) {
     this.speed = speed;
+    this.entityManager = entityManager;
   }
   update(entityManager) {
-    const entities = entityManager.getEntities();
+    const entities = this.entityManager.getEntities();
     for (const entity of entities) {
       if (entity.components[ComponentTypes.CONTROLABLE]) {
         const controlC = entity.components[ComponentTypes.CONTROLABLE];

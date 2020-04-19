@@ -3,7 +3,7 @@ import Images from "../../../Assets/ImageGenerator";
 import Helper from "../../../Helper";
 
 export default class GuiS {
-  constructor(scale, entityManager, onEndLevel, unpause) {
+  constructor(scale, entityManager, onEndLevel, togglePause) {
     this.guiScale = scale;
     this.defaultPadding = {
       x: 30,
@@ -13,7 +13,7 @@ export default class GuiS {
     this.entityManager = entityManager;
     this.pauseMenu = [];
     this.onEndLevel = onEndLevel;
-    this.unpause = unpause;
+    this.togglePause = togglePause;
   }
   updateCanvasOffset() {
     this.canvasOffset = Helper.getCanvasOffset();
@@ -137,7 +137,7 @@ export default class GuiS {
       this.pauseMenu.push(
         { entity: pauseMenu },
         { entity: exit, handler: this.onEndLevel },
-        { entity: continueItem, handler: this.unpause }
+        { entity: continueItem, handler: this.togglePause }
       );
     }
   }

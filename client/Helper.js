@@ -64,10 +64,21 @@ export default class Helper {
     const entityInstance = entityManger.addEntity(type);
     const components = Object.entries(EntityData[type]);
     for (let [component, properties] of components) {
-      const componentInstance = new ComponentClasses[component](properties);
-      entityInstance.addComponent(componentInstance);
+      if (ComponentClasses[component]) {
+        const componentInstance = new ComponentClasses[component](properties);
+        entityInstance.addComponent(componentInstance);
+      }
     }
     return entityInstance;
+  }
+  static cloneEntity(entity, entityManager) {
+    const clone = entityManager.addEntity(entity.descriptor);
+    const components = entity.components;
+    for (const [type, props] of Object.entries(components)) {
+      const componentCopy = new ComponentClasses[type](props);
+      clone.addComponent(componentCopy);
+    }
+    return clone;
   }
   static toOriginalPosition(position) {
     let canvasOffset = this.getCanvasOffset();

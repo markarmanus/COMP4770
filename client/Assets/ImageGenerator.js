@@ -26,7 +26,12 @@ const Images = {
   laserBullet: createImage("./Images/laserBullet.png"),
   stormtrooper: createImage("./Images/stormtrooperNEW"),
   orb: createImage("./Images/blueShootingOrb.png"),
-  explosion: createImage("./Images/explode.png")
+  explosion: createImage("./Images/explode.png"),
+  redBg: createImage("./Images/Planets/Backgrounds/redBg.png"),
+  blueBg: createImage("./Images/Planets/Backgrounds/blueBg.png"),
+  leftArrow: createImage("./Images/leftArrow.png"),
+  rightArrow: createImage("./Images/rightArrow.png"),
+  greenBg: createImage("./Images/Planets/Backgrounds/greenBg.png"),
 };
 
 export default Images;

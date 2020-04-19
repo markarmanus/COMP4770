@@ -11,8 +11,9 @@ export default class GameEngine {
   }
 
   init() {
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
     window.currentLevel = levels[0];
-    this.newStates.push(new inGameState(currentLevel, this));
+    this.newStates.push(new LevelEditorState(currentLevel, this));
   }
 
   run() {

@@ -10,6 +10,7 @@ import PhysicsS from "./Systems/PhysicsS";
 import PickUpS from "./Systems/PickUpS";
 import CollisionS from "./Systems/CollisionS";
 import GuiS from "./Systems/GuiS";
+import Images from "../../Assets/ImageGenerator";
 import BehaviourS from "./Systems/BehaviourS";
 import CameraS from "./Systems/CameraS";
 import WeaponsS from "./Systems/WeaponsS";
@@ -48,7 +49,7 @@ export default class inGameState extends GameState {
       0.55,
       this.entityManager,
       () => this.endLevel(),
-      () => this.unpause()
+      () => this.togglePause()
     );
 
     this.aiS = new AiS(this.entityManager);
@@ -67,19 +68,18 @@ export default class inGameState extends GameState {
   endLevel() {
     this.levelEnded = true;
   }
-  unpause() {
-    this.paused = false;
+  togglePause() {
+    this.paused = !this.paused;
   }
   setBackground() {
-    const background = new Image();
-    background.src = "https://i.ytimg.com/vi/Ic3ZdD5ko7k/maxresdefault.jpg";
-    const patern = canvasContext.createPattern(background, "repeat");
-    canvasContext.fillStyle = patern;
-    canvasContext.fillRect(
-      canvas.width * 2 * -1,
-      canvas.height * 2 * -1,
-      canvas.width * 10,
-      canvas.height * 10
+    const canvasOffset = Helper.getCanvasOffset();
+    const background = Images[`${this.level.planet}Bg`];
+    canvasContext.drawImage(
+      background,
+      canvasOffset.x * -1,
+      canvasOffset.y * -1,
+      canvas.width,
+      canvas.height
     );
   }
   update() {
@@ -117,7 +117,6 @@ export default class inGameState extends GameState {
       canvas.style = `opacity: ${canvas.style.opacity - 0.01}`;
     if (canvas.style.opacity < 0 && this.levelEnded) {
       this.gameEngine.popState(1);
-      this.gameEngine.addState(new inGameState(levels[0], this.gameEngine));
       canvas.style = `opacity: 1`;
     }
   }

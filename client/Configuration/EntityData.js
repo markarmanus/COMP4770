@@ -2,11 +2,12 @@ import ComponentTypes from "../ComponentTypes";
 import Images from "../Assets/ImageGenerator";
 const EntityData = {
   Player: {
+    inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
       image: Images.yoda,
       width: 64,
       height: 43,
-      scale: 1,
+      scale: 1.3,
       visionOffset: {
         x: 0.1,
         y: 0.2,
@@ -80,10 +81,11 @@ const EntityData = {
     },
   },
   EmptyCrib: {
+    inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
       image: Images.emptyCrib,
-      width: 32,
-      height: 32,
+      width: 14,
+      height: 10,
       scale: 2,
     },
     [ComponentTypes.COLLIDABLE]: {
@@ -105,7 +107,6 @@ const EntityData = {
       },
     },
   },
-
   ExitMenuItem: {
     [ComponentTypes.RENDERABLE]: {
       image: Images.exit,
@@ -141,6 +142,7 @@ const EntityData = {
     },
   },
   StormTropper: {
+    inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
       image: Images.stormtrooper,
       width: 64,
@@ -189,6 +191,7 @@ const EntityData = {
     },
   },
   Drone: {
+    inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
       image: Images.drone,
       width: 64,
@@ -265,6 +268,7 @@ const EntityData = {
     },
   },
   Currency: {
+    inLevelEditor: true,
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 60,
       spritesCount: 7,
@@ -308,6 +312,7 @@ const EntityData = {
     },
   },
   CheckPoint: {
+    inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
       image: Images.campFireOff,
       width: 32,
@@ -324,6 +329,24 @@ const EntityData = {
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
       spritesCount: 3,
+    },
+  },
+  LeftArrow: {
+    inLevelEditor: true,
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.leftArrow,
+      width: 453,
+      height: 719,
+      scale: 0.2,
+    },
+  },
+  RightArrow: {
+    inLevelEditor: true,
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.rightArrow,
+      width: 453,
+      height: 719,
+      scale: 0.2,
     },
   },
 };

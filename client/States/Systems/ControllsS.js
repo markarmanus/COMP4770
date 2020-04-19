@@ -8,7 +8,6 @@ export default class ControllsS {
     this.lastClickedAt = {};
     this.doubleClick = {};
     this.mouseState = {};
-    document.addEventListener("contextmenu", (event) => event.preventDefault());
     canvas.addEventListener("mousedown", (e) => {
       if (e.button === 0) this.mouseState.leftClick = true;
       if (e.button === 2) {
