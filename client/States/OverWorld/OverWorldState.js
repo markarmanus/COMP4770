@@ -28,8 +28,8 @@ export default class OverWorldState extends GameState {
     this.controllsS.update();
     this.animationS.update();
     this.movementS.update();
-    this.guiS.update(this.planets);
     this.renderS.update();
+    this.guiS.update(this.planets);
   }
   init() {
     // create planets entities here using the Helper.generateEntity
@@ -74,16 +74,11 @@ export default class OverWorldState extends GameState {
     this.planets.push(greenPlanet);
     this.planets.push(pinkPlanet);
 
-    // and position them in the correct places.
-    // make sure you add the planets to the entityData file with proper
-    //compoents (Renderable).
-    // make sure you add the planets to the this.planets list.
-    //create an entity to represent baby yoda in his crib
+
     const yoda = Helper.generateEntity("OverworldYoda", this.entityManager);
     const yodaRenderC = yoda.components[ComponentTypes.RENDERABLE];
     yodaRenderC.posX = window.innerWidth * .47;
     yodaRenderC.posY = window.innerHeight * .1;
-    // make sure you add the entity first in the EndityData
-    // with thr proper components he will need(renderable, movable, controllable)
+
   }
 }

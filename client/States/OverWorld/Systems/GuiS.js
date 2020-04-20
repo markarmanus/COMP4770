@@ -4,12 +4,26 @@ export default class GuiS {
   constructor(entityManager) {
     this.entityManager = entityManager;
 
-    window.addEventListener("click", function(e) {
-      this.handlePlanetClicked(e)
-    }.bind(this), false);
+    let canvas = document.getElementById('canvas').getContext('2d');
+    canvas.font = "40px DistantGalaxy";
+    canvas.fillStyle = 'yellow';
+
+    this.menuText = [];
+
   }
 
-  handlePlanetClicked(e) {
+  drawMenuText() {
+    let canvas = document.getElementById('canvas').getContext('2d');
+    canvas.font = "40px DistantGalaxy";
+    canvas.fillStyle = 'yellow';
+    canvas.strokeStyle = "black";
+    for (let i = 0; i < this.menuText.length; i ++) {
+      canvas.fillText(this.menuText[i][0], this.menuText[i][1], this.menuText[i][2]);
+      canvas.strokeText(this.menuText[i][0], this.menuText[i][1], this.menuText[i][2])
+    }
+  }
+
+  handlePlanetClicked(x, y) {
     const entities = this.entityManager.getEntities();
     let redPlanet = entities[0];
     let redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
@@ -27,17 +41,20 @@ export default class GuiS {
     let pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
     let pinkPlanetBoundBox = [pinkPlanetRenderC.posX, pinkPlanetRenderC.posX + 128, pinkPlanetRenderC.posY, pinkPlanetRenderC.posY + 128 ];
 
-    if (e.clientX >= redPlanetBoundBox[0] && e.clientX <= redPlanetBoundBox[1] && e.clientY >= redPlanetBoundBox[2] && e.clientY <= redPlanetBoundBox[3]) {
+    if (x >= redPlanetBoundBox[0] && x <= redPlanetBoundBox[1] && y >= redPlanetBoundBox[2] && y <= redPlanetBoundBox[3]) {
       this.drawPlanetMenu(redPlanet);
     }
-    else if (e.clientX >= greenPlanetBoundBox[0] && e.clientX <= greenPlanetBoundBox[1] && e.clientY >= greenPlanetBoundBox[2] && e.clientY <= greenPlanetBoundBox[3]) {
+    else if (x >= greenPlanetBoundBox[0] && x <= greenPlanetBoundBox[1] && y >= greenPlanetBoundBox[2] && y <= greenPlanetBoundBox[3]) {
       this.drawPlanetMenu(greenPlanet);
     }
-    else if (e.clientX >= bluePlanetBoundBox[0] && e.clientX <= bluePlanetBoundBox[1] && e.clientY >= bluePlanetBoundBox[2] && e.clientY <= bluePlanetBoundBox[3]) {
+    else if (x >= bluePlanetBoundBox[0] && x <= bluePlanetBoundBox[1] && y >= bluePlanetBoundBox[2] && y <= bluePlanetBoundBox[3]) {
       this.drawPlanetMenu(bluePlanet);
     }
-    else if (e.clientX >= pinkPlanetBoundBox[0] && e.clientX <= pinkPlanetBoundBox[1] && e.clientY >= pinkPlanetBoundBox[2] && e.clientY <= pinkPlanetBoundBox[3]) {
+    else if (x >= pinkPlanetBoundBox[0] && x <= pinkPlanetBoundBox[1] && y >= pinkPlanetBoundBox[2] && y <= pinkPlanetBoundBox[3]) {
       this.drawPlanetMenu(pinkPlanet);
+    }
+    else {
+      //no planet was clicked
     }
   }
 
@@ -45,32 +62,33 @@ export default class GuiS {
   let p = planet.descriptor;
   let menu;
   let createLevels;
-  let editLevels;
-  let playLevels;
+  let level1;
+  let level2;
+
   switch(p) {
     case 'RedPlanet':
       menu = 'RedPlanetMenu';
       createLevels = false;
-      editLevels = false;
-      playLevels = true;
+      level1 = true;
+      level2 = false;
       break;
     case 'BluePlanet':
       menu = 'BluePlanetMenu';
       createLevels = false;
-      editLevels = false;
-      playLevels = true;
+      level1 = true;
+      level2 = false;
       break;
     case 'GreenPlanet':
       menu = 'GreenPlanetMenu';
       createLevels = false;
-      editLevels = false;
-      playLevels = true;
+      level1 = true;
+      level2 = true;
       break;
     case 'PinkPlanet':
       menu = 'PinkPlanetMenu';
       createLevels = true;
-      editLevels = true;
-      playLevels = false;
+      level1 = false;
+      level2 = false;
       break;
     default :
       break;
@@ -79,13 +97,30 @@ export default class GuiS {
     const planetMenu = Helper.generateEntity(menu, this.entityManager);
     const planetMenuRenderC = planetMenu.components[ComponentTypes.RENDERABLE];
     planetMenuRenderC.posX = window.innerWidth/2 -256;
-    planetMenuRenderC.posY = window.innerHeight/2 - 256;
+    planetMenuRenderC.posY = window.innerHeight/2 -256;
+
+    let canvas = document.getElementById('canvas').getContext('2d');
+    canvas.font = "40px DistantGalaxy";
+    canvas.fillStyle = 'yellow';
+
+
+    if (createLevels) {
+      this.menuText.push(['create a level', window.innerWidth/2 -175, window.innerHeight/2 ])
+    }
+    if (level1) {
+      this.menuText.push(['level 1', window.innerWidth/2 -75, window.innerHeight/2 -50])
+    }
+
+    if (level2) {
+      this.menuText.push(['level 2', window.innerWidth/2 -75, window.innerHeight/2 + 50])
+    }
 
 
 
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         planetMenu.remove();
+        this.menuText = [];
       }
     });
 
@@ -93,11 +128,20 @@ export default class GuiS {
 
 
   update(planets) {
+    this.drawMenuText();
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
       const lifeTimeC = entity.components[ComponentTypes.LIFE_TIME];
       const healthC = entity.components[ComponentTypes.HEALTH];
       const renderC = entity.components[ComponentTypes.RENDERABLE];
+      const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+
+      if(controllsC) {
+        if (controllsC.mouseState.leftClick) {
+          this.handlePlanetClicked(window.mouseTracker.getLocation(0)['x'], window.mouseTracker.getLocation(0)['y']);
+
+        }
+      }
 
       if (lifeTimeC) {
         if (lifeTimeC.lifeTime === "animationCycle") {
@@ -125,7 +169,6 @@ export default class GuiS {
         }
       }
     }
-
 
   }
 }
