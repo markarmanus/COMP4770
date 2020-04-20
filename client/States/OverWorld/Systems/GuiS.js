@@ -89,13 +89,10 @@ export default class GuiS {
       }
     });
 
-
-
   }
 
 
   update(planets) {
-    const p = planets;
     const entities = this.entityManager.getEntities();
     for (const entity of entities) {
       const lifeTimeC = entity.components[ComponentTypes.LIFE_TIME];
