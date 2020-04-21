@@ -54,7 +54,7 @@ const Images = {
   IceFloor: createImage("./Images/IceFloor.png"),
   LavaFloor: createImage("./Images/LavaFloor.png"),
   MudFloor: createImage("./Images/MudFloor.png"),
-  MessageScroll: createImage("./Images/MessageScroll2.png"),
+  MessageScroll: createImage("./Images/MessageScroll.png"),
   YodaCrib: createImage("./Images/YodaCrib.png"),
 };
 
