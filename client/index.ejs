@@ -5,10 +5,8 @@
   crossorigin="anonymous"
 ></script>
 <link rel="stylesheet" type="text/css" href="index.css" />
-
-<% if (currentUser) { %>
-<script type="module">
-  window.onload = async () => {
+<script>
+  const loadGame = async () => {
     var canvas = document.getElementById("canvas");
     window.socket = io();
     window.canvas = canvas;
@@ -25,18 +23,23 @@
           engine.run();
         }
       );
-    }).catch(error => {
-      if ("user already exists") {
-        alert("User already exists. Login or register with a new username.");
-      }
-      else if ("wrong password") {
-        alert("Incorrect password. Please try again.")
-      }
     });
   };
 </script>
+<% if (currentUser && !currentUser.isFirstTime ) { %>
+<script type="module">
+  window.onload = async () => {
+    await loadGame();
+  };
+</script>
+<% } else if(currentUser){ %>
+<script type="module">
+  const video = document.getElementById("intro");
+  video.onended = async () => {
+    location.href = "/";
+  };
+</script>
 <% } %>
-
 <body>
   <% if(!currentUser){ %>
   <div id="title">adventures of baby yoda</div>
@@ -56,8 +59,20 @@
   <div id="logoutContainer">
     <a href="/logout">Log out</a>
   </div>
+  <% if(currentUser.isFirstTime ) { %>
+  <video
+    style="display: block; margin: 0 auto;"
+    id="intro"
+    width="1600"
+    height="900"
+    autoplay
+    controls
+  >
+    <source src="Assets/Intro.mp4" type="video/mp4" />
+  </video>
+  <% } else { %>
   <div id="canvasDiv">
     <canvas style="opacity: 1;" id="canvas" width="1600" height="900"> </canvas>
   </div>
-  <% } %>
+  <% } %> <% } %>
 </body>

@@ -54,9 +54,15 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.get("/", (req, res) => {
+  if (req.user) req.user.isFirstTime = false;
   res.render("index", { currentUser: req.user });
 });
 
+app.get("/firstTimeUser", (req, res) => {
+  // req.user.isFirstTime = false;
+  console.log(req.user);
+  res.render("index", { currentUser: req.user });
+});
 app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
@@ -78,7 +84,7 @@ app.post("/register", (req, res) => {
         res.send(err).sendStatus(500);
       }
       passport.authenticate("local")(req, res, () => {
-        res.redirect("/");
+        res.redirect("/firstTimeUser");
       });
     }
   );

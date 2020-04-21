@@ -124,7 +124,7 @@ export default class MovementS {
             movementC.velocity
           );
         }
-        if (canDash) {
+        if (canDash && renderC.image !== Images.YodaCrib) {
           movementC.isDashingTo = rightDbl ? "right" : leftDbl ? "left" : null;
           if (movementC.isDashingTo) {
             focusC.currentFocus -= movementC.dashCost;

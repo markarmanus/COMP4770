@@ -65,7 +65,7 @@ const EntityData = {
       timeToReGen: 800,
     },
     [ComponentTypes.CURRENCY]: {
-      currentCurrency: user.imperialCredits,
+      currentCurrency: user.currency,
       positionOnGUI: "right",
     },
     [ComponentTypes.WEAPONS]: {
