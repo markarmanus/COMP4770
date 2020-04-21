@@ -41,10 +41,9 @@ export default class GuiS {
           if (this.selectedEntity) this.selectedEntity.remove();
         } else if (e.key === "b") {
           nextPlanet();
-        } else if (e.key === "s" && e.ctrlKey) {
-          saveLevel();
+        } else if (e.key === "S") {
+          if (this.isActive) saveLevel();
         } else if (e.key === "q" && e.ctrlKey) {
-          this.isActive = false;
           this.togglePause(false);
           testLevel();
         }
@@ -263,7 +262,13 @@ export default class GuiS {
       exitRenderC.posY = continueRenderC.posY + 80;
       this.pauseMenu.push(
         { entity: pauseMenu },
-        { entity: exit, handler: this.exit },
+        {
+          entity: exit,
+          handler: () => {
+            this.isActive = false;
+            this.exit();
+          },
+        },
         { entity: continueItem, handler: this.togglePause }
       );
     }
@@ -282,8 +287,8 @@ export default class GuiS {
       }
     }
   }
-  update(isPaused, currentPlanet) {
-    this.isActive = true;
+  update(isPaused, currentPlanet, isActive) {
+    this.isActive = isActive;
     this.updateCanvasOffset();
     this.drawSelector();
     this.updateFloor(currentPlanet);
@@ -308,7 +313,6 @@ export default class GuiS {
         if (rightClick || leftClick) {
           const clickedAt = this.getEntityAtMouseClick();
           const clickedInSelector = this.isClickingSelector();
-          console.log(clickedAt, clickedInSelector, this.selectedEntity);
           if (clickedAt) {
             if (rightClick && !clickedInSelector) {
               clickedAt.remove();

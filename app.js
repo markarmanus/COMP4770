@@ -66,13 +66,44 @@ app.get("/firstTimeUser", (req, res) => {
 app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
+app.get("/customLevels", isLoggedIn, (req, res) => {
+  Level.find({ creator: ObjectId(req.user._id) }, (err, levels) => {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+      res.send(levels);
+    }
+  });
+});
+app.patch("/level", isLoggedIn, (req, res) => {
+  console.log(req.body);
+  Level.findById(ObjectId(req.body.level._id), (err, level) => {
+    console.log(req.body);
+    if (err) {
+      console.log(err);
+      res.send(500);
+    } else {
+      level.data = req.body.level.data;
+      level.save((err) => {
+        if (err) {
+          console.log(err);
+          res.send(500);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    }
+  });
+});
 app.post("/level", isLoggedIn, (req, res) => {
   const level = new Level();
   level.isCustom = true;
-  level.creator = ObjectId(req._id);
+  level.creator = ObjectId(req.user._id);
+  const name = "Level" + Math.floor(Math.random() * 1000);
   level.data = {
     planet: "green",
-    name: "Custom" + Math.random * 100,
+    name: name,
     entities: [
       {
         type: "Player",

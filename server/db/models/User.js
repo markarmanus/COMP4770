@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String },
   currency: { type: Number, default: 0 },
-  unlockedLevels: { type: Number, default: 1 },
+  unlockedLevels: { type: Number, default: 6 },
   customLevelsIds: { type: Array, default: [] },
   isFirstTime: { type: Boolean, default: true },
 });

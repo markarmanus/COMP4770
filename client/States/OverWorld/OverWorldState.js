@@ -10,6 +10,7 @@ import inGameState from "../InGame/InGameState";
 export default class OverWorldState extends GameState {
   constructor(gameEngine) {
     super();
+    canvasContext.resetTransform();
     this.gameEngine = gameEngine;
     // an array to hold the planets entites.
     this.planets = [];
@@ -41,6 +42,8 @@ export default class OverWorldState extends GameState {
   }
   update() {
     super.update();
+    canvasContext.resetTransform();
+
     this.controllsS.update();
     this.animationS.update();
     this.movementS.update();
@@ -48,6 +51,8 @@ export default class OverWorldState extends GameState {
     this.guiS.update(this.planets);
   }
   init() {
+    const offset = Helper.getCanvasOffset();
+    console.log(offset);
     for (const level of window.levels) {
       this.planetLevels[level.data.planet].push(level);
       if (user.unlockedLevels >= level.data.number)
@@ -57,12 +62,12 @@ export default class OverWorldState extends GameState {
     if (this.unlockedPlanetLevels.red.length) {
       const redPlanet = Helper.generateEntity("RedPlanet", this.entityManager);
       const redPlanetRenderC = redPlanet.components[ComponentTypes.RENDERABLE];
-      redPlanetRenderC.posX = canvas.width * 0.8;
-      redPlanetRenderC.posY = canvas.height / 2;
+      redPlanetRenderC.posX = canvas.width * 0.8 - offset.x;
+      redPlanetRenderC.posY = canvas.height / 2 - offset.y;
       const c = Helper.generateEntity("CoruscantText", this.entityManager);
       const cPlanetRenderC = c.components[ComponentTypes.RENDERABLE];
-      cPlanetRenderC.posX = canvas.width * 0.8 - 60;
-      cPlanetRenderC.posY = canvas.height / 2 + 100;
+      cPlanetRenderC.posX = canvas.width * 0.8 - 60 - offset.x;
+      cPlanetRenderC.posY = canvas.height / 2 + 100 - offset.y;
       this.planets.push(redPlanet);
     }
     if (this.unlockedPlanetLevels.blue.length) {
@@ -72,12 +77,12 @@ export default class OverWorldState extends GameState {
       );
       const bluePlanetRenderC =
         bluePlanet.components[ComponentTypes.RENDERABLE];
-      bluePlanetRenderC.posX = canvas.width * 0.56;
-      bluePlanetRenderC.posY = canvas.height / 2;
+      bluePlanetRenderC.posX = canvas.width * 0.56 - offset.x;
+      bluePlanetRenderC.posY = canvas.height / 2 - offset.y;
       const n = Helper.generateEntity("NabooText", this.entityManager);
       const nPlanetRenderC = n.components[ComponentTypes.RENDERABLE];
-      nPlanetRenderC.posX = canvas.width * 0.56 - 20;
-      nPlanetRenderC.posY = canvas.height / 2 + 100;
+      nPlanetRenderC.posX = canvas.width * 0.56 - 20 - offset.x;
+      nPlanetRenderC.posY = canvas.height / 2 + 100 - offset.y;
       this.planets.push(bluePlanet);
     }
 
@@ -88,28 +93,28 @@ export default class OverWorldState extends GameState {
       );
       const greenPlanetRenderC =
         greenPlanet.components[ComponentTypes.RENDERABLE];
-      greenPlanetRenderC.posX = canvas.width * 0.33;
-      greenPlanetRenderC.posY = canvas.height / 2;
+      greenPlanetRenderC.posX = canvas.width * 0.33 - offset.x;
+      greenPlanetRenderC.posY = canvas.height / 2 - offset.y;
       const o = Helper.generateEntity("OrondiaText", this.entityManager);
       const oPlanetRenderC = o.components[ComponentTypes.RENDERABLE];
-      oPlanetRenderC.posX = canvas.width * 0.33 - 30;
-      oPlanetRenderC.posY = canvas.height / 2 + 100;
+      oPlanetRenderC.posX = canvas.width * 0.33 - 30 - offset.x;
+      oPlanetRenderC.posY = canvas.height / 2 + 100 - offset.y;
       this.planets.push(greenPlanet);
     }
 
     const pinkPlanet = Helper.generateEntity("PinkPlanet", this.entityManager);
     const pinkPlanetRenderC = pinkPlanet.components[ComponentTypes.RENDERABLE];
-    pinkPlanetRenderC.posX = canvas.width * 0.1;
-    pinkPlanetRenderC.posY = canvas.height / 2;
+    pinkPlanetRenderC.posX = canvas.width * 0.1 - offset.x;
+    pinkPlanetRenderC.posY = canvas.height / 2 - offset.y;
     const l = Helper.generateEntity("LevelEditorText", this.entityManager);
     const lPlanetRenderC = l.components[ComponentTypes.RENDERABLE];
-    lPlanetRenderC.posX = canvas.width * 0.1 - 100;
-    lPlanetRenderC.posY = canvas.height / 2 + 100;
+    lPlanetRenderC.posX = canvas.width * 0.1 - 100 - offset.x;
+    lPlanetRenderC.posY = canvas.height / 2 + 100 - offset.y;
     this.planets.push(pinkPlanet);
 
     const yoda = Helper.generateEntity("OverworldYoda", this.entityManager);
     const yodaRenderC = yoda.components[ComponentTypes.RENDERABLE];
-    yodaRenderC.posX = canvas.width * 0.47;
-    yodaRenderC.posY = canvas.height * 0.1;
+    yodaRenderC.posX = canvas.width * 0.47 - offset.x;
+    yodaRenderC.posY = canvas.height * 0.1 - offset.y;
   }
 }

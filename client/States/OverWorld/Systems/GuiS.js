@@ -12,13 +12,14 @@ export default class GuiS {
     gameEngine
   ) {
     this.entityManager = entityManager;
-
+    this.getCustomLevels();
     let canvas = document.getElementById("canvas").getContext("2d");
     canvas.font = "40px DistantGalaxy";
     canvas.fillStyle = "yellow";
     this.customPlanetIndex = 0;
     this.planets = planets;
     this.unlockedPlanetLevel = unlockedPlanetLevels;
+
     this.planetLevels = planetLevels;
     this.gameEngine = gameEngine;
     this.selectedPlanet;
@@ -59,12 +60,22 @@ export default class GuiS {
       }
     });
   }
-  getCustomLevels() {}
+  getCustomLevels() {
+    fetch("/customLevels", {
+      credentials: "include",
+    }).then((res) =>
+      res.json().then((levels) => {
+        this.customLevels = levels;
+        console.log(levels);
+      })
+    );
+  }
   updateCustomLevelName() {
     if (this.selectedPlanet && this.selectedPlanet === "pink") {
       this.menuText[0].text = this.customLevels[
         this.customPlanetIndex
       ].data.name;
+      this.menuText[0].level = this.customLevels[this.customPlanetIndex];
     }
   }
   drawMenuText() {
@@ -124,6 +135,10 @@ export default class GuiS {
   loadLevel(level) {
     this.gameEngine.addState(new inGameState(level, this.gameEngine));
   }
+  handleEditLevel(level) {
+    console.log("hi");
+    this.gameEngine.addState(new LevelEditorState(level, this.gameEngine));
+  }
   drawPlanetMenu(planet) {
     this.menuText = [];
 
@@ -146,17 +161,26 @@ export default class GuiS {
     let planetType = planet.descriptor.replace("Planet", "").toLowerCase();
     this.selectedPlanet = planetType;
     if (planet.descriptor === "PinkPlanet") {
-      this.menuText.push({
-        text: this.customLevels[this.customPlanetIndex].data.name,
-        x: canvas.width / 2 - 100,
-        y: canvas.height / 2,
-        handler: (level) => this.loadLevel(level),
-        level: this.customLevels[this.customPlanetIndex],
-      });
+      if (this.customLevels.length) {
+        this.menuText.push({
+          text: this.customLevels[this.customPlanetIndex].data.name,
+          x:
+            planetMenuRenderC.posX +
+            planetMenuRenderC.scaledWidth / 2 -
+            100 -
+            Helper.getCanvasOffset().x,
+          y:
+            planetMenuRenderC.posY +
+            planetMenuRenderC.scaledHeight / 2 -
+            Helper.getCanvasOffset().y,
+          handler: (level) => this.handleEditLevel(level),
+          level: this.customLevels[this.customPlanetIndex],
+        });
+      }
       this.menuText.push({
         text: "create a level",
-        x: canvas.width / 2 - 175,
-        y: canvas.height / 2 + 150,
+        x: planetMenuRenderC.posX + planetMenuRenderC.scaledWidth / 2 - 175,
+        y: planetMenuRenderC.posY + planetMenuRenderC.scaledHeight / 2 + 150,
         handler: () => this.handleCreateLevel(),
       });
       return;

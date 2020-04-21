@@ -20,6 +20,7 @@ export default class LevelEditorState extends GameState {
     this.currentPlanetIndex = 0;
     this.planets = ["red", "blue", "green"];
     this.renderS = new RenderS(this.entityManager);
+    console.log(level);
     this.isActive = true;
     this.controllsS = new ControllsS(this.entityManager);
     this.animationS = new AnimationS(this.entityManager);
@@ -33,6 +34,7 @@ export default class LevelEditorState extends GameState {
       () => this.exit()
     );
     this.levelManager = new LevelManager(this.entityManager, this.cameraS);
+    this.level = [];
     this.level = level;
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.isActive) this.paused = !this.paused;
@@ -41,10 +43,12 @@ export default class LevelEditorState extends GameState {
   }
   exit() {
     this.isActive = false;
+    this.togglePause(false);
     this.gameManager.popState(1);
   }
   testLevel() {
     const level = this.generateLevelModel();
+    this.isActive = false;
     console.log(level);
     this.gameManager.addState(new inGameState(level, this.gameManager));
   }
@@ -54,18 +58,39 @@ export default class LevelEditorState extends GameState {
       this.currentPlanetIndex % this.planets.length
     ];
   }
-  saveLevel() {}
+  saveLevel() {
+    const level = this.generateLevelModel();
+    console.log(level);
+    fetch("/level", {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        level: level,
+      }),
+    }).then(() => alert("Success"));
+  }
   generateLevelModel() {
     const entities = this.entityManager.getEntities();
+    console.log(this.level);
     const level = {
+      _id: this.level._id,
       data: {
         planet: this.currentPlanet,
+        name: this.level.data.name,
         entities: [],
       },
     };
     for (const entity of entities) {
       const renderC = entity.components[ComponentTypes.RENDERABLE];
-      if (renderC && !entity.descriptor.includes("Selector")) {
+      if (
+        renderC &&
+        !entity.descriptor.includes("Selector") &&
+        !entity.descriptor.includes("Menu")
+      ) {
         level.data.entities.push({
           posX: renderC.posX,
           posY: renderC.posY,
@@ -96,13 +121,13 @@ export default class LevelEditorState extends GameState {
   update() {
     this.setBackground();
     super.update();
-
+    this.isActive = true;
     if (!this.paused) {
       this.cameraS.update();
       this.animationS.update();
     }
     this.controllsS.update();
-    this.guiS.update(this.paused, this.currentPlanet);
+    this.guiS.update(this.paused, this.currentPlanet, this.isActive);
     this.renderS.update();
   }
   init() {
