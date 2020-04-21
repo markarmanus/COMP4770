@@ -26,10 +26,11 @@
         }
       );
     }).catch(error => {
-      if ("user esits"){
-        
-      } else if ("wrong password") {
-
+      if ("user already exists") {
+        alert("User already exists. Login or register with a new username.");
+      }
+      else if ("wrong password") {
+        alert("Incorrect password. Please try again.")
       }
     });
   };
