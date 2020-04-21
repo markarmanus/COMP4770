@@ -789,5 +789,125 @@ const EntityData = {
       spritesCount: 4,
     },
   },
+  RedPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.redPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  CoruscantText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.coruscantText,
+      width: 500,
+      height: 62,
+      scale: .5,
+    },
+  },
+  RedPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.redPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
+  GreenPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.greenPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  OrondiaText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.orondia,
+      width: 550,
+      height: 86,
+      scale: .35,
+    },
+  },
+  GreenPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.greenPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
+  BluePlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.bluePlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  NabooText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.nabooText,
+      width: 552,
+      height: 110,
+      scale: .3,
+    },
+  },
+  BluePlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.bluePlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
+  PinkPlanet: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.pinkPlanet,
+      width: 128,
+      height: 128,
+      scale: 1,
+    },
+  },
+  LevelEditorText: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.levelEditor,
+      width: 600,
+      height: 58,
+      scale: .5,
+    },
+  },
+  PinkPlanetMenu: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.pinkPlanet,
+      width: 128,
+      height: 128,
+      scale: 4,
+    },
+  },
+  OverworldYoda: {
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.overworldYoda,
+      width: 64,
+      height: 54,
+      scale: 1,
+    },
+    [ComponentTypes.CONTROLABLE]: {
+      leftBttn: "a",
+      rightBttn: "d",
+      upBttn: "w",
+      downBttn: "s",
+    },
+    [ComponentTypes.MOVABLE]: {
+      velocity: 1,
+      maxVelocity: 5,
+      friction: 0.3,
+      accerlationSpeed: 0.9,
+    },
+    [ComponentTypes.ANIMATED]: {
+      animationSpeed: 300,
+      spritesCount: 4,
+    },
+  },
 };
 export default EntityData;
