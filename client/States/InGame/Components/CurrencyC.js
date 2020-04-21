@@ -6,5 +6,6 @@ export default class CurrencyC extends Component {
     this.currentCurrency = currentCurrency;
     // to Draw on GUI.
     this.positionOnGUI = positionOnGUI;
+    this.multiplier = 1;
   }
 }

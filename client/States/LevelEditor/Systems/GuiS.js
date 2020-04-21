@@ -20,6 +20,7 @@ export default class GuiS {
     this.exit = exit;
     this.togglePause = togglePause;
     this.gridSize = 32;
+    this.lastAddedLocation;
     this.isActive = true;
     this.defaultPadding = {
       x: 20,
@@ -344,6 +345,17 @@ export default class GuiS {
                 },
                 this.gridSize
               );
+              if (
+                this.lastAddedLocation &&
+                this.lastAddedLocation.x === gridPosition.x &&
+                this.lastAddedLocation.y === gridPosition.y
+              ) {
+                entity.remove();
+              }
+              this.lastAddedLocation = {
+                x: gridPosition.x,
+                y: gridPosition.y,
+              };
               renderC.posX = gridPosition.x * this.gridSize;
               renderC.posY = gridPosition.y * this.gridSize;
             }

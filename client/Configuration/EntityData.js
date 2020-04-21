@@ -38,7 +38,9 @@ const EntityData = {
       gravityForceScaler: 0.3,
       doubleJumpForceScale: 1,
       dashSpeed: 200,
+      dashForce: 10,
       dashCooldown: 500,
+      verticalVelocity: 0,
     },
     [ComponentTypes.MULTI_SPRITES]: {
       left: 384,
@@ -71,7 +73,9 @@ const EntityData = {
     [ComponentTypes.WEAPONS]: {
       fireRate: 400,
       orbCost: 2,
+      damageMultiplier: 1,
       fireBallCost: 0.5,
+      orbPenetration: false,
     },
   },
   PauseMenu: {
@@ -107,6 +111,20 @@ const EntityData = {
       height: 67,
       scale: 0.8,
     },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Permanent Triple Jump",
+      componentsToChange: {
+        [ComponentTypes.MOVABLE]: {
+          maxJumps: 3,
+        },
+      },
+    },
   },
   Chest: {
     inLevelEditor: true,
@@ -115,6 +133,21 @@ const EntityData = {
       width: 74,
       height: 63,
       scale: 1,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Double Currency",
+      lifeTime: 30000,
+      componentsToChange: {
+        [ComponentTypes.CURRENCY]: {
+          multiplier: 2,
+        },
+      },
     },
   },
   Chicken: {
@@ -125,6 +158,20 @@ const EntityData = {
       height: 33,
       scale: 1.2,
     },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Health!",
+      componentsToChange: {
+        [ComponentTypes.HEALTH]: {
+          currentHealth: 100,
+        },
+      },
+    },
   },
   Clover: {
     inLevelEditor: true,
@@ -133,6 +180,25 @@ const EntityData = {
       width: 31,
       height: 36,
       scale: 1.2,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Temp Invincibility",
+      lifeTime: 10000,
+      componentsToChange: {
+        [ComponentTypes.COLLIDABLE]: {
+          isInvincible: true,
+        },
+        [ComponentTypes.RENDERABLE]: {
+          shadowEffectPickUp: true,
+          alphaPickUp: 0.5,
+        },
+      },
     },
   },
   CoinPile: {
@@ -152,6 +218,22 @@ const EntityData = {
       height: 82,
       scale: 0.6,
     },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Temp Invisibility",
+      lifeTime: 5000,
+      componentsToChange: {
+        [ComponentTypes.RENDERABLE]: {
+          alphaPickUp: 0.5,
+          isInvisible: true,
+        },
+      },
+    },
   },
   Scroll: {
     inLevelEditor: true,
@@ -161,7 +243,9 @@ const EntityData = {
       height: 35,
       scale: 1.2,
     },
-    [ComponentTypes.PICK_UP]: {},
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "",
+    },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: {
         x: 1,
@@ -285,6 +369,21 @@ const EntityData = {
       height: 64,
       scale: 0.85,
     },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      lifeTime: 30000,
+      pickUpType: "Temp Double Damage",
+      componentsToChange: {
+        [ComponentTypes.WEAPONS]: {
+          damageMultiplier: 2,
+        },
+      },
+    },
   },
   Arrow: {
     inLevelEditor: true,
@@ -293,6 +392,22 @@ const EntityData = {
       width: 22,
       height: 64,
       scale: 1.1,
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+    [ComponentTypes.PICK_UP]: {
+      lifeTime: 3000,
+      pickUpType: "Temp Bullet Penetration",
+      componentsToChange: {
+        [ComponentTypes.WEAPONS]: {
+          orbPenetration: true,
+          damageMultiplier: 0.3,
+        },
+      },
     },
   },
   Timer: {
@@ -309,6 +424,31 @@ const EntityData = {
       lifeTime: "animationCycle",
     },
   },
+  GreenPotion: {
+    inLevelEditor: true,
+    [ComponentTypes.RENDERABLE]: {
+      image: Images.GreenPotion,
+      width: 25,
+      height: 36,
+      scale: 1.2,
+    },
+    [ComponentTypes.PICK_UP]: {
+      pickUpType: "Permanent Better Dash",
+      componentsToChange: {
+        [ComponentTypes.MOVABLE]: {
+          dashForce: 300,
+          dashForce: 15,
+          dashCooldown: 350,
+        },
+      },
+    },
+    [ComponentTypes.COLLIDABLE]: {
+      subSquareRatio: {
+        x: 1,
+        y: 1,
+      },
+    },
+  },
   Mushroom: {
     inLevelEditor: true,
     [ComponentTypes.RENDERABLE]: {
@@ -318,8 +458,17 @@ const EntityData = {
       scale: 1.2,
     },
     [ComponentTypes.PICK_UP]: {
-      lifeTime: 3000,
-      componentsToChange: {},
+      lifeTime: 6000,
+      pickUpType: "Temp Infinite Focus",
+      componentsToChange: {
+        [ComponentTypes.WEAPONS]: {
+          orbCost: 0,
+          fireBallCost: 0,
+        },
+        [ComponentTypes.MOVABLE]: {
+          dashCost: 0,
+        },
+      },
     },
     [ComponentTypes.COLLIDABLE]: {
       subSquareRatio: {
@@ -347,15 +496,19 @@ const EntityData = {
       },
     },
     [ComponentTypes.PICK_UP]: {
-      lifeTime: 30000,
+      lifeTime: 5000,
+      pickUpType: "Fly!!",
       componentsToChange: {
         [ComponentTypes.PHYSICAL]: {
           maxGravity: 0,
+          airFriction: 0,
         },
         [ComponentTypes.RENDERABLE]: {
           image: Images.YodaCrib,
           height: 64,
           width: 76,
+          scaledHeight: 64 * 1.2,
+          scaledWidth: 76 * 1.2,
         },
 
         [ComponentTypes.MULTI_SPRITES]: {
@@ -366,10 +519,8 @@ const EntityData = {
         },
         [ComponentTypes.MOVABLE]: {
           gravityForceScaler: 0,
+          verticalVelocity: 0,
           jumpForce: 0,
-        },
-        [ComponentTypes.COLLIDABLE]: {
-          isInvincible: false,
         },
       },
     },
@@ -455,7 +606,7 @@ const EntityData = {
         shooter: {
           fireRate: 200,
           shootingOffset: { x: 0.1, y: 0.25 },
-          accuracy: 60,
+          accuracy: 15,
         },
         patrol: {
           speed: 1.5,
@@ -526,7 +677,7 @@ const EntityData = {
       },
     },
     [ComponentTypes.DAMAGE]: {
-      damage: 3,
+      damage: 15,
     },
   },
   LaserBullet: {
@@ -537,7 +688,7 @@ const EntityData = {
       scale: 1,
     },
     [ComponentTypes.LIFE_TIME]: {
-      lifeTime: 500,
+      lifeTime: 1200,
     },
     [ComponentTypes.CHARGE]: {
       behaveLikeBullet: true,
@@ -550,7 +701,7 @@ const EntityData = {
       },
     },
     [ComponentTypes.DAMAGE]: {
-      damage: 0,
+      damage: 3,
     },
   },
   Currency: {
@@ -618,10 +769,7 @@ const EntityData = {
         y: 0.3,
       },
     },
-    [ComponentTypes.PHYSICAL]: {
-      airFriction: 0.7,
-      maxGravity: 16,
-    },
+
     [ComponentTypes.ANIMATED]: {
       animationSpeed: 300,
       spritesCount: 3,

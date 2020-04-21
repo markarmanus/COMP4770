@@ -3,6 +3,7 @@ import ShooterC from "../Components/ShooterC";
 import DroneC from "../Components/DroneC";
 import PatrolC from "../Components/PatrolC";
 import Vec2 from "../../../Vec2";
+import Helper from "../../../Helper";
 export default class AiS {
   constructor(entityManager) {
     this.entityManager = entityManager;
@@ -67,6 +68,7 @@ export default class AiS {
     }
     return true;
   }
+
   areIntersecting(line1, line2) {
     const r = line1.p2.subtract(line1.p1);
     const s = line2.p2.subtract(line2.p1);
@@ -87,6 +89,7 @@ export default class AiS {
   getPlayerDirection(player, entity) {
     const playerRenderC = player.components[ComponentTypes.RENDERABLE];
     const entityRenderC = entity.components[ComponentTypes.RENDERABLE];
+
     return entityRenderC.posX > playerRenderC.posX
       ? { x: -1, y: 0 }
       : { x: 1, y: 0 };
@@ -97,10 +100,21 @@ export default class AiS {
       const renderC = entity.components[ComponentTypes.RENDERABLE];
       if (renderC && entity.components[ComponentTypes.AI]) {
         const player = this.entityManager.getEntitiesOfType("Player")[0];
+        const playerRenderC = player.components[ComponentTypes.RENDERABLE];
+        const playerLocation = {
+          x: playerRenderC.posX,
+          y: playerRenderC.posY,
+        };
+        const aiLocation = {
+          x: renderC.posX,
+          y: renderC.posY,
+        };
         const aiC = entity.components[ComponentTypes.AI];
         if (
           player &&
           this.canSeeEachOther(player, entity, entities) &&
+          Helper.getDistance(playerLocation, aiLocation) < canvas.width / 2 &&
+          !renderC.isInvisible &&
           renderC.isOnScreen
         ) {
           if (aiC.lastAction === "cantSee")

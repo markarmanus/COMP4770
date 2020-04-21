@@ -20,7 +20,6 @@ export default class LevelEditorState extends GameState {
     this.currentPlanetIndex = 0;
     this.planets = ["red", "blue", "green"];
     this.renderS = new RenderS(this.entityManager);
-    console.log(level);
     this.isActive = true;
     this.controllsS = new ControllsS(this.entityManager);
     this.animationS = new AnimationS(this.entityManager);
@@ -49,7 +48,6 @@ export default class LevelEditorState extends GameState {
   testLevel() {
     const level = this.generateLevelModel();
     this.isActive = false;
-    console.log(level);
     this.gameManager.addState(new inGameState(level, this.gameManager));
   }
   nextPlanet() {
@@ -60,7 +58,15 @@ export default class LevelEditorState extends GameState {
   }
   saveLevel() {
     const level = this.generateLevelModel();
-    console.log(level);
+    let dataStr = JSON.stringify(level);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+    let exportFileDefaultName = 'data.json';
+
+    let linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
     fetch("/level", {
       method: "PATCH",
       credentials: "include",
@@ -75,7 +81,6 @@ export default class LevelEditorState extends GameState {
   }
   generateLevelModel() {
     const entities = this.entityManager.getEntities();
-    console.log(this.level);
     const level = {
       _id: this.level._id,
       data: {

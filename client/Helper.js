@@ -148,7 +148,7 @@ export default class Helper {
     );
     for (const entity of entities) {
       const renderC = entity.components[ComponentTypes.RENDERABLE];
-      if (renderC) {
+      if (renderC && renderC.posX && renderC.posY) {
         let x = Math.floor((renderC.posX + canvasOffset.x) / 32);
         let y = Math.floor((renderC.posY + canvasOffset.y) / 32);
         x = x < 0 ? 0 : x >= gridWidth ? gridWidth - 1 : x;

@@ -90,7 +90,11 @@ export default class CollisionS {
       case "DroneToOrb":
       case "StormTrooperToOrb":
         this.doDamage(entity1, entity2);
-        this.destroyWithEffect(entity2, Effects.Explosion, { x: 0.5, y: 0.5 });
+        if (!this.hasPenetration(entity2))
+          this.destroyWithEffect(entity2, Effects.Explosion, {
+            x: 0.5,
+            y: 0.5,
+          });
         break;
       case "PlayerToCheckPoint":
         Sounds.CoinPickUp().play();
@@ -102,7 +106,16 @@ export default class CollisionS {
         break;
       case "PlayerToEmptyCrib":
       case "PlayerToMushroom":
+      case "PlayerToClover":
       case "PlayerToScroll":
+      case "PlayerToSword":
+      case "PlayerToRing":
+      case "PlayerToChicken":
+      case "PlayerToCarrot":
+      case "PlayerToGreenPotion":
+
+      case "PlayerToArrow":
+      case "PlayerToChest":
         this.handlePlayerCollidePickUp(entity1, entity2);
         break;
       case "FireBallToFloor":
@@ -158,7 +171,7 @@ export default class CollisionS {
   handlePlayerWalkOnIce(player) {
     const movementC = player.components[ComponentTypes.MOVABLE];
     movementC.hasEffect = true;
-    movementC.friction = 0.08;
+    movementC.friction = 0.04;
   }
   handlePlayerWalkOnMud(player) {
     const movementC = player.components[ComponentTypes.MOVABLE];
@@ -176,9 +189,22 @@ export default class CollisionS {
       case "StormTrooperToOrb":
       case "PlayerToMushroom":
       case "StormTrooperToFloor":
+      case "StormTrooperToIceFloor":
+      case "StormTrooperToLavalFloor":
+      case "StormTrooperToMudFloor":
+      case "StormTrooperToGlass":
+
       case "FireBallToDrone":
       case "FireBallToStormTrooper":
       case "FireBallToFloor":
+      case "PlayerToGreenPotion":
+
+      case "DroneToFloor":
+      case "DroneToIceFloor":
+      case "DroneToLavaFloor":
+      case "DroneToMudFloor":
+      case "DroneToGlassFloor":
+
       case "PlayerToIceFloor":
       case "PlayerToLavalFloor":
       case "PlayerToScroll":
@@ -186,6 +212,13 @@ export default class CollisionS {
       case "PlayerToSpike":
       case "PlayerToGlass":
       case "PlayerToEmptyCrib":
+      case "PlayerToClover":
+      case "PlayerToSword":
+      case "PlayerToRing":
+      case "PlayerToChicken":
+      case "PlayerToCarrot":
+      case "PlayerToArrow":
+      case "PlayerToChest":
       case "PlayerToDrone":
       case "PlayerToCheckPoint":
       case "PlayerToLaserBullet":
@@ -230,8 +263,12 @@ export default class CollisionS {
     const healthC = toDamage.components[ComponentTypes.HEALTH];
     const collisionC = toDamage.components[ComponentTypes.COLLIDABLE];
     if (damageC && healthC && !collisionC.isInvincible) {
-      healthC.currentHealth -= damageC.damage;
+      healthC.currentHealth -= damageC.damage * damageC.multiplier;
     }
+  }
+  hasPenetration(entity) {
+    const damageC = entity.components[ComponentTypes.DAMAGE];
+    return damageC && damageC.penetrate;
   }
   destroyWithEffect(toDestroy, effecType, offset = { x: 0, y: 0 }, scale) {
     EffectsGenerator.createEffect(
@@ -245,7 +282,9 @@ export default class CollisionS {
   }
   handlePickUpCurrency(player, currency) {
     const currencyC = player.components[ComponentTypes.CURRENCY];
-    if (currencyC) currencyC.currentCurrency++;
+    if (currencyC)
+      currencyC.currentCurrency =
+        currencyC.currentCurrency + currencyC.multiplier * 1;
   }
   handleDefaultCollision(entity1, entity2, direction) {
     const e1RenderC = entity1.components[ComponentTypes.RENDERABLE];

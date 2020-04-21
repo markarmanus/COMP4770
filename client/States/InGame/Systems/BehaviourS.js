@@ -58,7 +58,11 @@ export default class BehaviourS {
     if (
       grid[nextLocation.y] &&
       grid[nextLocation.y][nextLocation.x] &&
-      grid[nextLocation.y][nextLocation.x].includes("Floor")
+      (grid[nextLocation.y][nextLocation.x].includes("Floor") ||
+        grid[nextLocation.y][nextLocation.x].includes("IceFloor") ||
+        grid[nextLocation.y][nextLocation.x].includes("LavalFloor") ||
+        grid[nextLocation.y][nextLocation.x].includes("MudFloor") ||
+        grid[nextLocation.y][nextLocation.x].includes("Glass"))
     ) {
       renderC.posX += direction.x * partrolC.speed;
     } else {
@@ -132,6 +136,7 @@ export default class BehaviourS {
     }
     if (
       shootAtRenderC &&
+      !shootAtRenderC.isInvisible &&
       new Date().getTime() - shooterC.lastShotTime > shooterC.fireRate
     ) {
       const distance = Helper.getDistance(
@@ -181,7 +186,7 @@ export default class BehaviourS {
     start = Helper.toGridPosition(start);
     goal = Helper.toGridPosition(goal);
     let path = Helper.AStar(start, goal, this.entityManager, true);
-    if (path.length > 0) {
+    if (path.length > 0 && !toAttackRenderC.isInvisible) {
       path = path.map((position) =>
         Helper.toOriginalPosition(Helper.toPixelPosition(position))
       );

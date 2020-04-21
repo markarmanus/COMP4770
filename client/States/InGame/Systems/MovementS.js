@@ -62,7 +62,7 @@ export default class MovementS {
         const slidingLeft =
           controllsC.bttnsState[controllsC.leftBttn] === false &&
           movementC.currentVelocity < 0;
-
+        movementC.totalDashFrames = movementC.dashSpeed / movementC.dashForce;
         if (movementC.isJumping && isGrounded) {
           movementC.isJumping = false;
           movementC.currentjumpForce = 0;
@@ -139,10 +139,10 @@ export default class MovementS {
           movementC.currentDashFrame++;
           switch (movementC.isDashingTo) {
             case "right":
-              renderC.posX += 10;
+              renderC.posX += movementC.dashForce;
               break;
             case "left":
-              renderC.posX -= 10;
+              renderC.posX -= movementC.dashForce;
               break;
           }
           if (movementC.currentDashFrame >= movementC.totalDashFrames) {
@@ -152,6 +152,7 @@ export default class MovementS {
         } else {
           renderC.shadowEffect = false;
           renderC.alpha = 1;
+          if (!renderC.shadowEffectPickUp) collisionC.isInvincible = false;
         }
 
         movementC.currentVelocity = this.setVelocityWithinBounds(

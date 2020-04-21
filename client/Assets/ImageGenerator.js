@@ -63,6 +63,7 @@ const Images = {
   NabooText: createImage("./Images/NabooText.png"),
   LevelEditorText: createImage("./Images/LevelEditorText.png"),
   Orondia: createImage("./Images/orondia.png"),
+  GreenPotion: createImage("./Images/GreenPotion.png"),
 };
 
 export default Images;

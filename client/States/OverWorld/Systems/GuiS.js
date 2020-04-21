@@ -66,7 +66,6 @@ export default class GuiS {
     }).then((res) =>
       res.json().then((levels) => {
         this.customLevels = levels;
-        console.log(levels);
       })
     );
   }
@@ -136,7 +135,6 @@ export default class GuiS {
     this.gameEngine.addState(new inGameState(level, this.gameEngine));
   }
   handleEditLevel(level) {
-    console.log("hi");
     this.gameEngine.addState(new LevelEditorState(level, this.gameEngine));
   }
   drawPlanetMenu(planet) {

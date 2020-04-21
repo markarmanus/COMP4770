@@ -52,7 +52,6 @@ export default class OverWorldState extends GameState {
   }
   init() {
     const offset = Helper.getCanvasOffset();
-    console.log(offset);
     for (const level of window.levels) {
       this.planetLevels[level.data.planet].push(level);
       if (user.unlockedLevels >= level.data.number)

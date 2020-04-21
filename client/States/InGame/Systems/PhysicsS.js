@@ -12,7 +12,11 @@ export default class CollisionS {
     for (const entity of entities) {
       const physicsC = entity.components[ComponentTypes.PHYSICAL];
       const renderC = entity.components[ComponentTypes.RENDERABLE];
-      if (renderC && renderC.isOnScreen && physicsC) {
+      if (
+        renderC &&
+        (renderC.shouldProcessPhysics || entity.descriptor === "Player") &&
+        physicsC
+      ) {
         const collisionC = entity.components[ComponentTypes.COLLIDABLE];
         if (collisionC && collisionC.isGrounded) {
           physicsC.currentGravityForce = 0;

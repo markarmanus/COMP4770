@@ -50,6 +50,9 @@ export default class WeaponsS {
           weaponsC.lastShot = new Date().getTime();
           const orb = Helper.generateEntity("Orb", this.entityManager);
           const orbRenderC = orb.components[ComponentTypes.RENDERABLE];
+          const orbDamageC = orb.components[ComponentTypes.DAMAGE];
+          orbDamageC.multiplier = weaponsC.damageMultiplier;
+          if (weaponsC.orbPenetration) orbDamageC.penetrate = true;
           focusC.currentFocus -= weaponsC.orbCost;
           Sounds.OrbSound().play();
           orbRenderC.posX =
@@ -79,6 +82,8 @@ export default class WeaponsS {
             );
             weaponsC.fireBallSound = Sounds.FireBall();
             weaponsC.fireBallSound.play();
+            const fireBallDamageC = fireBall.components[ComponentTypes.DAMAGE];
+            fireBallDamageC.multiplier = weaponsC.damageMultiplier;
             const fireBallRenderC =
               fireBall.components[ComponentTypes.RENDERABLE];
             fireBallRenderC.posX =

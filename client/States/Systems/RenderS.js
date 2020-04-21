@@ -42,7 +42,8 @@ export default class RenderS {
                 -renderC.posY - renderC.scaledHeight / 2
               );
             }
-            if (renderC.alpha) canvasContext.globalAlpha = renderC.alpha;
+            const alpha = renderC.alphaPickUp || renderC.alpha;
+            if (alpha) canvasContext.globalAlpha = alpha;
           }
 
           canvasContext.drawImage(
@@ -56,7 +57,7 @@ export default class RenderS {
             renderC.scaledWidth,
             renderC.scaledHeight
           );
-          if (renderC.shadowEffect) {
+          if (renderC.shadowEffect || renderC.shadowEffectPickUp) {
             canvasContext.drawImage(
               renderC.image,
               renderC.imageCropX,
@@ -79,16 +80,25 @@ export default class RenderS {
           canvasContext.globalAlpha = 1;
         }
         let canvasOffset = Helper.getCanvasOffset();
-        // if going to add buffer to loading zone, remember Helper AI wont work.
         if (
-          renderC.posX + canvasOffset.x < -64 ||
-          renderC.posX + canvasOffset.x > canvas.width + 64 ||
-          renderC.posY + canvasOffset.y < -64 ||
-          renderC.posY + canvasOffset.y > canvas.height + 64
+          renderC.posX + canvasOffset.x < 0 ||
+          renderC.posX + canvasOffset.x > canvas.width ||
+          renderC.posY + canvasOffset.y < 0 ||
+          renderC.posY + canvasOffset.y > canvas.height
         ) {
           renderC.isOnScreen = false;
         } else {
           renderC.isOnScreen = true;
+        }
+        if (
+          renderC.posX + canvasOffset.x < +100 ||
+          renderC.posX + canvasOffset.x > canvas.width - 100 ||
+          renderC.posY + canvasOffset.y < +100 ||
+          renderC.posY + canvasOffset.y > canvas.height - 100
+        ) {
+          renderC.shouldProcessPhysics = false;
+        } else {
+          renderC.shouldProcessPhysics = true;
         }
       }
     }

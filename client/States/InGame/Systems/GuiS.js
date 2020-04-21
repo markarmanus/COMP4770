@@ -16,6 +16,10 @@ export default class GuiS {
     this.togglePause = togglePause;
     this.pickUpGuiSize = 64;
     this.level = level;
+    this.pickUpText = {
+      text: "",
+      alpha: 1,
+    };
     this.drawingScroll;
     this.pickUps = [];
     window.addEventListener("keydown", (e) => {
@@ -134,7 +138,7 @@ export default class GuiS {
     } else {
       const renderC = this.drawingScroll.components[ComponentTypes.RENDERABLE];
       canvasContext.font = "30px Arial";
-      const messages = Messages[this.level.data.planet];
+      const messages = Messages["green"];
       for (let i = 0; i < messages.length; i++) {
         canvasContext.fillText(
           messages[i],
@@ -229,7 +233,27 @@ export default class GuiS {
       pickUpRenderC.posY = position.y + this.pickUpGuiSize / 4;
       timerRenderC.posX = position.x;
       timerRenderC.posY = position.y;
-      this.pickUps = newPickUps;
+    }
+    this.pickUps = newPickUps;
+  }
+  drawPickUpText() {
+    if (this.pickUpText.text.length > 0) {
+      if (this.pickUpText.alpha > 0) {
+        canvasContext.globalAlpha = this.pickUpText.alpha;
+        canvasContext.fillText(
+          this.pickUpText.text,
+          canvas.width / 2 -
+            this.canvasOffset.x -
+            canvasContext.measureText(this.pickUpText.text).width / 2,
+          50 - this.canvasOffset.y
+        );
+        canvasContext.globalAlpha = 1;
+        this.pickUpText.alpha -= 0.005;
+      } else {
+        this.pickUpText.text = "";
+        console.log("hi");
+        this.pickUpText.alpha = 1;
+      }
     }
   }
   createPickUpTimer(entity) {
@@ -247,19 +271,13 @@ export default class GuiS {
     this.pickUps.push({ pickUp: entity, timer });
     pickUpC.drewGuiTimer = true;
   }
-  updatePickUpArray() {
-    let newArray = [];
-    for (const pickUp of this.pickUps) {
-      if (pickUp && pickUp.isActive) {
-        newArray.push(entity);
-      }
-    }
-    this.pickUps = newArray;
-  }
+
   update(isPaused) {
-    if (this.drawingScroll) this.drawScroll();
-    this.drawPickUps();
     this.updateCanvasOffset();
+
+    if (this.drawingScroll) this.drawScroll();
+    this.drawPickUpText();
+    this.drawPickUps();
     if (isPaused && !this.drawingScroll) {
       this.drawPauseScreen();
     } else {
@@ -285,6 +303,8 @@ export default class GuiS {
           !pickUpC.drewGuiTimer
         ) {
           this.createPickUpTimer(entity);
+          this.pickUpText.text = pickUpC.pickUpType;
+          this.pickUpText.alpha = 1;
         }
       }
       if (currencyC && !this.drawingScroll) {

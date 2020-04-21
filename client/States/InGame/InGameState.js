@@ -25,8 +25,8 @@ export default class inGameState extends GameState {
     this.gameEngine = gameEngine;
     this.levelEnded = false;
     const cameraLimit = {
-      min: { x: -5000, y: -200 },
-      max: { x: 5000, y: 3000 },
+      min: { x: -15000, y: -100 },
+      max: { x: 15000, y: 2000 },
     };
     this.cameraS = new CameraS(cameraLimit, this.entityManager);
     this.levelManager = new LevelManager(
@@ -69,13 +69,13 @@ export default class inGameState extends GameState {
     });
   }
   playMusic() {
-    // if (window.backgroundMusic) {
-    //   window.backgroundMusic.parentNode.removeChild(window.backgroundMusic);
-    // }
-    // window.backgroundMusic = Sounds[`${this.level.data.planet}PlanetMusic`](
-    //   true
-    // );
-    // window.backgroundMusic.play();
+    if (window.backgroundMusic) {
+      window.backgroundMusic.parentNode.removeChild(window.backgroundMusic);
+    }
+    window.backgroundMusic = Sounds[`${this.level.data.planet}PlanetMusic`](
+      true
+    );
+    window.backgroundMusic.play();
   }
   endLevel() {
     this.levelEnded = true;
@@ -135,9 +135,9 @@ export default class inGameState extends GameState {
 
       this.cameraS.update();
     }
+    this.guiS.update(this.paused);
 
     this.renderS.update();
-    this.guiS.update(this.paused);
 
     if (this.levelEnded)
       canvas.style = `opacity: ${canvas.style.opacity - 0.01}`;
