@@ -17,7 +17,9 @@ const store = new MongoDBStore({
   uri: "mongodb://mongo:27017/database",
   collection: "sessions",
 });
-
+const mongoose = require("mongoose");
+const Types = mongoose.Types;
+const ObjectId = Types.ObjectId;
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/client"));
 
@@ -59,14 +61,35 @@ app.get("/", (req, res) => {
 });
 
 app.get("/firstTimeUser", (req, res) => {
-  // req.user.isFirstTime = false;
-  console.log(req.user);
   res.render("index", { currentUser: req.user });
 });
 app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
-app.post("/level", isLoggedIn, (req, res) => {});
+app.post("/level", isLoggedIn, (req, res) => {
+  const level = new Level();
+  level.isCustom = true;
+  level.creator = ObjectId(req._id);
+  level.data = {
+    planet: "green",
+    name: "Custom" + Math.random * 100,
+    entities: [
+      {
+        type: "Player",
+        posX: 100,
+        posY: 100,
+      },
+    ],
+  };
+  level.save((error) => {
+    if (error) {
+      res.sendStatus(500);
+    } else {
+      res.send(level);
+    }
+  });
+});
+
 app.get("/levels", isLoggedIn, async (req, res) => {
   await Level.find({ isCustom: false })
     .then((levels) => res.send(levels))

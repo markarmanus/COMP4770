@@ -56,12 +56,15 @@ const Images = {
   MudFloor: createImage("./Images/MudFloor.png"),
   MessageScroll: createImage("./Images/MessageScroll2.png"),
   YodaCrib: createImage("./Images/YodaCrib.png"),
-  pinkPlanet: createImage("./Images/Planets/pinkPlanet128.png"),
-  overworldYoda: createImage("./Images/yodaCrib.png"),
-  coruscantText: createImage("./Images/coruscant.png"),
-  nabooText: createImage("./Images/NabooText.png"),
-  levelEditor: createImage("./Images/levelEditor.png"),
-  orondia: createImage("./Images/orondia.png")
+  PinkPlanet: createImage("./Images/Planets/pinkPlanet128.png"),
+  BluePlanet: createImage("./Images/Planets/bluePlanet128.png"),
+  GreenPlanet: createImage("./Images/Planets/greenPlanet128.png"),
+  RedPlanet: createImage("./Images/Planets/redPlanet128.png"),
+  OverWorldYoda: createImage("./Images/OverWorldYoda.png"),
+  CoruscantText: createImage("./Images/coruscant.png"),
+  NabooText: createImage("./Images/NabooText.png"),
+  LevelEditorText: createImage("./Images/LevelEditorText.png"),
+  Orondia: createImage("./Images/orondia.png"),
 };
 
 export default Images;
