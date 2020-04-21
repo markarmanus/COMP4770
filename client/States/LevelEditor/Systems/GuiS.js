@@ -19,6 +19,7 @@ export default class GuiS {
     this.pauseMenu = [];
     this.exit = exit;
     this.togglePause = togglePause;
+    this.gridSize = 32;
     this.isActive = true;
     this.defaultPadding = {
       x: 20,
@@ -27,11 +28,15 @@ export default class GuiS {
     this.canvasOffset = {};
     this.updateCanvasOffset();
 
-    this.selector = this.initalizeSelector();
+    this.selector = this.initializeSelector();
     window.addEventListener("keydown", (e) => {
       if (this.isActive) {
         if (e.key === "C") {
           this.grid = !this.grid;
+        } else if (e.keyCode === 38) {
+          this.gridSize = Math.min(this.gridSize + 8, 64);
+        } else if (e.keyCode === 40) {
+          this.gridSize = Math.max(this.gridSize - 8, 8);
         } else if (e.key === "r") {
           if (this.selectedEntity) this.selectedEntity.remove();
         } else if (e.key === "b") {
@@ -40,13 +45,26 @@ export default class GuiS {
           saveLevel();
         } else if (e.key === "q" && e.ctrlKey) {
           this.isActive = false;
+          this.togglePause(false);
           testLevel();
         }
       }
     });
   }
-  initalizeSelector() {
-    let entitySize = 80;
+  updateFloor(planet) {
+    const entities = this.entityManager.getEntities();
+    for (const entity of entities) {
+      const renderC = entity.components[ComponentTypes.RENDERABLE];
+      if (
+        (renderC && entity.descriptor === "Floor") ||
+        entity.descriptor === "FloorSelector"
+      ) {
+        renderC.image = Images[`${planet}Floor`];
+      }
+    }
+  }
+  initializeSelector() {
+    let entitySize = 40;
     let padding = {
       x: 5,
       y: 10,
@@ -92,42 +110,47 @@ export default class GuiS {
   }
   drawGrid() {
     let startEndIndex = {
-      x: Math.round(this.canvasOffset.x / 32) * -1 - 3,
-      y: Math.round(this.canvasOffset.y / 32) * -1 - 3,
+      x: Math.round(this.canvasOffset.x / this.gridSize) * -1 - 3,
+      y: Math.round(this.canvasOffset.y / this.gridSize) * -1 - 3,
     };
-    let width = Math.round(canvas.width / 32) + startEndIndex.x;
-    let height = Math.round(canvas.height / 32) + startEndIndex.y;
+    let width = Math.round(canvas.width / this.gridSize) + startEndIndex.x;
+    let height = Math.round(canvas.height / this.gridSize) + startEndIndex.y;
 
     for (let x = startEndIndex.x; x <= width + 3; x++) {
       for (let y = startEndIndex.y; y <= height + 3; y++) {
         canvasContext.strokeStyle = "rgba(0,0,0,0.3)";
         canvasContext.beginPath();
-        canvasContext.rect(x * 32, y * 32, 32, 32);
+        canvasContext.rect(
+          x * this.gridSize,
+          y * this.gridSize,
+          this.gridSize,
+          this.gridSize
+        );
         canvasContext.stroke();
       }
     }
   }
   drawSelector() {
-    let margin = 10;
+    let margin = 15;
     let canFit = Math.floor(this.selector.width / this.selector.entitySize);
     let entitySize = this.selector.entitySize;
-    let remainigPadding =
+    let remainingPadding =
       this.selector.width - canFit * this.selector.entitySize;
     for (let i = 0; i < canFit && i < this.selector.entities.length; i++) {
       const entity = this.selector.entities[i];
       const renderC = entity.components[ComponentTypes.RENDERABLE];
-      let wdithScale = entitySize / renderC.width;
-      let hegihtScale = entitySize / renderC.height;
+      let widthScale = entitySize / renderC.width;
+      let heightScale = entitySize / renderC.height;
       let scale;
       let extraPadding;
-      if (wdithScale < hegihtScale) {
-        scale = wdithScale;
+      if (widthScale < heightScale) {
+        scale = widthScale;
         extraPadding = {
           x: 0,
           y: entitySize - scale * renderC.height,
         };
       } else {
-        scale = hegihtScale;
+        scale = heightScale;
         extraPadding = {
           x: entitySize - scale * renderC.width,
           y: 0,
@@ -139,8 +162,8 @@ export default class GuiS {
         i * entitySize +
         this.defaultPadding.x / 2 +
         this.selector.padding.x / 2 +
-        margin +
-        remainigPadding / 2 -
+        margin * i +
+        remainingPadding / 2 -
         this.canvasOffset.x +
         extraPadding.x / 2;
       renderC.posY =
@@ -181,22 +204,32 @@ export default class GuiS {
   isClickingSelector() {
     const mousePosition = window.mouseTracker.getLocation(0);
     return (
-      this.selector.x < mousePosition.x &&
-      this.selector.x + this.selector.width > mousePosition.x &&
-      this.selector.y < mousePosition.y &&
-      this.selector.y + this.selector.height > mousePosition.y
+      this.selector.x - this.canvasOffset.x < mousePosition.x &&
+      this.selector.x - this.canvasOffset.x + this.selector.width >
+        mousePosition.x &&
+      this.selector.y - this.canvasOffset.y < mousePosition.y &&
+      this.selector.y - this.canvasOffset.y + this.selector.height >
+        mousePosition.y
     );
   }
 
   getMouseGridPosition() {
     const mousePosition = window.mouseTracker.getLocation(0);
-    return Helper.toGridPosition(mousePosition);
+    return Helper.toGridPosition(mousePosition, this.gridSize);
   }
   updateSelectedEntityPosition() {
-    const gridPosition = this.getMouseGridPosition();
+    const mousePosition = window.mouseTracker.getLocation(0);
     const renderC = this.selectedEntity.components[ComponentTypes.RENDERABLE];
-    renderC.posX = gridPosition.x * 32;
-    renderC.posY = gridPosition.y * 32;
+    const gridPosition = Helper.toGridPosition(
+      {
+        x: mousePosition.x - renderC.scaledWidth / 2,
+        y: mousePosition.y - renderC.scaledHeight / 2,
+      },
+      this.gridSize
+    );
+
+    renderC.posX = (gridPosition.x + 0) * this.gridSize;
+    renderC.posY = (gridPosition.y + 0) * this.gridSize;
   }
   drawPauseScreen() {
     if (!this.pauseMenu.length > 0) {
@@ -249,10 +282,11 @@ export default class GuiS {
       }
     }
   }
-  update(isPaused) {
+  update(isPaused, currentPlanet) {
     this.isActive = true;
     this.updateCanvasOffset();
     this.drawSelector();
+    this.updateFloor(currentPlanet);
 
     if (isPaused) {
       this.drawPauseScreen();
@@ -274,8 +308,9 @@ export default class GuiS {
         if (rightClick || leftClick) {
           const clickedAt = this.getEntityAtMouseClick();
           const clickedInSelector = this.isClickingSelector();
+          console.log(clickedAt, clickedInSelector, this.selectedEntity);
           if (clickedAt) {
-            if (rightClick) {
+            if (rightClick && !clickedInSelector) {
               clickedAt.remove();
             }
             if (leftClick) {
@@ -296,11 +331,17 @@ export default class GuiS {
                 this.selectedEntity.descriptor.replace("Selector", ""),
                 this.entityManager
               );
-              const gridPosition = this.getMouseGridPosition();
               const renderC = entity.components[ComponentTypes.RENDERABLE];
-              renderC.posX = gridPosition.x * 32;
-              renderC.posY = gridPosition.y * 32;
-              controllsC.mouseState.leftClick = false;
+              const mousePosition = window.mouseTracker.getLocation(0);
+              const gridPosition = Helper.toGridPosition(
+                {
+                  x: mousePosition.x - renderC.scaledWidth / 2,
+                  y: mousePosition.y - renderC.scaledHeight / 2,
+                },
+                this.gridSize
+              );
+              renderC.posX = gridPosition.x * this.gridSize;
+              renderC.posY = gridPosition.y * this.gridSize;
             }
           }
         }

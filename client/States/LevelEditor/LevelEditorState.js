@@ -16,7 +16,7 @@ export default class LevelEditorState extends GameState {
     super();
     this.gameManager = gameManager;
     this.paused = false;
-    this.currentPlanet = "red";
+    this.currentPlanet = level.data.planet;
     this.currentPlanetIndex = 0;
     this.planets = ["red", "blue", "green"];
     this.renderS = new RenderS(this.entityManager);
@@ -29,7 +29,7 @@ export default class LevelEditorState extends GameState {
       () => this.nextPlanet(),
       () => this.saveLevel(),
       () => this.testLevel(),
-      () => this.togglePause(),
+      (value) => this.togglePause(value),
       () => this.exit()
     );
     this.levelManager = new LevelManager(this.entityManager, this.cameraS);
@@ -45,6 +45,7 @@ export default class LevelEditorState extends GameState {
   }
   testLevel() {
     const level = this.generateLevelModel();
+    console.log(level);
     this.gameManager.addState(new inGameState(level, this.gameManager));
   }
   nextPlanet() {
@@ -57,8 +58,8 @@ export default class LevelEditorState extends GameState {
   generateLevelModel() {
     const entities = this.entityManager.getEntities();
     const level = {
-      planet: this.currentPlanet,
       data: {
+        planet: this.currentPlanet,
         entities: [],
       },
     };
@@ -85,8 +86,12 @@ export default class LevelEditorState extends GameState {
       canvas.height
     );
   }
-  togglePause() {
-    this.paused = !this.paused;
+  togglePause(value) {
+    if (value) {
+      this.paused = value;
+    } else {
+      this.paused = !this.paused;
+    }
   }
   update() {
     this.setBackground();
@@ -97,7 +102,7 @@ export default class LevelEditorState extends GameState {
       this.animationS.update();
     }
     this.controllsS.update();
-    this.guiS.update(this.paused);
+    this.guiS.update(this.paused, this.currentPlanet);
     this.renderS.update();
   }
   init() {

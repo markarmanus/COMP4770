@@ -8,7 +8,7 @@ export default class LevelManager {
     this.cameraS = cameraS;
     this.level = level;
   }
-  
+
   loadCheckPoint(checkPoint) {
     const oldManager = this.entityManager;
 
@@ -36,8 +36,8 @@ export default class LevelManager {
           initialEntity.remove();
         }
         if (initialEntity.descriptor === "CheckPoint") {
-          renderC.image = Images.campFireOn;
-          renderC.height = Images.campFireOn.naturalHeight;
+          renderC.image = Images.CampFireOn;
+          renderC.height = Images.CampFireOn.naturalHeight;
         }
       }
     }
@@ -61,6 +61,8 @@ export default class LevelManager {
       }
       if (entity.type === "Player") {
         player = entityInstance;
+      } else if (entity.type === "Floor") {
+        renderC.image = Images[`${this.level.data.planet}Floor`];
       }
     }
     if (player) {

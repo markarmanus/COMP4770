@@ -40,7 +40,6 @@ export default class GameEngine {
   }
 
   addState(state) {
-    console.log(state);
     this.newStates.push(state);
   }
 

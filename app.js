@@ -60,9 +60,7 @@ app.get("/", (req, res) => {
 app.get("/user", isLoggedIn, (req, res) => {
   res.json(req.user);
 });
-app.post("/level", isLoggedIn, (req, res) => {
-  
-});
+app.post("/level", isLoggedIn, (req, res) => {});
 app.get("/levels", isLoggedIn, async (req, res) => {
   await Level.find({ isCustom: false })
     .then((levels) => res.send(levels))

@@ -9,5 +9,6 @@ export default class AnimtedC extends Component {
     this.timer = new Date().getTime();
     this.isAnimating = true;
     this.repeat = repeat !== undefined ? repeat : true;
+    this.restart = false;
   }
 }

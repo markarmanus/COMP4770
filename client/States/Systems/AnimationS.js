@@ -13,6 +13,11 @@ export default class AnimationS {
         const renderC = entity.components[ComponentTypes.RENDERABLE];
         const animationC = entity.components[ComponentTypes.ANIMATED];
         const currentTime = new Date().getTime();
+        if (animationC.restart) {
+          animationC.currentFrame = -1;
+          animationC.restart = false;
+          animationC.isAnimating = true;
+        }
         if (
           animationC.isAnimating &&
           currentTime - animationC.timer > animationC.animationSpeed

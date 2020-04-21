@@ -1,4 +1,6 @@
 import ComponentTypes from "./../../../ComponentTypes";
+import Sounds from "../../../Assets/SoundGenerator";
+import Images from "../../../Assets/ImageGenerator";
 export default class MovementS {
   constructor(entityManager) {
     this.entityManager = entityManager;
@@ -9,8 +11,8 @@ export default class MovementS {
       velocity > maxVelocity
         ? maxVelocity
         : velocity < negativeMax
-          ? negativeMax
-          : velocity;
+        ? negativeMax
+        : velocity;
     return velocity;
   }
 
@@ -28,12 +30,16 @@ export default class MovementS {
       const renderC = entity.components[ComponentTypes.RENDERABLE];
       const movementC = entity.components[ComponentTypes.MOVABLE];
       const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      const focusC = entity.components[ComponentTypes.FOCUS];
       if (renderC && movementC && controllsC) {
         const spritesC = entity.components[ComponentTypes.MULTI_SPRITES];
         const collisionC = entity.components[ComponentTypes.COLLIDABLE];
         const physicsC = entity.components[ComponentTypes.PHYSICAL];
 
         const rightBttn = controllsC.bttnsState[controllsC.rightBttn];
+        const upBttn = controllsC.bttnsState[controllsC.upBttn];
+        const downBttn = controllsC.bttnsState[controllsC.downBttn];
+
         const rightDbl = controllsC.bttnsDblClickState[controllsC.rightBttn];
         const leftDbl = controllsC.bttnsDblClickState[controllsC.leftBttn];
         const upDbl = controllsC.bttnsDblClickState[controllsC.upBttn];
@@ -48,7 +54,8 @@ export default class MovementS {
             movementC.jumpsCounter < movementC.maxJumps) ||
           isGrounded;
         const canDash =
-          currentTime - movementC.timeSinceDash > movementC.dashCooldown;
+          currentTime - movementC.timeSinceDash > movementC.dashCooldown &&
+          focusC.currentFocus > movementC.dashCost;
         const slidingRight =
           controllsC.bttnsState[controllsC.rightBttn] === false &&
           movementC.currentVelocity > 0;
@@ -62,6 +69,7 @@ export default class MovementS {
           movementC.jumpsCounter = 0;
         }
         if (jumpBttn && canJump && !isHoldingJump) {
+          if (renderC.image === Images.Yoda) Sounds.Jump().play();
           if (movementC.isJumping) {
             if (physicsC)
               physicsC.currentGravityForce *= movementC.doubleJumpForceScale;
@@ -79,6 +87,23 @@ export default class MovementS {
           movementC.currentVelocity +=
             movementC.velocity * movementC.accerlationSpeed;
         }
+        if (renderC.image === Images.YodaCrib) {
+          if (upBttn) {
+            movementC.verticalVelocity +=
+              movementC.velocity * movementC.accerlationSpeed;
+          } else {
+            movementC.verticalVelocity -=
+              movementC.velocity * movementC.accerlationSpeed;
+          }
+          if (downBttn) {
+            movementC.verticalVelocity -=
+              movementC.velocity * movementC.accerlationSpeed;
+          } else {
+            movementC.verticalVelocity +=
+              movementC.velocity * movementC.accerlationSpeed;
+          }
+        }
+
         if (leftBttn) {
           movementC.currentVelocity -=
             movementC.velocity * movementC.accerlationSpeed;
@@ -101,10 +126,16 @@ export default class MovementS {
         }
         if (canDash) {
           movementC.isDashingTo = rightDbl ? "right" : leftDbl ? "left" : null;
-          if (movementC.isDashingTo)
+          if (movementC.isDashingTo) {
+            focusC.currentFocus -= movementC.dashCost;
+            Sounds.Dash().play();
             movementC.timeSinceDash = new Date().getTime();
+          }
         }
         if (movementC.isDashingTo) {
+          renderC.alpha = 0.6;
+          renderC.shadowEffect = true;
+          collisionC.isInvincible = true;
           movementC.currentDashFrame++;
           switch (movementC.isDashingTo) {
             case "right":
@@ -118,12 +149,23 @@ export default class MovementS {
             movementC.isDashingTo = null;
             movementC.currentDashFrame = 0;
           }
+        } else {
+          renderC.shadowEffect = false;
+          renderC.alpha = 1;
         }
 
         movementC.currentVelocity = this.setVelocityWithinBounds(
           movementC.currentVelocity,
           movementC.maxVelocity
         );
+        if (movementC.verticalVelocity !== 0) {
+          movementC.verticalVelocity = this.setVelocityWithinBounds(
+            movementC.verticalVelocity,
+            movementC.maxVelocity
+          );
+          renderC.posY -= movementC.verticalVelocity;
+        }
+
         renderC.posX += movementC.currentVelocity;
         renderC.posY -= movementC.currentjumpForce;
       }

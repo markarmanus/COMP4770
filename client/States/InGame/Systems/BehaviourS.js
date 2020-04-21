@@ -1,12 +1,8 @@
 import ComponentTypes from "../../../ComponentTypes";
 import Vec2 from "../../../Vec2";
-import RenderableC from "../../Components/RenderableC";
-import ChargeC from "../Components/ChargeC";
-
-import Images from "../../../Assets/ImageGenerator";
-import CollidableC from "../Components/CollidableC";
 import Helper from "../../../Helper";
 import SeekC from "../Components/SeekC";
+import Sounds from "../../../Assets/SoundGenerator";
 export default class BehaviourS {
   constructor(entityManager) {
     this.debug = false;
@@ -16,6 +12,7 @@ export default class BehaviourS {
       }
     });
     this.entityManager = entityManager;
+    window.fady = 3;
     this.firstTime = false;
   }
   handleFollow(entity) {
@@ -119,7 +116,20 @@ export default class BehaviourS {
     const shooterRenderC = entity.components[ComponentTypes.RENDERABLE];
     const toShootAt = shooterC.toShootAt;
     const shootAtRenderC = toShootAt.components[ComponentTypes.RENDERABLE];
-
+    const spritesC = entity.components[ComponentTypes.MULTI_SPRITES];
+    let offsetToApply = {
+      x: shooterC.shootingOffset.x * shooterRenderC.scaledWidth,
+      y: shooterC.shootingOffset.y * shooterRenderC.scaledHeight,
+    };
+    if (spritesC) {
+      if (shooterRenderC.posX > shootAtRenderC.posX) {
+        spritesC.sprites.idle = spritesC.sprites.shootLeft;
+      } else {
+        spritesC.sprites.idle = spritesC.sprites.shootRight;
+        offsetToApply.x =
+          (1 - shooterC.shootingOffset.x) * shooterRenderC.scaledWidth;
+      }
+    }
     if (
       shootAtRenderC &&
       new Date().getTime() - shooterC.lastShotTime > shooterC.fireRate
@@ -134,10 +144,12 @@ export default class BehaviourS {
           y: shootAtRenderC.posY,
         }
       );
+
       const bullet = Helper.generateEntity("LaserBullet", this.entityManager);
+      Sounds.LaserSound().play();
       const renderC = bullet.components[ComponentTypes.RENDERABLE];
-      renderC.posX = shooterRenderC.posX + shooterC.shootingOffset.x;
-      renderC.posY = shooterRenderC.posY + shooterC.shootingOffset.y;
+      renderC.posX = shooterRenderC.posX + offsetToApply.x;
+      renderC.posY = shooterRenderC.posY + offsetToApply.y;
       const vector = {
         x: shootAtRenderC.posX - shooterRenderC.posX,
         y: shootAtRenderC.posY - shooterRenderC.posY,
@@ -173,6 +185,9 @@ export default class BehaviourS {
       path = path.map((position) =>
         Helper.toOriginalPosition(Helper.toPixelPosition(position))
       );
+      droneC.path = path;
+    }
+    if (droneC.path && droneC.path.length > 0) {
       if (this.debug) this.debugPath(path);
       let seekC = entity.components[ComponentTypes.SEEK];
       if (!seekC) {
@@ -185,7 +200,7 @@ export default class BehaviourS {
         });
         entity.addComponent(seekC);
       } else {
-        seekC.locationToSeek = path.shift();
+        seekC.locationToSeek = droneC.path.shift();
       }
     }
   }

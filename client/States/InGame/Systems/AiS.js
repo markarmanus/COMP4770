@@ -108,7 +108,7 @@ export default class AiS {
           aiC.lastAction = "see";
           if (new Date().getTime() - aiC.lastSawTime > aiC.recognitionSpeed) {
             aiC.lastSawTime = new Date().getTime();
-            if (aiC.AIType === "StormTropper") {
+            if (aiC.AIType === "StormTrooper") {
               aiC.properties.patrol.direction = this.getPlayerDirection(
                 player,
                 entity
@@ -137,7 +137,7 @@ export default class AiS {
         } else {
           aiC.lastAction = "cantSee";
           if (new Date().getTime() - aiC.lastSawTime > aiC.recognitionSpeed) {
-            if (aiC.AIType === "StormTropper") {
+            if (aiC.AIType === "StormTrooper") {
               if (!entity.components[ComponentTypes.PATROL]) {
                 entity.addComponent(
                   new PatrolC({
@@ -147,11 +147,6 @@ export default class AiS {
               }
               if (entity.components[ComponentTypes.SHOOTER])
                 entity.removeComponent(ComponentTypes.SHOOTER);
-            } else if (aiC.AIType === "Drone") {
-              if (entity.components[ComponentTypes.DRONE])
-                entity.removeComponent(ComponentTypes.DRONE);
-              if (entity.components[ComponentTypes.SEEK])
-                entity.removeComponent(ComponentTypes.SEEK);
             }
           }
         }

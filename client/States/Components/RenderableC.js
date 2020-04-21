@@ -8,17 +8,28 @@ export default class RenderableC extends Component {
     width = 32,
     height = 32,
     scale,
+    rotation,
+    alpha,
     blocksView,
+    offset = { x: 1, y: 1 },
+    imageCropY = 0,
+    shadowEffect = false,
+    imageCropX = 0,
     visionOffset,
   }) {
     super(ComponentTypes.RENDERABLE);
     this.posX = posX;
     this.posY = posY;
+    this.shadowEffect = shadowEffect;
+    this.rotation = rotation;
+    this.alpha = alpha;
     this.image = image;
-    this.imageCropX = 0;
-    this.imageCropY = 0;
+    this.imageCropX = imageCropX;
+    this.imageCropY = imageCropY;
     this.isOnScree = true;
+    this.shouldRender = true;
     this.width = width;
+    this.offset = offset;
     this.height = height;
     this.scale = scale;
     this.scaledWidth = width * scale;

@@ -7,6 +7,7 @@ export default class DroneC extends Component {
     this.toAttack = toAttack;
     this.maxSpeed = maxSpeed;
     this.offset = offset;
+    this.path;
     this.accerlation = accerlation;
   }
 }

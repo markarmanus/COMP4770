@@ -94,12 +94,14 @@ export default class Helper {
       y: position.y * 32 + 16,
     };
   }
-  static toGridPosition(position) {
+
+  static toGridPosition(position, gridSize = 32) {
     return {
-      x: Math.floor(position.x / 32),
-      y: Math.floor(position.y / 32),
+      x: Math.floor(position.x / gridSize),
+      y: Math.floor(position.y / gridSize),
     };
   }
+
   static getDistance(from, to) {
     let dx = to.x - from.x;
     let dy = to.y - from.y;
@@ -188,6 +190,7 @@ export default class Helper {
         return [];
       }
       let node = open.pop();
+
       if (node.x === goal.x && node.y === goal.y) {
         if (node.path.length > 1) {
           let prevAction = {
@@ -221,9 +224,11 @@ export default class Helper {
           x: node.x + action.x,
           y: node.y + action.y,
         };
+        let extraCost = 0;
         let isValid =
           isValidPosition(newNode, gridWidth, gridHeight) &&
-          !grid[newNode.y][newNode.x].includes("Floor");
+          !grid[newNode.y][newNode.x].includes("Floor") &&
+          !grid[newNode.y][newNode.x].includes("Glass");
         if (buffer) {
           inner: for (let i = 0; i < actions.length; i++) {
             let action = actions[i];
@@ -233,16 +238,18 @@ export default class Helper {
             };
             if (
               isValidPosition(position, gridWidth, gridHeight) &&
-              grid[position.y][position.x].includes("Floor")
+              (grid[position.y][position.x].includes("Floor") ||
+                grid[position.y][position.x].includes("Glass"))
             ) {
-              isValid = false;
+              extraCost = 100;
               break inner;
             }
           }
         }
         if (isValid) {
           newNode.h = this.getDistance(newNode, goal);
-          newNode.g = isDiagonalMove(action) ? node.g + 2 : node.g + 1.5;
+          newNode.g = isDiagonalMove(action) ? node.g + 2 : node.g + 1;
+          newNode.g += extraCost;
           newNode.path = [...node.path, { x: node.x, y: node.y }];
           addToOpen(newNode, open);
         }

@@ -5,7 +5,7 @@ import AnimationS from "../Systems/AnimationS";
 import DeathS from "./Systems/DeathS";
 import MovementS from "./Systems/MovementS";
 import CheckPointS from "./Systems/CheckPointS";
-import ComponentTypes from "../../ComponentTypes";
+import FocusS from "./Systems/FocusS";
 import PhysicsS from "./Systems/PhysicsS";
 import PickUpS from "./Systems/PickUpS";
 import CollisionS from "./Systems/CollisionS";
@@ -17,6 +17,7 @@ import WeaponsS from "./Systems/WeaponsS";
 import AiS from "./Systems/AiS";
 import LevelManager from "./LevelManager";
 import Helper from "../../Helper";
+import Sounds from "../../Assets/SoundGenerator";
 export default class inGameState extends GameState {
   constructor(level, gameEngine) {
     super();
@@ -42,6 +43,7 @@ export default class inGameState extends GameState {
     this.collisionS = new CollisionS(this.entityManager);
     this.physicsS = new PhysicsS(0.4, this.entityManager);
     this.pickUpS = new PickUpS(this.entityManager);
+    this.focusS = new FocusS(this.entityManager);
     this.behaviourS = new BehaviourS(this.entityManager);
 
     this.weaponsS = new WeaponsS(this.entityManager);
@@ -49,14 +51,15 @@ export default class inGameState extends GameState {
       0.55,
       this.entityManager,
       () => this.endLevel(),
-      () => this.togglePause()
+      (value) => this.togglePause(value),
+      level
     );
 
     this.aiS = new AiS(this.entityManager);
     this.level = level;
     this.init();
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") this.paused = !this.paused;
+      if (e.key === "Escape") this.togglePause();
     });
     this.debug = false;
     window.addEventListener("keydown", (e) => {
@@ -65,15 +68,35 @@ export default class inGameState extends GameState {
       }
     });
   }
+  playMusic() {
+    // if (window.backgroundMusic) {
+    //   window.backgroundMusic.parentNode.removeChild(window.backgroundMusic);
+    // }
+    // window.backgroundMusic = Sounds[`${this.level.data.planet}PlanetMusic`](
+    //   true
+    // );
+    // window.backgroundMusic.play();
+  }
   endLevel() {
     this.levelEnded = true;
   }
-  togglePause() {
-    this.paused = !this.paused;
+  togglePause(value) {
+    if (value) {
+      this.paused = value;
+    } else {
+      this.paused = !this.paused;
+    }
+    if (window.backgroundMusic) {
+      if (!this.paused) {
+        window.backgroundMusic.play();
+      } else {
+        window.backgroundMusic.pause();
+      }
+    }
   }
   setBackground() {
     const canvasOffset = Helper.getCanvasOffset();
-    const background = Images[`${this.level.planet}Bg`];
+    const background = Images[`${this.level.data.planet}Bg`];
     canvasContext.drawImage(
       background,
       canvasOffset.x * -1,
@@ -86,16 +109,17 @@ export default class inGameState extends GameState {
     super.update();
     this.setBackground();
     this.controllsS.update();
-    this.guiS.update(this.paused);
 
     if (!this.paused || this.levelEnded) {
+      this.focusS.update();
+
       this.animationS.update();
 
       this.behaviourS.update();
 
-      this.aiS.update();
-
       this.checkPointS.update();
+
+      this.aiS.update();
 
       this.DeathS.update();
 
@@ -113,6 +137,8 @@ export default class inGameState extends GameState {
     }
 
     this.renderS.update();
+    this.guiS.update(this.paused);
+
     if (this.levelEnded)
       canvas.style = `opacity: ${canvas.style.opacity - 0.01}`;
     if (canvas.style.opacity < 0 && this.levelEnded) {
@@ -123,5 +149,6 @@ export default class inGameState extends GameState {
   init() {
     this.levelManager.loadLevel();
     Helper.setInitialLevelGrid(this.entityManager);
+    this.playMusic();
   }
 }

@@ -11,8 +11,9 @@ export default class MovableC extends Component {
     jumpCooldown,
     gravityForceScaler,
     doubleJumpForceScale,
+    dashCost,
     dashSpeed,
-    dashCooldown
+    dashCooldown,
   }) {
     super(ComponentTypes.MOVABLE);
     this.velocity = velocity;
@@ -26,6 +27,7 @@ export default class MovableC extends Component {
     this.timeSinceJump = 0;
     this.currentjumpForce = 0;
     this.isJumping = false;
+    this.dashCost = dashCost;
     this.jumpsCounter = 0;
     this.gravityForceScaler = gravityForceScaler;
     this.doubleJumpForceScale = 1 - doubleJumpForceScale;
@@ -34,6 +36,7 @@ export default class MovableC extends Component {
     this.timeSinceDash = 0;
     // Split the dashing over multiple frames where each frame we will move 10 units.
     this.totalDashFrames = this.dashSpeed / 10;
+    this.verticalVelocity = 0;
     this.currentDashFrame = 0;
     this.isDashingTo = null;
   }

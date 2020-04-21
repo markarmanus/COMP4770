@@ -3,11 +3,12 @@ const Level = require("../models/Level");
 let levels = [
   {
     data: {
+      planet: "red",
       entities: [
         { posX: 128, posY: 480, type: "Player" },
 
         { posX: 800, posY: 300, type: "Drone" },
-        { posX: 2000, posY: 200, type: "StormTropper" },
+        { posX: 2000, posY: 200, type: "StormTrooper" },
         { posX: 800, posY: 400, type: "EmptyCrib" },
       ],
     },
@@ -44,7 +45,6 @@ for (let i = 1; i < 100; i++) {
   //   });
   // }
 }
-console.log(levels[0].data.entities);
 
 module.exports = levelSeeder = async () => {
   return new Promise((resolve) => {

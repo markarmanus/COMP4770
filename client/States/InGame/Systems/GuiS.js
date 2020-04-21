@@ -1,9 +1,9 @@
 import ComponentTypes from "../../../ComponentTypes";
 import Images from "../../../Assets/ImageGenerator";
 import Helper from "../../../Helper";
-
+import Messages from "../../../Configuration/Messages";
 export default class GuiS {
-  constructor(scale, entityManager, onEndLevel, togglePause) {
+  constructor(scale, entityManager, onEndLevel, togglePause, level) {
     this.guiScale = scale;
     this.defaultPadding = {
       x: 30,
@@ -14,6 +14,16 @@ export default class GuiS {
     this.pauseMenu = [];
     this.onEndLevel = onEndLevel;
     this.togglePause = togglePause;
+    this.pickUpGuiSize = 64;
+    this.level = level;
+    this.drawingScroll;
+    this.pickUps = [];
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && this.drawingScroll) {
+        this.onEndLevel();
+      }
+    });
+    canvas.addEvent;
   }
   updateCanvasOffset() {
     this.canvasOffset = Helper.getCanvasOffset();
@@ -78,7 +88,14 @@ export default class GuiS {
       fullBar.height
     );
   }
-  drawCurrency(currentCurrency, place, image, padding, currencyScale) {
+  drawCurrency(
+    currentCurrency,
+    place,
+    image,
+    padding,
+    currencyScale,
+    fontScale
+  ) {
     image.width = image.naturalWidth * this.guiScale * currencyScale;
     image.height = image.naturalHeight * this.guiScale * currencyScale;
     const imagePosX =
@@ -86,7 +103,7 @@ export default class GuiS {
         ? canvas.width - image.width - padding.x - 80
         : padding.x - 80;
     const imagePosY = padding.y;
-    const textPosX = imagePosX + 80;
+    const textPosX = imagePosX + 100;
     const textPosY = imagePosY;
     canvasContext.drawImage(
       image,
@@ -95,7 +112,7 @@ export default class GuiS {
       image.width,
       image.height
     );
-    canvasContext.font = `${this.guiScale * currencyScale * 360}px serif`;
+    canvasContext.font = `${this.guiScale * fontScale * 360}px serif`;
     canvasContext.fillStyle = "black";
     canvasContext.textBaseline = "top";
     canvasContext.fillText(
@@ -103,6 +120,34 @@ export default class GuiS {
       textPosX - this.canvasOffset.x,
       textPosY + image.height / 6 - this.canvasOffset.y
     );
+  }
+  drawScroll() {
+    this.togglePause(true);
+    if (!this.drawingScroll) {
+      const scroll = Helper.generateEntity("MessageScroll", this.entityManager);
+      const renderC = scroll.components[ComponentTypes.RENDERABLE];
+      renderC.posX =
+        canvas.width / 2 - renderC.scaledWidth / 2 - this.canvasOffset.x;
+      renderC.posY =
+        canvas.height / 2 - renderC.scaledHeight / 2 - this.canvasOffset.y;
+      this.drawingScroll = scroll;
+    } else {
+      const renderC = this.drawingScroll.components[ComponentTypes.RENDERABLE];
+      canvasContext.font = "30px Arial";
+      const messages = Messages[this.level.data.planet];
+      for (let i = 0; i < messages.length; i++) {
+        canvasContext.fillText(
+          messages[i],
+          renderC.posX + 200,
+          renderC.posY + 250 + 100 * i
+        );
+      }
+      canvasContext.fillText(
+        "Press Enter",
+        renderC.posX + renderC.scaledWidth / 2 - 100,
+        renderC.posY + renderC.scaledHeight - 250
+      );
+    }
   }
   drawPauseScreen() {
     if (!this.pauseMenu.length > 0) {
@@ -155,9 +200,67 @@ export default class GuiS {
       }
     }
   }
+  getTimerEntity(size) {
+    const timer = Helper.generateEntity("Timer", this.entityManager);
+    const renderC = timer.components[ComponentTypes.RENDERABLE];
+    renderC.scaledWidth = size;
+    renderC.scaledHeight = size;
+    return timer;
+  }
+  drawPickUps() {
+    const margin = 10;
+    let newPickUps = [];
+    for (let i = 0; i < this.pickUps.length; i++) {
+      const pickUp = this.pickUps[i].pickUp;
+      const timer = this.pickUps[i].timer;
+      if (pickUp && pickUp.active) {
+        newPickUps.push({
+          pickUp,
+          timer,
+        });
+      }
+      const pickUpRenderC = pickUp.components[ComponentTypes.RENDERABLE];
+      const timerRenderC = timer.components[ComponentTypes.RENDERABLE];
+      const position = {
+        x: 280 + i * this.pickUpGuiSize + margin * i - this.canvasOffset.x,
+        y: this.defaultPadding.y + 20 - this.canvasOffset.y,
+      };
+      pickUpRenderC.posX = position.x + this.pickUpGuiSize / 4;
+      pickUpRenderC.posY = position.y + this.pickUpGuiSize / 4;
+      timerRenderC.posX = position.x;
+      timerRenderC.posY = position.y;
+      this.pickUps = newPickUps;
+    }
+  }
+  createPickUpTimer(entity) {
+    const pickUpC = entity.components[ComponentTypes.PICK_UP];
+    const renderC = entity.components[ComponentTypes.RENDERABLE];
+    const timer = this.getTimerEntity(this.pickUpGuiSize);
+    const timerAnimationC = timer.components[ComponentTypes.ANIMATED];
+    renderC.scaledWidth = this.pickUpGuiSize / 2;
+    renderC.scaledHeight = this.pickUpGuiSize / 2;
+    renderC.shouldRender = true;
+
+    timerAnimationC.repeat = false;
+    timerAnimationC.animationSpeed =
+      pickUpC.lifeTime / timerAnimationC.spritesCount;
+    this.pickUps.push({ pickUp: entity, timer });
+    pickUpC.drewGuiTimer = true;
+  }
+  updatePickUpArray() {
+    let newArray = [];
+    for (const pickUp of this.pickUps) {
+      if (pickUp && pickUp.isActive) {
+        newArray.push(entity);
+      }
+    }
+    this.pickUps = newArray;
+  }
   update(isPaused) {
+    if (this.drawingScroll) this.drawScroll();
+    this.drawPickUps();
     this.updateCanvasOffset();
-    if (isPaused) {
+    if (isPaused && !this.drawingScroll) {
       this.drawPauseScreen();
     } else {
       while (this.pauseMenu.length > 0) {
@@ -171,23 +274,36 @@ export default class GuiS {
       const focusC = entity.components[ComponentTypes.FOCUS];
       const currencyC = entity.components[ComponentTypes.CURRENCY];
       const controllsC = entity.components[ComponentTypes.CONTROLABLE];
+      const pickUpC = entity.components[ComponentTypes.PICK_UP];
       if (controllsC) this.checkForClicks(controllsC);
-      if (currencyC) {
+      if (pickUpC) {
+        if (entity.descriptor === "Scroll" && pickUpC.wasPickedUp) {
+          this.drawScroll();
+        } else if (
+          pickUpC.wasPickedUp &&
+          pickUpC.lifeTime &&
+          !pickUpC.drewGuiTimer
+        ) {
+          this.createPickUpTimer(entity);
+        }
+      }
+      if (currencyC && !this.drawingScroll) {
         this.drawCurrency(
           currencyC.currentCurrency,
           currencyC.positionOnGUI,
-          Images.currency,
+          Images.CurrencyImage,
           this.defaultPadding,
+          3,
           0.3
         );
       }
-      if (healthC) {
+      if (healthC && !this.drawingScroll) {
         const healthPrcnt =
           Math.max(healthC.currentHealth, 0) / healthC.maxHealth;
         if (healthC.folllowEntity) {
           this.drawSmallBar(
-            Images.fullSmallHealthBar,
-            Images.emptySmallHealthBar,
+            Images.FullSmallHealthBar,
+            Images.EmptySmallHealthBar,
             0.5,
             healthPrcnt,
             entity
@@ -195,8 +311,8 @@ export default class GuiS {
         } else {
           const offset = 80;
           this.drawBar(
-            Images.fullHealthBar,
-            Images.emptyHealthBar,
+            Images.FullHealthBar,
+            Images.EmptyHealthBar,
             this.defaultPadding,
             offset,
             healthPrcnt,
@@ -204,18 +320,18 @@ export default class GuiS {
           );
         }
       }
-      if (focusC) {
+      if (focusC && !this.drawingScroll) {
         const padding = {
           x: this.defaultPadding.x,
           y:
-            Images.fullHealthBar.naturalHeight * this.guiScale +
+            Images.FullHealthBar.naturalHeight * this.guiScale +
             this.defaultPadding.y,
         };
         const focusPercent = focusC.currentFocus / focusC.maxFocus;
         const offset = 80;
         this.drawBar(
-          Images.fullFocusBar,
-          Images.emptyFocusBar,
+          Images.FullFocusBar,
+          Images.EmptyFocusBar,
           padding,
           offset,
           focusPercent,
